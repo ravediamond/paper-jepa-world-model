@@ -38,6 +38,8 @@ else:
     check(f"register rows / pass / met / not proven / fail = {got} as stated in §2 Counts {stated}", got == stated)
     p = [l.split("|")[7].strip() for l in rows]
     check("pre-reg: 13 bar-first, 6 same-commit", (p.count("bar-first"), p.count("same-commit")) == (13, 6))
+    u = json.loads((E / "uses.json").read_text())["rows"]
+    check("uses.json: one entry per register row, in order", len(u) == len(rows) and all(r[2:].strip().startswith(x["gate"]) for r, x in zip(rows, u)))
     s = json.loads((E / "split.json").read_text())
     check("split: n_train + n_val episodes listed", len(s["train_episodes"]) == s["n_train"] and len(s["val_episodes"]) == s["n_val"]
           if isinstance(s["train_episodes"], list) else s["train_episodes"] == s["n_train"])
