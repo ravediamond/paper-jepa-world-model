@@ -23,7 +23,7 @@ Table 1 lists the 20 uses, grouped by what they need from the model.
 \emph{Predictor forecasts.} G0's open-loop prediction beats copy-last (0.31 vs 0.89 at K = 30): the predictor predicts its own latent. Every use of that prediction fails: G1b ranks chunks at top-1 0.60 (bar 0.8) while the commanded actions alone reach 0.68--0.90; W1-A's surprise catches 2/8 at 2/42; W1-C1's imagined latent (0.70) is below the current one; SURVEYOR's $\tau$ is 1.2488 (paper 0.20); HWM finds no crossover; G6a, G6b, W1-B, W1-C2, W1-R, REAP and G11-B-cal all miss their bars.
 \section*{4. What the encoder knows}
 Table 2: outcome AUROC on the same 69 rollouts, leave-one-session-out, 95 \% episode-bootstrap CIs.
-\begin{table}[t]\centering\footnotesize
+\begin{table*}[t]\centering\footnotesize
 \begin{tabular}{lll}
 \toprule
 feature & at rest & grasp anchor (65 scored, 21 fail) \\
@@ -36,7 +36,7 @@ policy identity & 0.5882 [0.4084, 0.7515] & --- \\
 \bottomrule
 \end{tabular}
 \caption{Outcome AUROC, same rollouts, LOSO probes (exploratory).}
-\end{table}
+\end{table*}
 At rest W1 is level with the colour judge (CIs overlap) and above the frozen encoder and the joints; at the grasp anchor, where no judge applies, it leads both controls. The original G10 gate scored W1 at 1.000 on a larger rollout set; the rerun here, on the 69 Orin rollouts with the controls beside it, gives 0.9545.
 \section*{5. Where the predictor fails}
 The cleanest contrast is W1-C1: same encoder, same anchor, current latent 0.82 vs imagined 0.70 (bar $\geq$ 0.85, $\geq$ +0.05 over current). Imagining forward loses outcome information the encoder had. In SURVEYOR, W1's latent-distance threshold fails both checks, while W2$'$ ($\tau$ 0.3601) and the joints ($\tau$ 0.0265) pass the scale check S2: the predictor-facing geometry of W1 is the problem, not the task.

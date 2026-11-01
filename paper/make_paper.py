@@ -134,9 +134,9 @@ def to_tex(md):
                 if not set(lines[i]) <= set("|-: "):
                     t.append([esc(x.strip()) for x in lines[i].strip("|").split("|")])
                 i += 1
-            out += [r"\begin{table}[t]\centering\footnotesize", r"\begin{tabular}{" + "l" * len(t[0]) + "}", r"\toprule",
+            out += [r"\begin{table*}[t]\centering\footnotesize", r"\begin{tabular}{" + "l" * len(t[0]) + "}", r"\toprule",
                     " & ".join(t[0]) + r" \\", r"\midrule"] + [" & ".join(r) + r" \\" for r in t[1:]] + \
-                   [r"\bottomrule", r"\end{tabular}", r"\caption{Outcome AUROC, same rollouts, LOSO probes (exploratory).}", r"\end{table}"]
+                   [r"\bottomrule", r"\end{tabular}", r"\caption{Outcome AUROC, same rollouts, LOSO probes (exploratory).}", r"\end{table*}"]
             continue
         elif l.startswith("*Ravindu"):
             pass
