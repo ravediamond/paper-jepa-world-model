@@ -15,6 +15,10 @@
   "value": "0.5305",
   "anchor": "repro/gaps/expected/controls.json w1c1/joints (commanded) current at anchor/auroc"
  },
+ "anc_lead": {
+  "value": "15",
+  "anchor": "repro/gaps/scripts/run_w1c_offline.py: 'ANCHOR_BEFORE_CLOSE, K_IMAGINE = 15, 30'"
+ },
  "anc_scored": {
   "value": "65",
   "anchor": "repro/gaps/expected/controls.json w1c1/scored"
@@ -67,6 +71,10 @@
   "value": "+0.179",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row G10: '+0.179'"
  },
+ "g10_n": {
+  "value": "87",
+  "anchor": "repro/gaps/expected/README.md: 'against judge labels on 87'"
+ },
  "g10_rest": {
   "value": "1.000",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row G10: 'W1 1.000'"
@@ -110,6 +118,10 @@
  "n_pass": {
   "value": "3",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict pass)"
+ },
+ "no_class": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. '—')"
  },
  "rest_W1": {
   "value": "0.9545",
@@ -175,6 +187,14 @@
   "value": "20",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py"
  },
+ "sai_eps": {
+  "value": "10,030",
+  "anchor": "repro/register/expected/FEASIBILITY.md: '10,030 LIBERO-Plus'"
+ },
+ "sai_gain": {
+  "value": "+0.03",
+  "anchor": "repro/register/expected/FEASIBILITY.md: '+0.03 points'"
+ },
  "same_commit": {
   "value": "6",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. same-commit)"
@@ -214,6 +234,18 @@
  "train_eps": {
   "value": "157",
   "anchor": "repro/register/expected/split.json n_train"
+ },
+ "uses_both": {
+  "value": "5",
+  "anchor": "repro/register/expected/uses.json rows, needs = both"
+ },
+ "uses_encoder": {
+  "value": "7",
+  "anchor": "repro/register/expected/uses.json rows, needs = encoder"
+ },
+ "uses_predictor": {
+  "value": "8",
+  "anchor": "repro/register/expected/uses.json rows, needs = predictor"
  },
  "val_eps": {
   "value": "25",

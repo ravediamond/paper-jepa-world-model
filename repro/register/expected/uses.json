@@ -1,0 +1,25 @@
+{
+ "about": "What each register row (FEASIBILITY.md §2, keyed by the start of its first cell) takes from W1: 'encoder' = current-frame latents, distances between them or probes on them; 'predictor' = action-conditioned predicted / imagined latents or their error (surprise); 'both' = the row compares or combines the two. Author's classification (WS-091 review round, 2026-11-01); basis = where in road-to-robotics the method is stated.",
+ "rows": [
+  {"gate": "G0", "needs": "predictor", "basis": "FEASIBILITY.md row: open-loop prediction at K = 30 vs copy-last"},
+  {"gate": "C1 probe", "needs": "both", "basis": "FEASIBILITY.md row: imagined vs current latent probe"},
+  {"gate": "G1b W1", "needs": "predictor", "basis": "G1B_RJ_PROTOCOL.md: score = L2 between the last imagined latent and the encoded real latent"},
+  {"gate": "G1 probes", "needs": "encoder", "basis": "EXPERIMENTS.md G1 probes: does the representation encode the arm"},
+  {"gate": "G1 W2 dynamics", "needs": "predictor", "basis": "FEASIBILITY.md row: W2 dynamics ranking, top-1 bar as G1b"},
+  {"gate": "G6a", "needs": "encoder", "basis": "G6A_PROTOCOL.md: 'G6a uses the encoder only'; 'the encoder only, no predictor rollouts'"},
+  {"gate": "G10", "needs": "both", "basis": "FEASIBILITY.md row: readout at rest (encoder) and imagined-latent anticipation (predictor)"},
+  {"gate": "G6b", "needs": "encoder", "basis": "G6B_PROTOCOL.md: level-2 slow features trained on frozen level-1 (W1) latents"},
+  {"gate": "W1-A", "needs": "predictor", "basis": "FEASIBILITY.md row: L2 surprise (prediction error)"},
+  {"gate": "W1-B", "needs": "encoder", "basis": "EXPERIMENTS.md W1-B: latent stage tracker, distance to grasp / place prototypes"},
+  {"gate": "G11-B-cal", "needs": "predictor", "basis": "EXPERIMENTS.md G11-B-cal: W1 surprise reflex refit from episode maxima"},
+  {"gate": "W1-C1", "needs": "both", "basis": "FEASIBILITY.md row: imagined 0.70 < current 0.82"},
+  {"gate": "W1-C2", "needs": "predictor", "basis": "EXPERIMENTS.md W1-C2: CP band on W1's long surprise"},
+  {"gate": "W1-R", "needs": "predictor", "basis": "EXPERIMENTS.md W1-R: re-rank G1b's candidates on the frozen W1"},
+  {"gate": "REAP v1", "needs": "both", "basis": "EXPERIMENTS.md REAP: W1 L2 surprise vs a risk head on [z, commanded actions, t]"},
+  {"gate": "§30 inverse dynamics", "needs": "encoder", "basis": "FEASIBILITY.md row: action from a latent pair"},
+  {"gate": "LeJEPA", "needs": "encoder", "basis": "FEASIBILITY.md row: linear R² of the latent"},
+  {"gate": "SURVEYOR", "needs": "encoder", "basis": "gaps/README.md: gate 0 τ (latent distance) rerun with W2′ and joints, no predictor"},
+  {"gate": "HWM", "needs": "predictor", "basis": "FEASIBILITY.md row: high-level vs flat predictor crossover over horizon"},
+  {"gate": "RoboJEPA", "needs": "both", "basis": "FEASIBILITY.md row: encoder latency and prediction vs copy-last"}
+ ]
+}

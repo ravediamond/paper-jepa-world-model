@@ -16,3 +16,5 @@ Every file copied into this repository, with its source. Source commits at copy 
 | `repro/register/expected/split.json` | road-to-robotics | a2ee18e7bb | `projects/vla-jepa-world-model/wm_train/split.json` | 22a469b4209f |
 | `paper/DRAFT_4p.md.in` | road-to-robotics | a2ee18e7bb | `journal/papers/jepa-world-model/DRAFT_4p.md.in` | a3a5b2a57c98 |
 | `paper/OUTLINE.md` | road-to-robotics | a2ee18e7bb | `journal/papers/jepa-world-model/OUTLINE_4PAGE.md` | 5e89df9e40e4 |
+| `repro/gaps/scripts/run_w1c_offline.py` | road-to-robotics | 49a68f4b82 | `scripts/run_w1c_offline.py` | daaa81dff87e |
+| `repro/register/expected/uses.json` | derived | — | encoder / predictor classification per register row (basis per row in the file) | — |

@@ -67,7 +67,7 @@ def main():
 
     rows = [l for l in (REG / "FEASIBILITY.md").read_text().split("## 2.", 1)[1].split("## 3.", 1)[0].splitlines()
             if l.startswith("| ") and not l.startswith("| gate")]
-    cnt = {"pass": 0, "met": 0, "np": 0, "fail": 0}; pre = {"bar-first": 0, "same-commit": 0}
+    cnt = {"pass": 0, "met": 0, "np": 0, "fail": 0}; pre = {"bar-first": 0, "same-commit": 0, "—": 0}
     for l in rows:
         cells = [x.strip() for x in l.split("|")]
         v, p = cells[6].lower(), cells[7]
@@ -77,6 +77,10 @@ def main():
     put("rows", str(len(rows)), a)
     for k in cnt: put(f"n_{k}", str(cnt[k]), a + f" (verdict {k})")
     put("bar_first", str(pre["bar-first"]), a + " (pre-reg. bar-first)"); put("same_commit", str(pre["same-commit"]), a + " (pre-reg. same-commit)")
+    put("no_class", str(pre["—"]), a + " (pre-reg. '—')")
+    uses = json.loads((REG / "uses.json").read_text())["rows"]
+    for k in ("encoder", "predictor", "both"):
+        put(f"uses_{k}", str(sum(u["needs"] == k for u in uses)), f"repro/register/expected/uses.json rows, needs = {k}")
 
     lit("g0_err", "G0", "0.31"); lit("g0_copy", "G0", "0.89")
     lit("g1b_top1", "G1b", "0.60"); lit("g1b_actions", "G1b", "0.68–0.90"); lit("g1b_bar", "G1b", "≥ 0.8", "0.8")
@@ -86,6 +90,10 @@ def main():
     lit("lejepa_w1", "LeJEPA", "R² 0.565", "0.565"); lit("lejepa_w2p", "LeJEPA", "W2′ 0.867", "0.867")
     lit("surv_paper", "SURVEYOR", "paper 0.20", "0.20")
     lit("g10_rest", "G10", "W1 1.000", "1.000"); lit("g10_anticip", "G10", "+0.179")
+    lit_file("anc_lead", "gaps/scripts/run_w1c_offline.py", "ANCHOR_BEFORE_CLOSE, K_IMAGINE = 15, 30", "15")
+    lit_file("g10_n", "gaps/expected/README.md", "against judge labels on 87", "87")
+    lit_file("sai_eps", "register/expected/FEASIBILITY.md", "10,030 LIBERO-Plus", "10,030")
+    lit_file("sai_gain", "register/expected/FEASIBILITY.md", "+0.03 points", "+0.03")
     lit_file("cost_w1", "register/expected/FEASIBILITY.md", "3.30) predicts", "3.30")
     lit_file("arm_cost", "register/expected/FEASIBILITY.md", "on a $200 robot", "200")
     lit_file("scale_eps", "register/expected/FEASIBILITY.md", "(653 episodes", "653")
@@ -98,6 +106,7 @@ def main():
     (HERE / "DRAFT_4p.md").write_text(md)
     (HERE / "numbers.json").write_text(json.dumps({k: {"value": N[k], "anchor": A[k]} for k in sorted(N)}, indent=1, ensure_ascii=False) + "\n")
     (HERE / "main.tex").write_text(to_tex(md))
+    import make_figs; make_figs.OUT.mkdir(exist_ok=True); make_figs.table2(); make_figs.register()
     print(f"{len(N)} numbers; DRAFT_4p.md, main.tex, numbers.json written")
 
 
@@ -115,9 +124,9 @@ def esc(s):
 
 
 def to_tex(md):
-    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}",
+    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{graphicx}",
            r"\pdfinfoomitdate=1 \pdftrailerid{}" if False else "", r"\begin{document}"]
-    lines, i, abstract = md.splitlines(), 0, False
+    lines, i, abstract, cap = md.splitlines(), 0, False, ""
     while i < len(lines):
         l = lines[i]
         if l.startswith("# "):
@@ -128,6 +137,12 @@ def to_tex(md):
             if abstract:
                 out.append(r"\end{abstract}"); abstract = False
             out.append(r"\section*{" + esc(l[3:]) + "}")
+        elif l.startswith("!["):
+            m = re.match(r"!\[(.*)\]\((.*)\)(\{wide\})?", l); env = "figure*" if m.group(3) else "figure"
+            out += [r"\begin{" + env + "}[t]\\centering", r"\includegraphics[width=" + (r"0.72\textwidth" if m.group(3) else r"\columnwidth") + "]{" + m.group(2) + "}",
+                    r"\caption{" + esc(m.group(1)) + "}", r"\end{" + env + "}"]
+        elif l.startswith("Table ") and i + 2 < len(lines) and lines[i + 2].startswith("|"):
+            cap = l.split(": ", 1)[1]
         elif l.startswith("|"):
             t = []
             while i < len(lines) and lines[i].startswith("|"):
@@ -136,7 +151,7 @@ def to_tex(md):
                 i += 1
             out += [r"\begin{table*}[t]\centering\footnotesize", r"\begin{tabular}{" + "l" * len(t[0]) + "}", r"\toprule",
                     " & ".join(t[0]) + r" \\", r"\midrule"] + [" & ".join(r) + r" \\" for r in t[1:]] + \
-                   [r"\bottomrule", r"\end{tabular}", r"\caption{Outcome AUROC, same rollouts, LOSO probes (exploratory).}", r"\end{table*}"]
+                   [r"\bottomrule", r"\end{tabular}", r"\caption{" + esc(cap) + "}", r"\end{table*}"]
             continue
         elif l.startswith("*Ravindu"):
             pass
