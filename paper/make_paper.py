@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""paper-jepa-world-model: fill paper/DRAFT_4p.md.in from repro/*/expected/ into numbers.json, DRAFT_4p.md and main.tex.
+Every number has an anchor; a row literal that is not found in its source file fails the build."""
+import json, re
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+R = ROOT / "repro"
+G = R / "gaps/expected"
+REG = R / "register/expected"
+N, A = {}, {}
+
+
+def put(key, value, anchor):
+    N[key] = value; A[key] = anchor
+
+
+def row(gate):
+    """The FEASIBILITY.md §2 row whose first cell starts with `gate`."""
+    t = (REG / "FEASIBILITY.md").read_text()
+    for line in t.splitlines():
+        if line.startswith("| " + gate + " "):
+            return line
+    raise SystemExit(f"row not found: {gate}")
+
+
+def lit(key, gate, text, value=None):
+    assert text in row(gate), f"{text!r} not in the {gate} row"
+    put(key, value if value is not None else text, f"repro/register/expected/FEASIBILITY.md §2 row {gate}: '{text}'")
+
+
+def lit_file(key, rel, text, value):
+    assert text in (R / rel).read_text(), f"{text!r} not in {rel}"
+    put(key, value, f"repro/{rel}: '{text}'")
+
+
+def f4(x):
+    return f"{x:.4f}"
+
+
+def main():
+    c = json.loads((G / "controls.json").read_text())
+    for k in ("n", "success", "failure", "sessions"):
+        put(k, str(c[k]), f"repro/gaps/expected/controls.json {k}")
+    names = {"W1": "W1 at judge frame (LOSO probe)", "W2p": "W2' at judge frame (LOSO probe)",
+             "joints": "joints (commanded) at judge frame (LOSO probe)", "policy": "policy identity (LOSO probe)",
+             "judge": "G9c-3 judge score s (no learning)"}
+    for k, name in names.items():
+        e = c["gap2"][name]; a = f"repro/gaps/expected/controls.json gap2/{name}"
+        put(f"rest_{k}", f4(e["auroc"]), a + "/auroc")
+        put(f"rest_{k}_lo", f4(e["ci95"][0]), a + "/ci95[0]"); put(f"rest_{k}_hi", f4(e["ci95"][1]), a + "/ci95[1]")
+    w = c["w1c1"]
+    put("anc_scored", str(w["scored"]), "repro/gaps/expected/controls.json w1c1/scored")
+    put("anc_fail", str(w["failures"]), "repro/gaps/expected/controls.json w1c1/failures")
+    for k, name in {"W1": "W1 current at anchor", "W2p": "W2' current at anchor", "joints": "joints (commanded) current at anchor"}.items():
+        put(f"anc_{k}", f4(w[name]["auroc"]), f"repro/gaps/expected/controls.json w1c1/{name}/auroc")
+    for k, name in {"W1": "W1", "W2p": "W2'", "joints": "joints (commanded)"}.items():
+        put(f"surv_tau_{k}", f4(c["surveyor_gate0"][name]["tau"]), f"repro/gaps/expected/controls.json surveyor_gate0/{name}/tau")
+    ks = json.loads((G / "vla_jepa_keyset.json").read_text())
+    put("wm_keys", str(ks["world_model_keys"]), "repro/gaps/expected/vla_jepa_keyset.json world_model_keys")
+    put("wm_missing", str(ks["world_model_keys_missing"]), "repro/gaps/expected/vla_jepa_keyset.json world_model_keys_missing")
+    sp = json.loads((REG / "split.json").read_text())
+    put("train_eps", str(sp["n_train"]), "repro/register/expected/split.json n_train")
+    put("val_eps", str(sp["n_val"]), "repro/register/expected/split.json n_val")
+    put("teleop_eps", str(sp["n_train"] + sp["n_val"]), "repro/register/expected/split.json n_train + n_val")
+
+    rows = [l for l in (REG / "FEASIBILITY.md").read_text().split("## 2.", 1)[1].split("## 3.", 1)[0].splitlines()
+            if l.startswith("| ") and not l.startswith("| gate")]
+    cnt = {"pass": 0, "met": 0, "np": 0, "fail": 0}; pre = {"bar-first": 0, "same-commit": 0}
+    for l in rows:
+        cells = [x.strip() for x in l.split("|")]
+        v, p = cells[6].lower(), cells[7]
+        cnt["np" if "not proven" in v else "met" if "met" in v else "pass" if "pass" in v and "fail" not in v else "fail"] += 1
+        if p in pre: pre[p] += 1
+    a = "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py"
+    put("rows", str(len(rows)), a)
+    for k in cnt: put(f"n_{k}", str(cnt[k]), a + f" (verdict {k})")
+    put("bar_first", str(pre["bar-first"]), a + " (pre-reg. bar-first)"); put("same_commit", str(pre["same-commit"]), a + " (pre-reg. same-commit)")
+
+    lit("g0_err", "G0", "0.31"); lit("g0_copy", "G0", "0.89")
+    lit("g1b_top1", "G1b", "0.60"); lit("g1b_actions", "G1b", "0.68–0.90"); lit("g1b_bar", "G1b", "≥ 0.8", "0.8")
+    lit("w1a_hits", "W1-A", "2/8 at 2/42")
+    lit("c1_imagined", "W1-C1", "imagined 0.70", "0.70"); lit("c1_current", "W1-C1", "current 0.82", "0.82")
+    lit("c1_bar", "W1-C1", "≥ 0.85, ≥ +0.05")
+    lit("lejepa_w1", "LeJEPA", "R² 0.565", "0.565"); lit("lejepa_w2p", "LeJEPA", "W2′ 0.867", "0.867")
+    lit("surv_paper", "SURVEYOR", "paper 0.20", "0.20")
+    lit("g10_rest", "G10", "W1 1.000", "1.000"); lit("g10_anticip", "G10", "+0.179")
+    lit_file("cost_w1", "register/expected/FEASIBILITY.md", "3.30) predicts", "3.30")
+    lit_file("arm_cost", "register/expected/FEASIBILITY.md", "on a $200 robot", "200")
+    lit_file("scale_eps", "register/expected/FEASIBILITY.md", "(653 episodes", "653")
+    lit_file("audit_trained", "register/expected/AUDIT_W1_LOADS.md", "**Trained: 26 rows**", "26")
+    lit_file("audit_random", "register/expected/AUDIT_W1_LOADS.md", "**random: 1**", "1")
+
+    tpl = (HERE / "DRAFT_4p.md.in").read_text()
+    md = re.sub(r"\{\{(\w+)\}\}", lambda m: N[m.group(1)], tpl)
+    assert "{{" not in md
+    (HERE / "DRAFT_4p.md").write_text(md)
+    (HERE / "numbers.json").write_text(json.dumps({k: {"value": N[k], "anchor": A[k]} for k in sorted(N)}, indent=1, ensure_ascii=False) + "\n")
+    (HERE / "main.tex").write_text(to_tex(md))
+    print(f"{len(N)} numbers; DRAFT_4p.md, main.tex, numbers.json written")
+
+
+SUB = [("\\", r"\textbackslash{}"), ("&", r"\&"), ("%", r"\%"), ("$", r"\$"), ("#", r"\#"), ("_", r"\_"),
+       ("≥", r"$\geq$"), ("≈", r"$\approx$"), ("×", r"$\times$"), ("τ", r"$\tau$"), ("²", r"$^2$"), ("′", r"$'$"),
+       ("—", "---"), ("–", "--"), ("…", r"\ldots{}")]
+
+
+def esc(s):
+    for a, b in SUB:
+        s = s.replace(a, b)
+    s = re.sub(r"`([^`]*)`", r"\\texttt{\1}", s)
+    s = re.sub(r"\*\*([^*]+)\*\*", r"\\textbf{\1}", s)
+    return re.sub(r"\*([^*]+)\*", r"\\emph{\1}", s)
+
+
+def to_tex(md):
+    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}",
+           r"\pdfinfoomitdate=1 \pdftrailerid{}" if False else "", r"\begin{document}"]
+    lines, i, abstract = md.splitlines(), 0, False
+    while i < len(lines):
+        l = lines[i]
+        if l.startswith("# "):
+            out += [r"\title{" + esc(l[2:]) + "}", r"\author{Ravindu Somawansa}", r"\date{}", r"\maketitle"]
+        elif l.startswith("## Abstract"):
+            out.append(r"\begin{abstract}"); abstract = True
+        elif l.startswith("## "):
+            if abstract:
+                out.append(r"\end{abstract}"); abstract = False
+            out.append(r"\section*{" + esc(l[3:]) + "}")
+        elif l.startswith("|"):
+            t = []
+            while i < len(lines) and lines[i].startswith("|"):
+                if not set(lines[i]) <= set("|-: "):
+                    t.append([esc(x.strip()) for x in lines[i].strip("|").split("|")])
+                i += 1
+            out += [r"\begin{table}[t]\centering\footnotesize", r"\begin{tabular}{" + "l" * len(t[0]) + "}", r"\toprule",
+                    " & ".join(t[0]) + r" \\", r"\midrule"] + [" & ".join(r) + r" \\" for r in t[1:]] + \
+                   [r"\bottomrule", r"\end{tabular}", r"\caption{Outcome AUROC, same rollouts, LOSO probes (exploratory).}", r"\end{table}"]
+            continue
+        elif l.startswith("*Ravindu"):
+            pass
+        else:
+            out.append(esc(l))
+        i += 1
+    if abstract:
+        out.append(r"\end{abstract}")
+    out.append(r"\end{document}")
+    return "\n".join(x for x in out if x != "") + "\n"
+
+
+if __name__ == "__main__":
+    main()

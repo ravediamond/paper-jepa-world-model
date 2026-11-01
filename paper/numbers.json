@@ -1,0 +1,234 @@
+{
+ "anc_W1": {
+  "value": "0.8199",
+  "anchor": "repro/gaps/expected/controls.json w1c1/W1 current at anchor/auroc"
+ },
+ "anc_W2p": {
+  "value": "0.7067",
+  "anchor": "repro/gaps/expected/controls.json w1c1/W2' current at anchor/auroc"
+ },
+ "anc_fail": {
+  "value": "21",
+  "anchor": "repro/gaps/expected/controls.json w1c1/failures"
+ },
+ "anc_joints": {
+  "value": "0.5305",
+  "anchor": "repro/gaps/expected/controls.json w1c1/joints (commanded) current at anchor/auroc"
+ },
+ "anc_scored": {
+  "value": "65",
+  "anchor": "repro/gaps/expected/controls.json w1c1/scored"
+ },
+ "arm_cost": {
+  "value": "200",
+  "anchor": "repro/register/expected/FEASIBILITY.md: 'on a $200 robot'"
+ },
+ "audit_random": {
+  "value": "1",
+  "anchor": "repro/register/expected/AUDIT_W1_LOADS.md: '**random: 1**'"
+ },
+ "audit_trained": {
+  "value": "26",
+  "anchor": "repro/register/expected/AUDIT_W1_LOADS.md: '**Trained: 26 rows**'"
+ },
+ "bar_first": {
+  "value": "13",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. bar-first)"
+ },
+ "c1_bar": {
+  "value": "≥ 0.85, ≥ +0.05",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row W1-C1: '≥ 0.85, ≥ +0.05'"
+ },
+ "c1_current": {
+  "value": "0.82",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row W1-C1: 'current 0.82'"
+ },
+ "c1_imagined": {
+  "value": "0.70",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row W1-C1: 'imagined 0.70'"
+ },
+ "cost_w1": {
+  "value": "3.30",
+  "anchor": "repro/register/expected/FEASIBILITY.md: '3.30) predicts'"
+ },
+ "failure": {
+  "value": "25",
+  "anchor": "repro/gaps/expected/controls.json failure"
+ },
+ "g0_copy": {
+  "value": "0.89",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G0: '0.89'"
+ },
+ "g0_err": {
+  "value": "0.31",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G0: '0.31'"
+ },
+ "g10_anticip": {
+  "value": "+0.179",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G10: '+0.179'"
+ },
+ "g10_rest": {
+  "value": "1.000",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G10: 'W1 1.000'"
+ },
+ "g1b_actions": {
+  "value": "0.68–0.90",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G1b: '0.68–0.90'"
+ },
+ "g1b_bar": {
+  "value": "0.8",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G1b: '≥ 0.8'"
+ },
+ "g1b_top1": {
+  "value": "0.60",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row G1b: '0.60'"
+ },
+ "lejepa_w1": {
+  "value": "0.565",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row LeJEPA: 'R² 0.565'"
+ },
+ "lejepa_w2p": {
+  "value": "0.867",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row LeJEPA: 'W2′ 0.867'"
+ },
+ "n": {
+  "value": "69",
+  "anchor": "repro/gaps/expected/controls.json n"
+ },
+ "n_fail": {
+  "value": "14",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict fail)"
+ },
+ "n_met": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict met)"
+ },
+ "n_np": {
+  "value": "2",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict np)"
+ },
+ "n_pass": {
+  "value": "3",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict pass)"
+ },
+ "rest_W1": {
+  "value": "0.9545",
+  "anchor": "repro/gaps/expected/controls.json gap2/W1 at judge frame (LOSO probe)/auroc"
+ },
+ "rest_W1_hi": {
+  "value": "0.9908",
+  "anchor": "repro/gaps/expected/controls.json gap2/W1 at judge frame (LOSO probe)/ci95[1]"
+ },
+ "rest_W1_lo": {
+  "value": "0.9023",
+  "anchor": "repro/gaps/expected/controls.json gap2/W1 at judge frame (LOSO probe)/ci95[0]"
+ },
+ "rest_W2p": {
+  "value": "0.8655",
+  "anchor": "repro/gaps/expected/controls.json gap2/W2' at judge frame (LOSO probe)/auroc"
+ },
+ "rest_W2p_hi": {
+  "value": "0.9405",
+  "anchor": "repro/gaps/expected/controls.json gap2/W2' at judge frame (LOSO probe)/ci95[1]"
+ },
+ "rest_W2p_lo": {
+  "value": "0.7767",
+  "anchor": "repro/gaps/expected/controls.json gap2/W2' at judge frame (LOSO probe)/ci95[0]"
+ },
+ "rest_joints": {
+  "value": "0.7573",
+  "anchor": "repro/gaps/expected/controls.json gap2/joints (commanded) at judge frame (LOSO probe)/auroc"
+ },
+ "rest_joints_hi": {
+  "value": "0.8880",
+  "anchor": "repro/gaps/expected/controls.json gap2/joints (commanded) at judge frame (LOSO probe)/ci95[1]"
+ },
+ "rest_joints_lo": {
+  "value": "0.6084",
+  "anchor": "repro/gaps/expected/controls.json gap2/joints (commanded) at judge frame (LOSO probe)/ci95[0]"
+ },
+ "rest_judge": {
+  "value": "0.9432",
+  "anchor": "repro/gaps/expected/controls.json gap2/G9c-3 judge score s (no learning)/auroc"
+ },
+ "rest_judge_hi": {
+  "value": "0.9878",
+  "anchor": "repro/gaps/expected/controls.json gap2/G9c-3 judge score s (no learning)/ci95[1]"
+ },
+ "rest_judge_lo": {
+  "value": "0.8919",
+  "anchor": "repro/gaps/expected/controls.json gap2/G9c-3 judge score s (no learning)/ci95[0]"
+ },
+ "rest_policy": {
+  "value": "0.5882",
+  "anchor": "repro/gaps/expected/controls.json gap2/policy identity (LOSO probe)/auroc"
+ },
+ "rest_policy_hi": {
+  "value": "0.7515",
+  "anchor": "repro/gaps/expected/controls.json gap2/policy identity (LOSO probe)/ci95[1]"
+ },
+ "rest_policy_lo": {
+  "value": "0.4084",
+  "anchor": "repro/gaps/expected/controls.json gap2/policy identity (LOSO probe)/ci95[0]"
+ },
+ "rows": {
+  "value": "20",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py"
+ },
+ "same_commit": {
+  "value": "6",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. same-commit)"
+ },
+ "scale_eps": {
+  "value": "653",
+  "anchor": "repro/register/expected/FEASIBILITY.md: '(653 episodes'"
+ },
+ "sessions": {
+  "value": "13",
+  "anchor": "repro/gaps/expected/controls.json sessions"
+ },
+ "success": {
+  "value": "44",
+  "anchor": "repro/gaps/expected/controls.json success"
+ },
+ "surv_paper": {
+  "value": "0.20",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row SURVEYOR: 'paper 0.20'"
+ },
+ "surv_tau_W1": {
+  "value": "1.2488",
+  "anchor": "repro/gaps/expected/controls.json surveyor_gate0/W1/tau"
+ },
+ "surv_tau_W2p": {
+  "value": "0.3601",
+  "anchor": "repro/gaps/expected/controls.json surveyor_gate0/W2'/tau"
+ },
+ "surv_tau_joints": {
+  "value": "0.0265",
+  "anchor": "repro/gaps/expected/controls.json surveyor_gate0/joints (commanded)/tau"
+ },
+ "teleop_eps": {
+  "value": "182",
+  "anchor": "repro/register/expected/split.json n_train + n_val"
+ },
+ "train_eps": {
+  "value": "157",
+  "anchor": "repro/register/expected/split.json n_train"
+ },
+ "val_eps": {
+  "value": "25",
+  "anchor": "repro/register/expected/split.json n_val"
+ },
+ "w1a_hits": {
+  "value": "2/8 at 2/42",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row W1-A: '2/8 at 2/42'"
+ },
+ "wm_keys": {
+  "value": "351",
+  "anchor": "repro/gaps/expected/vla_jepa_keyset.json world_model_keys"
+ },
+ "wm_missing": {
+  "value": "0",
+  "anchor": "repro/gaps/expected/vla_jepa_keyset.json world_model_keys_missing"
+ }
+}

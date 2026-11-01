@@ -1,0 +1,13 @@
+{
+ "checkpoint": "/root/.cache/huggingface/hub/models--ravediamond--vla_jepa_so101_bowls_trimmed/snapshots/c65c98bb713d0e8bf3692e2fbc624869e1d10f05",
+ "module_keys": 1613,
+ "file_keys": 1612,
+ "missing": 1,
+ "unexpected": 0,
+ "missing_first": [
+  "model.qwen.model.model.language_model.embed_tokens.weight"
+ ],
+ "unexpected_first": [],
+ "world_model_keys": 351,
+ "world_model_keys_missing": 0
+}
