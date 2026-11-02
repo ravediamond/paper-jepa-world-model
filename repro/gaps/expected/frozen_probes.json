@@ -1,0 +1,25 @@
+{
+ "n": 69,
+ "success": 44,
+ "labels": "ravediamond/so101-bowls-policy-rollouts@bad1c8ea363789f5f55f9098e775f7361a0f019f",
+ "features": {
+  "W1": {
+   "dim": 192,
+   "in_sample_auroc_sanity": 1.0
+  },
+  "W2p": {
+   "dim": 768,
+   "in_sample_auroc_sanity": 1.0
+  },
+  "joints": {
+   "dim": 6,
+   "in_sample_auroc_sanity": 0.8645
+  },
+  "policy": {
+   "dim": 9,
+   "in_sample_auroc_sanity": 0.87
+  }
+ },
+ "sha256": "3a7fe4c1389bdc159655920ad05f250179136e2d681c0bda2d8d69777eda8d8a",
+ "anchor_probes": "pending: strict-load image step, before the first fresh rollout"
+}
