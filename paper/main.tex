@@ -64,7 +64,7 @@ The cleanest contrast is W1-C1: same encoder, same anchor, current latent 0.82 v
 65 / 302 & 1.5236 & −0.070 & 22.0 & −0.38 \\
 \bottomrule
 \end{tabular}
-\caption{Outcome AUROC on the same 69 rollouts. Exploratory (controls chosen after the data), LOSO linear probes, operator labels. At rest: 95 \% episode-bootstrap CI. At the anchor: 95 \% episode-bootstrap CI on the mean over 5 seeds of the out-of-fold AUROC (episodes resampled jointly across the seeds, 2,000 resamples, percentile).}
+\caption{VLA-JEPA world-model loss at 5 anchors with the true action tokens, tokens from another episode (Δ shuffled) and zeroed tokens; token change is the relative L2 of the shuffled tokens. Exploratory, a spot check, not a power analysis. Source: repro/gaps/expected/M3\_diag\_action\_shuffle.json.}
 \end{table*}
 \emph{Objection: G10 step 2 is a predictive pass.} The imagined latent beat policy identity by +0.179 --- but that bar is retrospective, and the two bar-first reruns of the same idea (W1-C1, G11-B-cal) fail.
 \section*{6. Related work}

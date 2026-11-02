@@ -56,6 +56,8 @@ The cleanest contrast is W1-C1: same encoder, same anchor, current latent 0.82 v
 
 *Exploratory, three further lines.* (1) On the distillation probe's §30 term (pooled, 25 teleop validation episodes), trained W1 (0.7476) is not distinguishable from its own random init (0.7974): difference −0.0499, 95 % paired episode-bootstrap CI [−0.7403, +0.6559] (`gap5_pooled_rerun.json`). The term is sensitive to BLAS / ridge conditioning: the same untrained network scored 1.4383 on one machine and 0.7974 / 0.8042 on two others. (2) The surprise scorer that gives W1 a class-5 AUROC of 0.775 (below its sanity bar) reproduces G0's K = 30 corruption ratios (cross-episode 3.428 vs 3.341, constant-first 2.558 vs 2.543; `M1_diag_g0_repro.json`), so 0.775 is a real value, not a load or scorer bug. (3) VLA-JEPA's predictor is near action-blind (exploratory, 5 anchors; `M3_diag_action_shuffle.json`): action tokens from another episode change the tokens by 21–28 % (relative L2) and the loss by about 0.05 %; zeroing the tokens changes it by about 1.05 % on average (|Δ| 0.4–2.2 %); the forward is deterministic. Its class-5 AUROC of 0.501 (below the same sanity bar) is therefore a real value, and its table stays unread under the frozen bar.
 
+Table 3: VLA-JEPA world-model loss at 5 anchors with the true action tokens, tokens from another episode (Δ shuffled) and zeroed tokens; token change is the relative L2 of the shuffled tokens. Exploratory, a spot check, not a power analysis. Source: repro/gaps/expected/M3_diag_action_shuffle.json.
+
 | anchor (episode / frame) | true loss | Δ shuffled (%) | token change (%) | Δ zeroed (%) |
 |---|---|---|---|---|
 | 8 / 402 | 1.3031 | +0.014 | 21.1 | +2.22 |
