@@ -5,15 +5,19 @@ fig/register.pdf: the register as a 20-row strip (use, what it takes from W1, pr
 import json
 from pathlib import Path
 
+import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE / "style"))
+import shisso_colors as sc
+sc.use()
 R = HERE.parent / "repro"
 OUT = HERE / "fig"
 INK, MUTED, GRID = "#1f1f1e", "#6b6a63", "#d9d8d2"
-NEEDS = {"encoder": "#2a78d6", "predictor": "#eb6834", "both": "#1baf7a"}
+NEEDS = {"encoder": sc.CATEGORICAL[0], "predictor": sc.CATEGORICAL[1], "both": sc.CATEGORICAL[2]}
 META = {"CreationDate": None, "ModDate": None, "Producer": None, "Creator": None}
 plt.rcParams.update({"font.size": 7, "font.family": "DejaVu Sans", "axes.edgecolor": MUTED, "axes.labelcolor": INK,
                      "xtick.color": MUTED, "ytick.color": INK, "pdf.fonttype": 42, "svg.hashsalt": "0"})
@@ -36,7 +40,7 @@ def table2():
             ax.spines[s].set_visible(False)
         ax.tick_params(axis="y", length=0)
     for y, (lab, key) in zip(ys, rest):
-        e = c["gap2"][key]; col = INK if lab.startswith("W1") else MUTED
+        e = c["gap2"][key]; col = sc.ACCENT if lab.startswith("W1") else sc.GREY
         axes[0].plot(e["ci95"], [y, y], color=col, lw=1.2, solid_capstyle="round")
         axes[0].plot(e["auroc"], y, "o", ms=4, color=col, mec="white", mew=0.8)
         if lab in anc:

@@ -1,0 +1,27 @@
+# Shisso figure style (WS-132): sized for a \columnwidth figure (3.4 in), 7 pt labels, no top/right spines.
+axes.prop_cycle: cycler('color', ['1F5FBF', 'E69F00', '009E73', 'D55E00', 'CC79A7'])
+axes.spines.top: False
+axes.spines.right: False
+axes.edgecolor: 555B66
+axes.labelcolor: 1A1C20
+axes.labelsize: 7
+axes.titlesize: 7.5
+axes.linewidth: 0.6
+axes.grid: False
+xtick.labelsize: 6.5
+ytick.labelsize: 6.5
+xtick.color: 555B66
+ytick.color: 555B66
+xtick.major.width: 0.6
+ytick.major.width: 0.6
+legend.fontsize: 6.5
+legend.frameon: False
+font.size: 7
+font.family: serif
+font.serif: P052, TeX Gyre Pagella, DejaVu Serif
+lines.linewidth: 1.2
+figure.figsize: 3.4, 2.2
+figure.dpi: 150
+savefig.dpi: 300
+savefig.bbox: tight
+pdf.fonttype: 42

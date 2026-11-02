@@ -139,13 +139,13 @@ def esc(s):
 
 
 def to_tex(md):
-    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{graphicx}",
+    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{graphicx}", r"\usepackage{style/shisso}", r"\shissorepo{github.com/ravediamond/paper-jepa-world-model}",
            r"\pdfinfoomitdate=1 \pdftrailerid{}" if False else "", r"\begin{document}"]
     lines, i, abstract, cap = md.splitlines(), 0, False, ""
     while i < len(lines):
         l = lines[i]
         if l.startswith("# "):
-            out += [r"\title{" + esc(l[2:]) + "}", r"\author{Ravindu Somawansa}", r"\date{}", r"\maketitle"]
+            out += [r"\title{" + esc(l[2:]) + "}", r"\author{Ravindu Somawansa\\Shisso Robotics\\\texttt{ravindu.somawansa@gmail.com}}", r"\date{}", r"\maketitle"]
         elif l.startswith("## Abstract"):
             out.append(r"\begin{abstract}"); abstract = True
         elif l.startswith("## "):
@@ -165,7 +165,7 @@ def to_tex(md):
                     t.append([esc(x.strip()) for x in lines[i].strip("|").split("|")])
                 i += 1
             out += [r"\begin{table*}[t]\centering\footnotesize", r"\begin{tabular}{" + "l" * len(t[0]) + "}", r"\toprule",
-                    " & ".join(t[0]) + r" \\", r"\midrule"] + [" & ".join(r) + r" \\" for r in t[1:]] + \
+                    r"\shissohead " + " & ".join(t[0]) + r" \\", r"\midrule"] + [" & ".join(r) + r" \\" for r in t[1:]] + \
                    [r"\bottomrule", r"\end{tabular}", r"\caption{" + esc(cap) + "}", r"\end{table*}"]
             continue
         elif l.startswith("*Ravindu"):

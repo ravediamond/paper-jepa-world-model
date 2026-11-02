@@ -10,5 +10,6 @@ paper:
 	$(PY) paper/make_paper.py
 	git diff --exit-code -- paper/numbers.json paper/main.tex paper/DRAFT_4p.md
 pdf:
+	git rev-parse --short HEAD | sed 's/.*/\\shissocommit{&}/' > paper/shisso_commit.tex
 	cd paper && $(TECTONIC) main.tex
 .PHONY: check l0 paper pdf

@@ -2,9 +2,11 @@
 \usepackage[margin=0.75in]{geometry}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{style/shisso}
+\shissorepo{github.com/ravediamond/paper-jepa-world-model}
 \begin{document}
 \title{A small JEPA world model: the encoder knows, the predictor does not add}
-\author{Ravindu Somawansa}
+\author{Ravindu Somawansa\\Shisso Robotics\\\texttt{ravindu.somawansa@gmail.com}}
 \date{}
 \maketitle
 \begin{abstract}
@@ -30,7 +32,7 @@ Figure 1 lists the 20 uses with what each takes from W1: the encoder alone (7), 
 \begin{table*}[t]\centering\footnotesize
 \begin{tabular}{lll}
 \toprule
-feature & at rest & grasp anchor (65 scored, 21 fail) \\
+\shissohead feature & at rest & grasp anchor (65 scored, 21 fail) \\
 \midrule
 W1 (ours) & 0.9545 [0.9023, 0.9908] & 0.8199 \\
 colour judge G9c-3 (no learning) & 0.9432 [0.8919, 0.9878] & --- \\

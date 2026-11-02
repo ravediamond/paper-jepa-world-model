@@ -1,3 +1,4 @@
 paper/*.aux
 paper/*.log
 __pycache__/
+paper/shisso_commit.tex
