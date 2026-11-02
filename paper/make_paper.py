@@ -150,14 +150,81 @@ def main():
     lit_file("audit_trained", "register/expected/AUDIT_W1_LOADS.md", "**Trained: 26 rows**", "26")
     lit_file("audit_random", "register/expected/AUDIT_W1_LOADS.md", "**random: 1**", "1")
 
+    assert N["same_commit_gates"] == "G6b", "prose names the same-commit row as the two-level hierarchical progress use"
+    put("rest_W1_2", f"{c['gap2'][names['W1']]['auroc']:.2f}", f"repro/gaps/expected/controls.json gap2/{names['W1']}/auroc, 2 decimals")
+    put("rest_judge_2", f"{c['gap2'][names['judge']]['auroc']:.2f}", f"repro/gaps/expected/controls.json gap2/{names['judge']}/auroc, 2 decimals")
+
     tpl = (HERE / "DRAFT_4p.md.in").read_text()
-    md = re.sub(r"\{\{(\w+)\}\}", lambda m: N[m.group(1)], tpl)
-    assert "{{" not in md
-    (HERE / "DRAFT_4p.md").write_text(md)
+    src = re.sub(r"\{\{(\w+)\}\}", lambda m: N[m.group(1)], tpl).replace("<!-- register -->", register_md(rows, uses, pa["rows"]))
+    assert "{{" not in src
+    bib = read_bib()
+    (HERE / "DRAFT_4p.md").write_text(to_md(src, bib))
     (HERE / "numbers.json").write_text(json.dumps({k: {"value": N[k], "anchor": A[k]} for k in sorted(N)}, indent=1, ensure_ascii=False) + "\n")
-    (HERE / "main.tex").write_text(to_tex(md))
-    import make_figs; make_figs.OUT.mkdir(exist_ok=True); make_figs.table2(); make_figs.register()
+    (HERE / "main.tex").write_text(to_tex(src, bib))
+    import make_figs; make_figs.OUT.mkdir(exist_ok=True); make_figs.table2()
     print(f"{len(N)} numbers; DRAFT_4p.md, main.tex, numbers.json written")
+
+
+# register table: one row per FEASIBILITY.md §2 row; names and citations from register_names.json, the rest verbatim
+PLAIN = [("W2 (frozen DINOv2-S)", "DINOv2-S"), ("W2′", "DINOv2-S"), ("W2", "DINOv2-S"), ("random-init W1", "random-init ours"),
+         ("W1", "ours"), ("G1b's", "the ranking row's"), ("v1 ", "first version "), ("v2 ", "second version ")]
+BARFIRST = {"bar-first": "yes", "same-commit": "same commit"}
+
+
+def plain(s):
+    for a, b in PLAIN:
+        s = s.replace(a, b)
+    return s
+
+
+def register_md(rows, uses, pa):
+    names = json.loads((HERE / "register_names.json").read_text())["rows"]
+    assert len(names) == len(rows) == len(uses) == len(pa)
+    out = ["Table @tab:register: The register: every pre-registered use of our world model (and the frozen-DINOv2 and RoboJEPA rows beside it), the paper it re-tests, what it takes from the model, whether the bar was committed before the result (audited against the commit history), the bar, the result and the verdict. Bar, result and verdict are quoted from repro/register/expected/FEASIBILITY.md §2 with the model names made plain; the code names the repro folder.",
+           "", "| use | re-tests | takes | bar first | bar | result | verdict | code |", "|---|---|---|---|---|---|---|---|"]
+    for l, u, q, nm in zip(rows, uses, pa, names):
+        cells = [x.strip() for x in l.split("|")]
+        assert cells[1].startswith(nm["gate"]) and cells[1].startswith(u["gate"]) and cells[1].startswith(q["register_gate"]), (cells[1], nm["gate"])
+        cite = "[" + "; ".join("@" + k for k in nm["cite"]) + "]" if nm["cite"] else "this project"
+        out.append("| " + " | ".join([nm["use"], cite, u["needs"], BARFIRST.get(q["class"], "none"), plain(cells[5]),
+                                      plain(cells[4]), plain(cells[6]), nm["code"]]) + " |")
+    return "\n".join(out)
+
+
+def read_bib():
+    """refs.bib -> {key: (short label, reference line)} in file order."""
+    bib = {}
+    for m in re.finditer(r"@\w+\{(\w+),(.*?)\n\}", (HERE / "refs.bib").read_text(), re.S):
+        f = dict(re.findall(r"(\w+)\s*=\s*\{(.*)\},?\s*$", m.group(2), re.M))
+        clean = lambda s: re.sub(r"[{}]|\\url", "", s).replace("\\'e", "é")
+        auth = [a.strip() for a in clean(f["author"]).split(" and ")]
+        last = lambda a: a.split(",")[0]
+        lab = last(auth[0]) + (" et al." if len(auth) > 2 else " and " + last(auth[1]) if len(auth) == 2 else "")
+        where = clean(f.get("journal") or f.get("howpublished") or f.get("note", ""))
+        bib[m.group(1)] = (lab, f"{', '.join(auth)}. {clean(f['title'])}. {where}, {f['year']}.")
+    return bib
+
+
+def numbering(src):
+    """Tables and figures numbered by order of definition, citations by order of first use."""
+    num, k = {}, {"tab": 0, "fig": 0}
+    for m in re.finditer(r"^Table @(tab:\w+):|^!\[.*\]\(.*\)\{#(fig:\w+)", src, re.M):
+        key = m.group(1) or m.group(2); k[key[:3]] += 1; num[key] = str(k[key[:3]])
+    cites = []
+    for m in re.finditer(r"\[(@[^\]]+)\]", src):
+        for key in re.findall(r"@(\w+)", m.group(1)):
+            if key not in cites: cites.append(key)
+    return num, cites
+
+
+def to_md(src, bib):
+    num, cites = numbering(src)
+    for c in cites:
+        assert c in bib, f"citation {c} not in refs.bib"
+    md = re.sub(r"\[(@[^\]]+)\]", lambda m: "[" + ", ".join(str(cites.index(k) + 1) for k in re.findall(r"@(\w+)", m.group(1))) + "]", src)
+    md = re.sub(r"\{#fig:\w+\}", "", md)
+    md = re.sub(r"@((?:tab|fig):\w+)", lambda m: num[m.group(1)], md)
+    return md.rstrip("\n") + "\n\n## References\n\n" + "\n".join(f"[{i + 1}] {bib[k][1]}" for i, k in enumerate(cites)) + "\n"
 
 
 SUB = [("\\", r"\textbackslash{}"), ("&", r"\&"), ("%", r"\%"), ("$", r"\$"), ("#", r"\#"), ("_", r"\_"),
@@ -173,44 +240,63 @@ def esc(s):
     return re.sub(r"\*([^*]+)\*", r"\\emph{\1}", s)
 
 
-def to_tex(md):
-    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{graphicx}", r"\usepackage{style/shisso}", r"\shissorepo{github.com/ravediamond/paper-jepa-world-model}",
-           r"\pdfinfoomitdate=1 \pdftrailerid{}" if False else "", r"\begin{document}"]
-    lines, i, abstract, cap = md.splitlines(), 0, False, ""
+COLS = {"tab:register": (r"\scriptsize", r">{\raggedright}p{2.2cm}>{\raggedright}p{1.0cm}p{1.25cm}>{\raggedright}p{0.9cm}>{\raggedright}p{2.1cm}>{\raggedright}p{4.2cm}>{\raggedright}p{1.5cm}p{1.1cm}")}
+
+
+def refs(s):
+    """esc'd text -> \\citep / \\ref (non-breaking space after Table / Fig. / Section)."""
+    s = re.sub(r"\[(@[^\]]+)\]", lambda m: r"~\citep{" + ",".join(re.findall(r"@(\w+)", m.group(1))) + "}", s)
+    s = s.replace(" ~\\citep", "~\\citep")
+    return re.sub(r"(Table|Fig\.|Figure|Section) @((?:tab|fig|sec):\w+)", r"\1~\\ref{\2}", s)
+
+
+def cell(s):
+    return refs(esc(s)).lstrip("~")
+
+
+def to_tex(md, bib):
+    out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{array}", r"\usepackage{graphicx}",
+           r"\usepackage[numbers,sort&compress]{natbib}", r"\usepackage{style/shisso}", r"\shissorepo{github.com/ravediamond/paper-jepa-world-model}",
+           r"\renewcommand{\dbltopfraction}{0.95}\renewcommand{\topfraction}{0.9}\renewcommand{\textfraction}{0.05}\setcounter{dbltopnumber}{2}", r"\begin{document}"]
+    lines, i, abstract, cap, lab = md.splitlines(), 0, False, "", ""
     while i < len(lines):
         l = lines[i]
         if l.startswith("# "):
-            out += [r"\title{" + esc(l[2:]) + "}", r"\author{Ravindu Somawansa\\Shisso Robotics\\\texttt{ravindu.somawansa@gmail.com}}", r"\date{}", r"\maketitle"]
+            out += [r"\title{" + esc(l[2:]) + "}",
+                    r"\author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@gmail.com}}",
+                    r"\date{}", r"\maketitle"]
         elif l.startswith("## Abstract"):
             out.append(r"\begin{abstract}"); abstract = True
         elif l.startswith("## "):
             if abstract:
                 out.append(r"\end{abstract}"); abstract = False
-            out.append(r"\section*{" + esc(l[3:]) + "}")
+            out.append(r"\section{" + esc(l[3:]) + "}")
         elif l.startswith("!["):
-            m = re.match(r"!\[(.*)\]\((.*)\)(\{wide\})?", l); env = "figure*" if m.group(3) else "figure"
-            out += [r"\begin{" + env + "}[t]\\centering", r"\includegraphics[width=" + (r"0.72\textwidth" if m.group(3) else r"\columnwidth") + "]{" + m.group(2) + "}",
-                    r"\caption{" + esc(m.group(1)) + "}", r"\end{" + env + "}"]
-        elif l.startswith("Table ") and i + 2 < len(lines) and lines[i + 2].startswith("|"):
-            cap = l.split(": ", 1)[1]
+            m = re.match(r"!\[(.*)\]\((.*)\)\{#(fig:\w+)\}(\{wide\})?", l); env = "figure*" if m.group(4) else "figure"
+            out += [r"\begin{" + env + "}[t]\\centering", r"\includegraphics[width=" + (r"0.72\textwidth" if m.group(4) else r"\columnwidth") + "]{" + m.group(2) + "}",
+                    r"\caption{" + cell(m.group(1)) + r"}\label{" + m.group(3) + "}", r"\end{" + env + "}"]
+        elif re.match(r"Table @tab:\w+: ", l):
+            lab, cap = re.match(r"Table @(tab:\w+): (.*)", l).groups()
         elif l.startswith("|"):
             t = []
             while i < len(lines) and lines[i].startswith("|"):
                 if not set(lines[i]) <= set("|-: "):
-                    t.append([esc(x.strip()) for x in lines[i].strip("|").split("|")])
+                    t.append([cell(x.strip()) for x in lines[i].strip("|").split("|")])
                 i += 1
-            out += [r"\begin{table*}[t]\centering\footnotesize", r"\begin{tabular}{" + "l" * len(t[0]) + "}", r"\toprule",
-                    r"\shissohead " + " & ".join(t[0]) + r" \\", r"\midrule"] + [" & ".join(r) + r" \\" for r in t[1:]] + \
-                   [r"\bottomrule", r"\end{tabular}", r"\caption{" + esc(cap) + "}", r"\end{table*}"]
+            size, spec = COLS.get(lab, (r"\scriptsize", "l" * len(t[0])))
+            end, env = (r" \tabularnewline", "table*") if lab in COLS else (r" \\", "table")
+            out += [r"\begin{" + env + r"}[!t]\centering\setlength{\tabcolsep}{3pt}" + size, r"\caption{" + cell(cap) + r"}\label{" + lab + "}", (r"\resizebox{\columnwidth}{!}{" if env == "table" else "") + r"\begin{tabular}{" + spec + "}", r"\toprule",
+                    r"\shissohead " + " & ".join(t[0]) + end, r"\midrule"] + [" & ".join(r) + end for r in t[1:]] + \
+                   [r"\bottomrule", r"\end{tabular}" + ("}" if env == "table" else ""), r"\end{" + env + "}"]
             continue
         elif l.startswith("*Ravindu"):
             pass
         else:
-            out.append(esc(l))
+            out.append(cell(l))
         i += 1
     if abstract:
         out.append(r"\end{abstract}")
-    out.append(r"\end{document}")
+    out += [r"\bibliographystyle{unsrtnat}", r"\bibliography{refs}", r"\end{document}"]
     return "\n".join(x for x in out if x != "") + "\n"
 
 

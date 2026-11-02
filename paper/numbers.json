@@ -391,6 +391,10 @@
   "value": "0.9545",
   "anchor": "repro/gaps/expected/controls.json gap2/W1 at judge frame (LOSO probe)/auroc"
  },
+ "rest_W1_2": {
+  "value": "0.95",
+  "anchor": "repro/gaps/expected/controls.json gap2/W1 at judge frame (LOSO probe)/auroc, 2 decimals"
+ },
  "rest_W1_hi": {
   "value": "0.9908",
   "anchor": "repro/gaps/expected/controls.json gap2/W1 at judge frame (LOSO probe)/ci95[1]"
@@ -426,6 +430,10 @@
  "rest_judge": {
   "value": "0.9432",
   "anchor": "repro/gaps/expected/controls.json gap2/G9c-3 judge score s (no learning)/auroc"
+ },
+ "rest_judge_2": {
+  "value": "0.94",
+  "anchor": "repro/gaps/expected/controls.json gap2/G9c-3 judge score s (no learning)/auroc, 2 decimals"
  },
  "rest_judge_hi": {
   "value": "0.9878",

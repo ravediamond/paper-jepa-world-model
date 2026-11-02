@@ -4,7 +4,7 @@ Every pre-registered use of one LeWM-style JEPA world model on one SO-101 arm: t
 
 ## What is here
 
-- `paper/`: the draft (markdown and LaTeX sources, `make_paper.py`, `numbers.json` with every number's anchor, generated `fig/`, the built `main.pdf`).
+- `paper/`: the draft (markdown and LaTeX sources, `make_paper.py`, `numbers.json` with every number's anchor, `refs.bib`, `register_names.json` with the plain names of the register rows, generated `fig/`, the built `main.pdf`).
 - `repro/`: one folder per experiment the paper cites (gaps, register): protocol, scripts, the expected result files the paper reads, `l0_check.py`, `REPRODUCE.md`.
 - `data/DATA.md`: every dataset and checkpoint, Hub id and pinned revision. No raw data is stored here.
 - `PROVENANCE.md`: where every file was copied from.
@@ -17,7 +17,7 @@ Every pre-registered use of one LeWM-style JEPA world model on one SO-101 arm: t
 
 ## Cost
 
-W1 training $3.30 on a rented GPU (register row G0); everything here is $0 on the Orin CPU.
+World-model (W1) training $3.30 on a rented GPU (register row G0); everything here is $0 on the Orin CPU.
 
 ## Licence
 

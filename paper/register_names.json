@@ -1,0 +1,25 @@
+{
+ "about": "Editorial layer of the register table (make_paper.py): the plain name of each FEASIBILITY.md §2 row (in row order), the refs.bib keys of the paper it re-tests ([] = a use designed in this project), and the short code that names its repro folder. Attributions follow the paper's Related work and the row text; the rows with [] are to be confirmed by the author.",
+ "rows": [
+  {"gate": "G0", "use": "open-loop latent prediction", "cite": ["maes2026lewm"], "code": "G0"},
+  {"gate": "C1 probe", "use": "imagined- vs current-latent outcome probe (first run)", "cite": ["zheng2026contactguard"], "code": "C1"},
+  {"gate": "G1b W1", "use": "action-chunk ranking", "cite": ["maes2026lewm"], "code": "G1b"},
+  {"gate": "G1 probes", "use": "arm-pose linear probe", "cite": ["maes2026lewm", "zhou2024dinowm"], "code": "G1"},
+  {"gate": "G1 W2 dynamics", "use": "chunk ranking with a frozen-DINOv2 world model", "cite": ["zhou2024dinowm"], "code": "G1-W2"},
+  {"gate": "G6a", "use": "progress monotonicity and done detection", "cite": [], "code": "G6a"},
+  {"gate": "G10", "use": "outcome readout at rest; imagined-latent anticipation", "cite": ["zheng2026contactguard"], "code": "G10"},
+  {"gate": "G6b", "use": "two-level hierarchical progress", "cite": ["zhang2026hjepa"], "code": "G6b"},
+  {"gate": "W1-A", "use": "surprise monitor", "cite": [], "code": "W1-A"},
+  {"gate": "W1-B", "use": "latent stage tracker", "cite": [], "code": "W1-B"},
+  {"gate": "G11-B-cal", "use": "calibrated surprise reflex", "cite": [], "code": "G11-B-cal"},
+  {"gate": "W1-C1", "use": "imagined-latent grasp probe", "cite": ["zheng2026contactguard"], "code": "W1-C1"},
+  {"gate": "W1-C2", "use": "conformal surprise band", "cite": [], "code": "W1-C2"},
+  {"gate": "W1-R", "use": "re-ranking chunk candidates", "cite": ["maes2026lewm"], "code": "W1-R"},
+  {"gate": "REAP", "use": "action-conditioned risk head", "cite": ["liu2026reap"], "code": "REAP"},
+  {"gate": "§30 inverse dynamics", "use": "inverse dynamics from a latent pair", "cite": [], "code": "§30"},
+  {"gate": "LeJEPA", "use": "linear identifiability of the latent", "cite": ["klindt2026lejepa"], "code": "LeJEPA"},
+  {"gate": "SURVEYOR", "use": "latent-distance scale for plan consumption", "cite": ["surveyor2026"], "code": "SURVEYOR"},
+  {"gate": "HWM", "use": "hierarchical vs flat prediction horizon", "cite": ["zhang2026hwm"], "code": "HWM"},
+  {"gate": "RoboJEPA", "use": "on-device latency of RoboJEPA / V-JEPA 2.1", "cite": ["zholus2026robojepa", "murlabadia2026vjepa21"], "code": "RoboJEPA"}
+ ]
+}
