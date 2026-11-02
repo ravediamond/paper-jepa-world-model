@@ -1,0 +1,73 @@
+{
+ "labels": "ravediamond/so101-bowls-policy-rollouts@bad1c8ea363789f5f55f9098e775f7361a0f019f meta/rollout_labels.csv",
+ "scored": 65,
+ "failures": 21,
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 0,
+  "unit": "episode",
+  "interval": "percentile 95 %"
+ },
+ "features": {
+  "W1": {
+   "auroc_mean_of_seeds": 0.8199,
+   "auroc_oof_per_seed": [
+    0.7554,
+    0.8171,
+    0.8377,
+    0.8561,
+    0.8333
+   ],
+   "auroc_seed_averaged": 0.8377,
+   "ci95_seed_averaged": [
+    0.725,
+    0.9267
+   ],
+   "auroc_seed0": 0.7554,
+   "ci95_seed0": [
+    0.6263,
+    0.8627
+   ]
+  },
+  "W2p": {
+   "auroc_mean_of_seeds": 0.7067,
+   "auroc_oof_per_seed": [
+    0.7024,
+    0.7348,
+    0.7045,
+    0.6829,
+    0.7089
+   ],
+   "auroc_seed_averaged": 0.7175,
+   "ci95_seed_averaged": [
+    0.5621,
+    0.8477
+   ],
+   "auroc_seed0": 0.7024,
+   "ci95_seed0": [
+    0.5562,
+    0.8384
+   ]
+  },
+  "joints": {
+   "auroc_mean_of_seeds": 0.5305,
+   "auroc_oof_per_seed": [
+    0.5574,
+    0.5043,
+    0.5411,
+    0.5119,
+    0.5379
+   ],
+   "auroc_seed_averaged": 0.5346,
+   "ci95_seed_averaged": [
+    0.3661,
+    0.7048
+   ],
+   "auroc_seed0": 0.5574,
+   "ci95_seed0": [
+    0.377,
+    0.735
+   ]
+  }
+ }
+}

@@ -34,15 +34,17 @@ Figure 1 lists the {{rows}} uses with what each takes from W1: the encoder alone
 
 ## 4. What the encoder knows
 
-Table 2: Outcome AUROC on the same {{n}} rollouts. Exploratory (controls chosen after the data), LOSO linear probes, operator labels. At rest: 95 % episode-bootstrap CI; at the anchor: mean of 5 seeds.
+Table 2: Outcome AUROC on the same {{n}} rollouts. Exploratory (controls chosen after the data), LOSO linear probes, operator labels. At rest: 95 % episode-bootstrap CI. At the anchor: 95 % episode-bootstrap CI on the mean over 5 seeds of the out-of-fold AUROC (episodes resampled jointly across the seeds, 2,000 resamples, percentile).
 
 | feature | at rest | grasp anchor ({{anc_scored}} scored, {{anc_fail}} fail) |
 |---|---|---|
-| W1 (ours) | {{rest_W1}} [{{rest_W1_lo}}, {{rest_W1_hi}}] | {{anc_W1}} |
+| W1 (ours) | {{rest_W1}} [{{rest_W1_lo}}, {{rest_W1_hi}}] | {{anc_W1}} [{{anc_W1_lo}}, {{anc_W1_hi}}] |
 | colour judge G9c-3 (no learning) | {{rest_judge}} [{{rest_judge_lo}}, {{rest_judge_hi}}] | — |
-| W2′ frozen DINOv2-S | {{rest_W2p}} [{{rest_W2p_lo}}, {{rest_W2p_hi}}] | {{anc_W2p}} |
-| commanded joints | {{rest_joints}} [{{rest_joints_lo}}, {{rest_joints_hi}}] | {{anc_joints}} |
+| W2′ frozen DINOv2-S | {{rest_W2p}} [{{rest_W2p_lo}}, {{rest_W2p_hi}}] | {{anc_W2p}} [{{anc_W2p_lo}}, {{anc_W2p_hi}}] |
+| commanded joints | {{rest_joints}} [{{rest_joints_lo}}, {{rest_joints_hi}}] | {{anc_joints}} [{{anc_joints_lo}}, {{anc_joints_hi}}] |
 | policy identity | {{rest_policy}} [{{rest_policy_lo}}, {{rest_policy_hi}}] | — |
+
+Sensitivity of the anchor column to the seed aggregation (exploratory): the AUROC of the 5-seed-averaged predictions is {{anc_W1_avg}} / {{anc_W2p_avg}} / {{anc_joints_avg}} (W1 / W2′ / joints), and seed 0 alone gives {{anc_W1_s0}} / {{anc_W2p_s0}} / {{anc_joints_s0}}, a smaller W1-over-W2′ gap; the ordering holds in both.
 
 ![Table 2 as a dot plot. Left: AUROC at rest with its 95 % bootstrap CI. Right: AUROC at the grasp anchor, mean of 5 seeds with the seed range (not a CI). Exploratory, LOSO, operator labels.](fig/table2.pdf)
 

@@ -3,9 +3,41 @@
   "value": "0.8199",
   "anchor": "repro/gaps/expected/controls.json w1c1/W1 current at anchor/auroc"
  },
+ "anc_W1_avg": {
+  "value": "0.8377",
+  "anchor": "repro/gaps/expected/anchor_ci_sensitivity.json features/W1/auroc_seed_averaged"
+ },
+ "anc_W1_hi": {
+  "value": "0.9041",
+  "anchor": "repro/gaps/expected/anchor_ci_mean_of_seeds.json features/W1/ci95_mean_of_seeds[1]"
+ },
+ "anc_W1_lo": {
+  "value": "0.7141",
+  "anchor": "repro/gaps/expected/anchor_ci_mean_of_seeds.json features/W1/ci95_mean_of_seeds[0]"
+ },
+ "anc_W1_s0": {
+  "value": "0.7554",
+  "anchor": "repro/gaps/expected/anchor_ci_sensitivity.json features/W1/auroc_seed0"
+ },
  "anc_W2p": {
   "value": "0.7067",
   "anchor": "repro/gaps/expected/controls.json w1c1/W2' current at anchor/auroc"
+ },
+ "anc_W2p_avg": {
+  "value": "0.7175",
+  "anchor": "repro/gaps/expected/anchor_ci_sensitivity.json features/W2p/auroc_seed_averaged"
+ },
+ "anc_W2p_hi": {
+  "value": "0.8269",
+  "anchor": "repro/gaps/expected/anchor_ci_mean_of_seeds.json features/W2p/ci95_mean_of_seeds[1]"
+ },
+ "anc_W2p_lo": {
+  "value": "0.5816",
+  "anchor": "repro/gaps/expected/anchor_ci_mean_of_seeds.json features/W2p/ci95_mean_of_seeds[0]"
+ },
+ "anc_W2p_s0": {
+  "value": "0.7024",
+  "anchor": "repro/gaps/expected/anchor_ci_sensitivity.json features/W2p/auroc_seed0"
  },
  "anc_fail": {
   "value": "21",
@@ -14,6 +46,22 @@
  "anc_joints": {
   "value": "0.5305",
   "anchor": "repro/gaps/expected/controls.json w1c1/joints (commanded) current at anchor/auroc"
+ },
+ "anc_joints_avg": {
+  "value": "0.5346",
+  "anchor": "repro/gaps/expected/anchor_ci_sensitivity.json features/joints/auroc_seed_averaged"
+ },
+ "anc_joints_hi": {
+  "value": "0.6855",
+  "anchor": "repro/gaps/expected/anchor_ci_mean_of_seeds.json features/joints/ci95_mean_of_seeds[1]"
+ },
+ "anc_joints_lo": {
+  "value": "0.3709",
+  "anchor": "repro/gaps/expected/anchor_ci_mean_of_seeds.json features/joints/ci95_mean_of_seeds[0]"
+ },
+ "anc_joints_s0": {
+  "value": "0.5574",
+  "anchor": "repro/gaps/expected/anchor_ci_sensitivity.json features/joints/auroc_seed0"
  },
  "anc_lead": {
   "value": "15",

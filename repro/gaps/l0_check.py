@@ -26,6 +26,30 @@ if (E / "controls.json").exists():
         if isinstance(v, dict):
             s = v["auroc_oof_per_seed"]
             check(f"anchor {k}: auroc = mean of seeds", abs(sum(s) / len(s) - v["auroc"]) < 6e-5)
+    # Table 2 anchor column recomputed from the per-episode predictions (anchor_stats.py, standard library).
+    # Tolerance 6e-5: values are stored at 4 decimals; the bootstrap is deterministic (random.Random(0)).
+    from anchor_stats import compute
+    r, tol = compute(), 6e-5
+    stored = json.loads((E / "anchor_ci_mean_of_seeds.json").read_text())
+    sens = json.loads((E / "anchor_ci_sensitivity.json").read_text())["features"]
+    nums = json.loads(Path("../../paper/numbers.json").read_text())
+    cname = {"W1": "W1 current at anchor", "W2p": "W2' current at anchor", "joints": "joints (commanded) current at anchor"}
+    check("anchor CSV: scored / failures = controls.json", (r["scored"], r["failures"]) == (c["w1c1"]["scored"], c["w1c1"]["failures"]))
+    for k, f in r["features"].items():
+        ctl = c["w1c1"][cname[k]]
+        check(f"anchor {k}: per-seed AUROCs from CSV = controls.json",
+              all(abs(a - b) < tol for a, b in zip(f["auroc_oof_per_seed"], ctl["auroc_oof_per_seed"])))
+        check(f"anchor {k}: mean of seeds from CSV = controls.json auroc", abs(f["auroc_mean_of_seeds"] - ctl["auroc"]) < tol)
+        check(f"anchor {k}: CSV result = anchor_ci_mean_of_seeds.json", f == stored["features"][k])
+        check(f"anchor {k}: seed-averaged and seed-0 AUROC = anchor_ci_sensitivity.json",
+              abs(f["auroc_seed_averaged"] - sens[k]["auroc_seed_averaged"]) < tol and abs(f["auroc_seed0"] - sens[k]["auroc_seed0"]) < tol)
+        check(f"anchor {k}: point and CI = paper/numbers.json",
+              abs(float(nums[f"anc_{k}"]["value"]) - f["auroc_mean_of_seeds"]) < tol
+              and abs(float(nums[f"anc_{k}_lo"]["value"]) - f["ci95_mean_of_seeds"][0]) < tol
+              and abs(float(nums[f"anc_{k}_hi"]["value"]) - f["ci95_mean_of_seeds"][1]) < tol)
+    for m in ("auroc_seed_averaged", "auroc_seed0"):
+        f = r["features"]
+        check(f"anchor {m}: W1 > W2p > joints", f["W1"][m] > f["W2p"][m] > f["joints"][m])
     k = json.loads((E / "vla_jepa_keyset.json").read_text())
     check("VLA-JEPA world-model keys: none missing", k["world_model_keys_missing"] == 0)
 else:

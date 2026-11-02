@@ -55,6 +55,14 @@ def main():
     put("anc_fail", str(w["failures"]), "repro/gaps/expected/controls.json w1c1/failures")
     for k, name in {"W1": "W1 current at anchor", "W2p": "W2' current at anchor", "joints": "joints (commanded) current at anchor"}.items():
         put(f"anc_{k}", f4(w[name]["auroc"]), f"repro/gaps/expected/controls.json w1c1/{name}/auroc")
+    ci = json.loads((G / "anchor_ci_mean_of_seeds.json").read_text())["features"]
+    se = json.loads((G / "anchor_ci_sensitivity.json").read_text())["features"]
+    for k in ("W1", "W2p", "joints"):
+        a = f"repro/gaps/expected/anchor_ci_mean_of_seeds.json features/{k}/ci95_mean_of_seeds"
+        put(f"anc_{k}_lo", f4(ci[k]["ci95_mean_of_seeds"][0]), a + "[0]"); put(f"anc_{k}_hi", f4(ci[k]["ci95_mean_of_seeds"][1]), a + "[1]")
+        a = f"repro/gaps/expected/anchor_ci_sensitivity.json features/{k}/"
+        put(f"anc_{k}_avg", f4(se[k]["auroc_seed_averaged"]), a + "auroc_seed_averaged")
+        put(f"anc_{k}_s0", f4(se[k]["auroc_seed0"]), a + "auroc_seed0")
     for k, name in {"W1": "W1", "W2p": "W2'", "joints": "joints (commanded)"}.items():
         put(f"surv_tau_{k}", f4(c["surveyor_gate0"][name]["tau"]), f"repro/gaps/expected/controls.json surveyor_gate0/{name}/tau")
     ks = json.loads((G / "vla_jepa_keyset.json").read_text())

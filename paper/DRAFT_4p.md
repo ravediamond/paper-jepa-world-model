@@ -34,15 +34,17 @@ Figure 1 lists the 20 uses with what each takes from W1: the encoder alone (7), 
 
 ## 4. What the encoder knows
 
-Table 2: Outcome AUROC on the same 69 rollouts. Exploratory (controls chosen after the data), LOSO linear probes, operator labels. At rest: 95 % episode-bootstrap CI; at the anchor: mean of 5 seeds.
+Table 2: Outcome AUROC on the same 69 rollouts. Exploratory (controls chosen after the data), LOSO linear probes, operator labels. At rest: 95 % episode-bootstrap CI. At the anchor: 95 % episode-bootstrap CI on the mean over 5 seeds of the out-of-fold AUROC (episodes resampled jointly across the seeds, 2,000 resamples, percentile).
 
 | feature | at rest | grasp anchor (65 scored, 21 fail) |
 |---|---|---|
-| W1 (ours) | 0.9545 [0.9023, 0.9908] | 0.8199 |
+| W1 (ours) | 0.9545 [0.9023, 0.9908] | 0.8199 [0.7141, 0.9041] |
 | colour judge G9c-3 (no learning) | 0.9432 [0.8919, 0.9878] | — |
-| W2′ frozen DINOv2-S | 0.8655 [0.7767, 0.9405] | 0.7067 |
-| commanded joints | 0.7573 [0.6084, 0.8880] | 0.5305 |
+| W2′ frozen DINOv2-S | 0.8655 [0.7767, 0.9405] | 0.7067 [0.5816, 0.8269] |
+| commanded joints | 0.7573 [0.6084, 0.8880] | 0.5305 [0.3709, 0.6855] |
 | policy identity | 0.5882 [0.4084, 0.7515] | — |
+
+Sensitivity of the anchor column to the seed aggregation (exploratory): the AUROC of the 5-seed-averaged predictions is 0.8377 / 0.7175 / 0.5346 (W1 / W2′ / joints), and seed 0 alone gives 0.7554 / 0.7024 / 0.5574, a smaller W1-over-W2′ gap; the ordering holds in both.
 
 ![Table 2 as a dot plot. Left: AUROC at rest with its 95 % bootstrap CI. Right: AUROC at the grasp anchor, mean of 5 seeds with the seed range (not a CI). Exploratory, LOSO, operator labels.](fig/table2.pdf)
 

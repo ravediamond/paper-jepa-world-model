@@ -69,3 +69,14 @@ Superseded by `../OUTLINE_4PAGE.md` (claim reworded on the owner's go, 2026-11-0
 - `M1_diag_g0_repro.json` — road-to-robotics `projects/jepa-surprise-receptive-field/results/M1_diag_g0_repro.json`
   @ fb68283 (WS-116 M1 diagnosis): the surprise scorer reproduces G0's K=30 corruption ratios (`by_k/30` vs `g0_k30`).
 - `M1_diag_note.md` — the README excerpt stating M1's class-5 step-2 AUROC (0.775) and that it stands as measured.
+
+## Table 2 grasp-anchor CI (WS-091 CI round, owner choice (a), 2026-11-02)
+
+- `anchor_predictions.csv`: out-of-fold anchor predictions, episode × feature (W1 | W2p | joints) × seed (5), labels and
+  scores only (65 episodes, label 1 = failure); from road-to-robotics `journal/papers/jepa-world-model/gaps/anchor_predictions.py`
+  on the cached features (the per-seed AUROCs equal `controls.json`).
+- `anchor_ci_mean_of_seeds.json`: written by `../anchor_stats.py` (standard library): the table's statistic (mean over 5 seeds
+  of the out-of-fold AUROC) and its 95 % episode-bootstrap CI (episodes resampled jointly across seeds, 2,000 resamples,
+  `random.Random(0)`, percentile). `l0_check.py` recomputes both from the CSV.
+- `anchor_ci_sensitivity.json`: copy of road-to-robotics `gaps/anchor_ci.json` (numpy / scikit-learn): AUROC of the
+  5-seed-averaged predictions and of seed 0 alone, with their CIs; the sensitivity sentence under Table 2.
