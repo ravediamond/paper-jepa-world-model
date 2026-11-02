@@ -8,11 +8,11 @@ We trained a LeWM-style JEPA world model (W1) on {{teleop_eps}} teleoperated dem
 
 ## 1. Introduction
 
-World-model papers report the use that worked. We report every use we pre-registered for one small JEPA world model on one ${{arm_cost}} arm: {{rows}} gates, each with a bar, a dataset and a verdict, logged in a public register ({{bar_first}} bars committed before their result, {{same_commit}} in the same commit as the result, and {{no_class}} row, the on-device latency of the pretrained RoboJEPA / V-JEPA 2.1, that is not a W1 use and has no pre-registration class). Of the {{rows}}, {{n_pass}} pass, {{n_met}} is met as predicted, {{n_np}} are not proven and {{n_fail}} fail or are no-go (the RoboJEPA row is one of the {{n_fail}}).
+World-model papers report the use that worked. We report every use we pre-registered for one small JEPA world model on one ${{arm_cost}} arm: {{rows}} gates, each with a bar, a dataset and a verdict, logged in a public register. Audited against the commit history ({{prereg_matched}} of {{rows}} rows matched to the audited pre-registration check), {{bar_first}} bars were committed before their result and {{same_commit}} ({{same_commit_gates}}) in the same commit as the result; one row, the on-device latency of the pretrained RoboJEPA / V-JEPA 2.1, is not a W1 use. Of the {{rows}}, {{n_pass}} pass, {{n_met}} is met as predicted, {{n_np}} are not proven and {{n_fail}} fail or are no-go (the RoboJEPA row is one of the {{n_fail}}).
 
 The result splits along the model. The *encoder* reads the episode's outcome from the current frame, better than a frozen foundation encoder or the robot's own joint commands, including at the grasp anchor, {{anc_lead}} frames before the gripper first closes. The *predictor*, which every forecasting use relies on, does not improve on that by imagining forward. Contribution: (i) the register, with a load audit of every checkpoint use (Fig. 1); (ii) controls that separate encoder from predictor (Table 2, Fig. 2); (iii) the reading that, at this data scale, the predictor is the weak link.
 
-**Caveats stated up front.** The encoder readouts are linear probes fit with leave-one-session-out (LOSO) cross-validation on {{n}} rollouts ({{success}} success / {{failure}} failure, {{sessions}} sessions) with operator labels; W1 was trained on teleop only and never saw them, but the controls were chosen after the data and are **exploratory**. Two of the three passes have same-commit bars.
+**Caveats stated up front.** The encoder readouts are linear probes fit with leave-one-session-out (LOSO) cross-validation on {{n}} rollouts ({{success}} success / {{failure}} failure, {{sessions}} sessions) with operator labels; W1 was trained on teleop only and never saw them, but the controls were chosen after the data and are **exploratory**. {{pass_bar_first}} of the {{n_pass}} passes have bars committed before the result; G10's is retrospective. Ordered by commit alone, without the audit, the register reads {{prereg_v1_bar_first}} bar-first and {{prereg_v1_same_commit}} same-commit.
 
 ## 2. Setup
 
@@ -26,9 +26,9 @@ The result splits along the model. The *encoder* reads the episode's outcome fro
 
 Figure 1 lists the {{rows}} uses with what each takes from W1: the encoder alone ({{uses_encoder}}), the predictor ({{uses_predictor}}) or both ({{uses_both}}).
 
-![The register: every pre-registered use of W1 (and the W2 / RoboJEPA rows beside it), what it takes from the model, whether its bar was committed before the result, and the verdict. Source: repro/register/expected/FEASIBILITY.md §2 and uses.json.](fig/register.pdf){wide}
+![The register: every pre-registered use of W1 (and the W2 / RoboJEPA rows beside it), what it takes from the model, whether its bar was committed before the result, and the verdict. Source: repro/register/expected/FEASIBILITY.md §2, uses.json and prereg_audited.json (audited class).](fig/register.pdf){wide}
 
-*Encoder reads.* G10 step 1 reads the outcome at rest (pass, retrospective, same-commit); W1-C1's current-latent arm reads the grasp at the anchor ({{c1_current}}). The pose probes (LeJEPA) measure what else the latent holds: the encoder holds about half of the joint variance linearly (R² {{lejepa_w1}}; the frozen DINOv2-S {{lejepa_w2p}}). Encoder uses that read progress or stage rather than outcome fail: G6a, G6b, W1-B, and SURVEYOR's latent-distance scale (τ {{surv_tau_W1}}, paper {{surv_paper}}).
+*Encoder reads.* G10 step 1 reads the outcome at rest (pass, retrospective); W1-C1's current-latent arm reads the grasp at the anchor ({{c1_current}}). The pose probes (LeJEPA) measure what else the latent holds: the encoder holds about half of the joint variance linearly (R² {{lejepa_w1}}; the frozen DINOv2-S {{lejepa_w2p}}). Encoder uses that read progress or stage rather than outcome fail: G6a, G6b, W1-B, and SURVEYOR's latent-distance scale (τ {{surv_tau_W1}}, paper {{surv_paper}}).
 
 *Predictor forecasts.* G0's open-loop prediction beats copy-last ({{g0_err}} vs {{g0_copy}} at K = 30): the predictor predicts its own latent. Every use of that prediction fails: G1b ranks chunks at top-1 {{g1b_top1}} (bar {{g1b_bar}}) while the commanded actions alone reach {{g1b_actions}}; W1-A's surprise catches {{w1a_hits}}; W1-C1's imagined latent ({{c1_imagined}}) is below the current one; HWM finds no crossover; W1-C2, W1-R, REAP and G11-B-cal all miss their bars.
 
@@ -54,9 +54,17 @@ At rest W1 is level with the colour judge (CIs overlap) and above the frozen enc
 
 The cleanest contrast is W1-C1: same encoder, same anchor, current latent {{c1_current}} vs imagined {{c1_imagined}} (bar {{c1_bar}} over current). Imagining forward loses outcome information the encoder had. On SURVEYOR's scale check, W2′ (τ {{surv_tau_W2p}}) and the joints (τ {{surv_tau_joints}}) pass where W1 fails, which points at W1's latent geometry rather than the task.
 
-*Exploratory, two further lines.* (1) On the distillation probe's §30 term (pooled, {{g5_val}} teleop validation episodes), trained W1 ({{g5_w1}}) is not distinguishable from its own random init ({{g5_rand}}): difference {{g5_diff}}, 95 % paired episode-bootstrap CI [{{g5_lo}}, {{g5_hi}}] (`gap5_pooled_rerun.json`). The term is sensitive to BLAS / ridge conditioning: the same untrained network scored {{g5_unstable}} on one machine and {{g5_rand}} / {{g5_orin}} on two others. (2) The surprise scorer that gives W1 a class-5 AUROC of {{m1_auroc}} (below its sanity bar) reproduces G0's K = 30 corruption ratios (cross-episode {{m1_xep}} vs {{m1_xep_g0}}, constant-first {{m1_cf}} vs {{m1_cf_g0}}; `M1_diag_g0_repro.json`), so {{m1_auroc}} is a real value, not a load or scorer bug.
+*Exploratory, three further lines.* (1) On the distillation probe's §30 term (pooled, {{g5_val}} teleop validation episodes), trained W1 ({{g5_w1}}) is not distinguishable from its own random init ({{g5_rand}}): difference {{g5_diff}}, 95 % paired episode-bootstrap CI [{{g5_lo}}, {{g5_hi}}] (`gap5_pooled_rerun.json`). The term is sensitive to BLAS / ridge conditioning: the same untrained network scored {{g5_unstable}} on one machine and {{g5_rand}} / {{g5_orin}} on two others. (2) The surprise scorer that gives W1 a class-5 AUROC of {{m1_auroc}} (below its sanity bar) reproduces G0's K = 30 corruption ratios (cross-episode {{m1_xep}} vs {{m1_xep_g0}}, constant-first {{m1_cf}} vs {{m1_cf_g0}}; `M1_diag_g0_repro.json`), so {{m1_auroc}} is a real value, not a load or scorer bug. (3) VLA-JEPA's predictor is near action-blind (exploratory, {{m3_n}} anchors; `M3_diag_action_shuffle.json`): action tokens from another episode change the tokens by {{m3_tok_lo}}–{{m3_tok_hi}} % (relative L2) and the loss by about {{m3_sh}} %; zeroing the tokens changes it by about {{m3_zero}} % on average (|Δ| {{m3_zero_lo}}–{{m3_zero_hi}} %); the forward is deterministic. Its class-5 AUROC of {{m3_auroc}} (below the same sanity bar) is therefore a real value, and its table stays unread under the frozen bar.
 
-*Objection: G10 step 2 is a predictive pass.* The imagined latent beat policy identity by {{g10_anticip}} — but that bar is same-commit and retrospective, and the two bar-first reruns of the same idea (W1-C1, G11-B-cal) fail.
+| anchor (episode / frame) | true loss | Δ shuffled (%) | token change (%) | Δ zeroed (%) |
+|---|---|---|---|---|
+| {{m3_0_ep}} / {{m3_0_fr}} | {{m3_0_true}} | {{m3_0_sh}} | {{m3_0_tok}} | {{m3_0_zero}} |
+| {{m3_1_ep}} / {{m3_1_fr}} | {{m3_1_true}} | {{m3_1_sh}} | {{m3_1_tok}} | {{m3_1_zero}} |
+| {{m3_2_ep}} / {{m3_2_fr}} | {{m3_2_true}} | {{m3_2_sh}} | {{m3_2_tok}} | {{m3_2_zero}} |
+| {{m3_3_ep}} / {{m3_3_fr}} | {{m3_3_true}} | {{m3_3_sh}} | {{m3_3_tok}} | {{m3_3_zero}} |
+| {{m3_4_ep}} / {{m3_4_fr}} | {{m3_4_true}} | {{m3_4_sh}} | {{m3_4_tok}} | {{m3_4_zero}} |
+
+*Objection: G10 step 2 is a predictive pass.* The imagined latent beat policy identity by {{g10_anticip}} — but that bar is retrospective, and the two bar-first reruns of the same idea (W1-C1, G11-B-cal) fail.
 
 ## 6. Related work
 
@@ -64,7 +72,7 @@ LeWorldModel (2603.19312) trains the JEPA recipe we use end to end from pixels a
 
 ## 7. Limitations
 
-Exploratory controls: {{n}} rollouts, operator labels, probes chosen after the data; fresh rollouts scored under a bar committed first are the test. One rig, one model, one data scale: a second scale point ({{scale_eps}} episodes) is costed and queued separately, and the scale curve belongs to the longer version. Not run: W1-A surprise and W1-C1 imagined with W2′ / joints (each needs its own predictor), G6a T1 with the controls (needs a reimplementation). G0 and G10 bars are same-commit.
+Exploratory controls: {{n}} rollouts, operator labels, probes chosen after the data; fresh rollouts scored under a bar committed first are the test. One rig, one model, one data scale: a second scale point ({{scale_eps}} episodes) is costed and queued separately, and the scale curve belongs to the longer version. Not run: W1-A surprise and W1-C1 imagined with W2′ / joints (each needs its own predictor), G6a T1 with the controls (needs a reimplementation). G10's bar is retrospective; the one same-commit bar is {{same_commit_gates}}'s.
 
 ## 8. Conclusion
 

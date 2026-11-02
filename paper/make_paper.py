@@ -84,8 +84,18 @@ def main():
     a = "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py"
     put("rows", str(len(rows)), a)
     for k in cnt: put(f"n_{k}", str(cnt[k]), a + f" (verdict {k})")
-    put("bar_first", str(pre["bar-first"]), a + " (pre-reg. bar-first)"); put("same_commit", str(pre["same-commit"]), a + " (pre-reg. same-commit)")
-    put("no_class", str(pre["—"]), a + " (pre-reg. '—')")
+    pa = json.loads((REG / "prereg_audited.json").read_text())
+    assert [r["register_gate"] for r in pa["rows"]] == [l.split("|")[1].strip()[:len(r["register_gate"])] for l, r in zip(rows, pa["rows"])]
+    a = "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py"
+    cls = [r["class"] for r in pa["rows"]]
+    put("prereg_matched", str(len(pa["rows"]) - len(pa["unmatched"])), a + " (rows minus unmatched)")
+    put("bar_first", str(cls.count("bar-first")), a + " (bar-first)"); put("same_commit", str(cls.count("same-commit")), a + " (same-commit)")
+    put("same_commit_gates", ", ".join(r["register_gate"] for r in pa["rows"] if r["class"] == "same-commit"), a + " (same-commit gates)")
+    vs = [l.split("|")[6].lower() for l in rows]
+    passes = [c for v, c in zip(vs, cls) if "pass" in v and "fail" not in v and "not proven" not in v]
+    put("pass_bar_first", str(passes.count("bar-first")), a + " (bar-first among the verdict-pass rows of FEASIBILITY.md §2)")
+    put("prereg_v1_bar_first", str(pre["bar-first"]), "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. bar-first, commit order only)")
+    put("prereg_v1_same_commit", str(pre["same-commit"]), "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. same-commit, commit order only)")
     uses = json.loads((REG / "uses.json").read_text())["rows"]
     for k in ("encoder", "predictor", "both"):
         put(f"uses_{k}", str(sum(u["needs"] == k for u in uses)), f"repro/register/expected/uses.json rows, needs = {k}")
@@ -104,6 +114,23 @@ def main():
         put(f"m1_{k}", f"{m1['by_k']['30'][name]:.3f}", a + f" by_k/30/{name}")
         put(f"m1_{k}_g0", f"{m1['g0_k30'][name]:.3f}", a + f" g0_k30/{name}")
     lit_file("m1_auroc", "gaps/expected/M1_diag_note.md", "AUROC 0.775 < 0.9", "0.775")
+    m3 = json.loads((G / "M3_diag_action_shuffle.json").read_text()); a = "repro/gaps/expected/M3_diag_action_shuffle.json"
+    pct = lambda x, y: 100 * (x - y) / y
+    tok = [100 * r["token_rel_l2"] for r in m3["rows"]]; zero = [abs(pct(r["zero_tokens"], r["true_1"])) for r in m3["rows"]]
+    for i, r in enumerate(m3["rows"]):
+        b = a + f" rows[{i}]"
+        put(f"m3_{i}_ep", str(r["episode"]), b + "/episode"); put(f"m3_{i}_fr", str(r["anchor"]), b + "/anchor")
+        put(f"m3_{i}_true", f4(r["true_1"]), b + "/true_1")
+        put(f"m3_{i}_sh", f"{pct(r['shuffled'], r['true_1']):+.3f}".replace("-", "−"), b + " 100 (shuffled − true_1) / true_1")
+        put(f"m3_{i}_tok", f"{tok[i]:.1f}", b + " 100 token_rel_l2")
+        put(f"m3_{i}_zero", f"{pct(r['zero_tokens'], r['true_1']):+.2f}".replace("-", "−"), b + " 100 (zero_tokens − true_1) / true_1")
+    put("m3_n", str(len(m3["rows"])), a + " len(rows)")
+    put("m3_tok_lo", f"{min(tok):.0f}", a + " min over rows of 100 token_rel_l2"); put("m3_tok_hi", f"{max(tok):.0f}", a + " max over rows of 100 token_rel_l2")
+    put("m3_sh", f"{100 * m3['mean_abs_diff_shuffled'] / m3['mean_true']:.2f}", a + " 100 mean_abs_diff_shuffled / mean_true")
+    put("m3_zero", f"{sum(zero) / len(zero):.2f}", a + " mean over rows of 100 |zero_tokens − true_1| / true_1")
+    put("m3_zero_lo", f"{min(zero):.1f}", a + " min over rows of 100 |zero_tokens − true_1| / true_1")
+    put("m3_zero_hi", f"{max(zero):.1f}", a + " max over rows of 100 |zero_tokens − true_1| / true_1")
+    lit_file("m3_auroc", "gaps/expected/M3_diag_note.md", "class-5 AUROC is 0.501 against the 0.9", "0.501")
 
     lit("g0_err", "G0", "0.31"); lit("g0_copy", "G0", "0.89")
     lit("g1b_top1", "G1b", "0.60"); lit("g1b_actions", "G1b", "0.68–0.90"); lit("g1b_bar", "G1b", "≥ 0.8", "0.8")

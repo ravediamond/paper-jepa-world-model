@@ -84,8 +84,8 @@
   "anchor": "repro/register/expected/AUDIT_W1_LOADS.md: '**Trained: 26 rows**'"
  },
  "bar_first": {
-  "value": "13",
-  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. bar-first)"
+  "value": "19",
+  "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (bar-first)"
  },
  "c1_bar": {
   "value": "≥ 0.85, ≥ +0.05",
@@ -199,6 +199,158 @@
   "value": "3.341",
   "anchor": "repro/gaps/expected/M1_diag_g0_repro.json g0_k30/cross_episode_ratio"
  },
+ "m3_0_ep": {
+  "value": "8",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[0]/episode"
+ },
+ "m3_0_fr": {
+  "value": "402",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[0]/anchor"
+ },
+ "m3_0_sh": {
+  "value": "+0.014",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[0] 100 (shuffled − true_1) / true_1"
+ },
+ "m3_0_tok": {
+  "value": "21.1",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[0] 100 token_rel_l2"
+ },
+ "m3_0_true": {
+  "value": "1.3031",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[0]/true_1"
+ },
+ "m3_0_zero": {
+  "value": "+2.22",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[0] 100 (zero_tokens − true_1) / true_1"
+ },
+ "m3_1_ep": {
+  "value": "10",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[1]/episode"
+ },
+ "m3_1_fr": {
+  "value": "227",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[1]/anchor"
+ },
+ "m3_1_sh": {
+  "value": "+0.088",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[1] 100 (shuffled − true_1) / true_1"
+ },
+ "m3_1_tok": {
+  "value": "27.6",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[1] 100 token_rel_l2"
+ },
+ "m3_1_true": {
+  "value": "1.4641",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[1]/true_1"
+ },
+ "m3_1_zero": {
+  "value": "+0.50",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[1] 100 (zero_tokens − true_1) / true_1"
+ },
+ "m3_2_ep": {
+  "value": "23",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[2]/episode"
+ },
+ "m3_2_fr": {
+  "value": "327",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[2]/anchor"
+ },
+ "m3_2_sh": {
+  "value": "+0.036",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[2] 100 (shuffled − true_1) / true_1"
+ },
+ "m3_2_tok": {
+  "value": "21.1",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[2] 100 token_rel_l2"
+ },
+ "m3_2_true": {
+  "value": "1.4215",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[2]/true_1"
+ },
+ "m3_2_zero": {
+  "value": "+0.87",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[2] 100 (zero_tokens − true_1) / true_1"
+ },
+ "m3_3_ep": {
+  "value": "59",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[3]/episode"
+ },
+ "m3_3_fr": {
+  "value": "302",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[3]/anchor"
+ },
+ "m3_3_sh": {
+  "value": "+0.030",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[3] 100 (shuffled − true_1) / true_1"
+ },
+ "m3_3_tok": {
+  "value": "25.5",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[3] 100 token_rel_l2"
+ },
+ "m3_3_true": {
+  "value": "1.4637",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[3]/true_1"
+ },
+ "m3_3_zero": {
+  "value": "+1.28",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[3] 100 (zero_tokens − true_1) / true_1"
+ },
+ "m3_4_ep": {
+  "value": "65",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[4]/episode"
+ },
+ "m3_4_fr": {
+  "value": "302",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[4]/anchor"
+ },
+ "m3_4_sh": {
+  "value": "−0.070",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[4] 100 (shuffled − true_1) / true_1"
+ },
+ "m3_4_tok": {
+  "value": "22.0",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[4] 100 token_rel_l2"
+ },
+ "m3_4_true": {
+  "value": "1.5236",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[4]/true_1"
+ },
+ "m3_4_zero": {
+  "value": "−0.38",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json rows[4] 100 (zero_tokens − true_1) / true_1"
+ },
+ "m3_auroc": {
+  "value": "0.501",
+  "anchor": "repro/gaps/expected/M3_diag_note.md: 'class-5 AUROC is 0.501 against the 0.9'"
+ },
+ "m3_n": {
+  "value": "5",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json len(rows)"
+ },
+ "m3_sh": {
+  "value": "0.05",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json 100 mean_abs_diff_shuffled / mean_true"
+ },
+ "m3_tok_hi": {
+  "value": "28",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json max over rows of 100 token_rel_l2"
+ },
+ "m3_tok_lo": {
+  "value": "21",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json min over rows of 100 token_rel_l2"
+ },
+ "m3_zero": {
+  "value": "1.05",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json mean over rows of 100 |zero_tokens − true_1| / true_1"
+ },
+ "m3_zero_hi": {
+  "value": "2.2",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json max over rows of 100 |zero_tokens − true_1| / true_1"
+ },
+ "m3_zero_lo": {
+  "value": "0.4",
+  "anchor": "repro/gaps/expected/M3_diag_action_shuffle.json min over rows of 100 |zero_tokens − true_1| / true_1"
+ },
  "n": {
   "value": "69",
   "anchor": "repro/gaps/expected/controls.json n"
@@ -219,9 +371,21 @@
   "value": "3",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict pass)"
  },
- "no_class": {
-  "value": "1",
-  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. '—')"
+ "pass_bar_first": {
+  "value": "3",
+  "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (bar-first among the verdict-pass rows of FEASIBILITY.md §2)"
+ },
+ "prereg_matched": {
+  "value": "20",
+  "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (rows minus unmatched)"
+ },
+ "prereg_v1_bar_first": {
+  "value": "13",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. bar-first, commit order only)"
+ },
+ "prereg_v1_same_commit": {
+  "value": "6",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. same-commit, commit order only)"
  },
  "rest_W1": {
   "value": "0.9545",
@@ -296,8 +460,12 @@
   "anchor": "repro/register/expected/FEASIBILITY.md: '+0.03 points'"
  },
  "same_commit": {
-  "value": "6",
-  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. same-commit)"
+  "value": "1",
+  "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (same-commit)"
+ },
+ "same_commit_gates": {
+  "value": "G6b",
+  "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (same-commit gates)"
  },
  "scale_eps": {
   "value": "653",

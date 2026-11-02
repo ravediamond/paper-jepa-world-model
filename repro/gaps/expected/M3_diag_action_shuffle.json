@@ -1,0 +1,97 @@
+{
+ "checkpoint": "/root/.cache/huggingface/hub/models--ravediamond--vla_jepa_so101_bowls_trimmed/snapshots/c65c98bb713d0e8bf3692e2fbc624869e1d10f05",
+ "seed": 116,
+ "token_shape": [
+  1,
+  24,
+  2048
+ ],
+ "derangement": [
+  2,
+  4,
+  1,
+  0,
+  3
+ ],
+ "rows": [
+  {
+   "episode": 8,
+   "anchor": 402,
+   "anchor_k": 5,
+   "m3_clean_stored": 1.3030803203582764,
+   "m3_c5_s2_stored": 1.302616000175476,
+   "true_1": 1.3030803203582764,
+   "true_2": 1.3030803203582764,
+   "shuffled_from_episode": 23,
+   "shuffled": 1.3032646179199219,
+   "diff_shuffled_minus_true": 0.0001842975616455078,
+   "noise_true2_minus_true1": 0.0,
+   "token_rel_l2": 0.21133731305599213,
+   "zero_tokens": 1.3319971561431885
+  },
+  {
+   "episode": 10,
+   "anchor": 227,
+   "anchor_k": 5,
+   "m3_clean_stored": 1.4641168117523193,
+   "m3_c5_s2_stored": 1.4650514125823975,
+   "true_1": 1.4641168117523193,
+   "true_2": 1.4641168117523193,
+   "shuffled_from_episode": 65,
+   "shuffled": 1.46540105342865,
+   "diff_shuffled_minus_true": 0.0012842416763305664,
+   "noise_true2_minus_true1": 0.0,
+   "token_rel_l2": 0.27613309025764465,
+   "zero_tokens": 1.4714536666870117
+  },
+  {
+   "episode": 23,
+   "anchor": 327,
+   "anchor_k": 5,
+   "m3_clean_stored": 1.4215224981307983,
+   "m3_c5_s2_stored": 1.4216450452804565,
+   "true_1": 1.4215224981307983,
+   "true_2": 1.4215224981307983,
+   "shuffled_from_episode": 10,
+   "shuffled": 1.4220352172851562,
+   "diff_shuffled_minus_true": 0.0005127191543579102,
+   "noise_true2_minus_true1": 0.0,
+   "token_rel_l2": 0.2111821472644806,
+   "zero_tokens": 1.4339559078216553
+  },
+  {
+   "episode": 59,
+   "anchor": 302,
+   "anchor_k": 5,
+   "m3_clean_stored": 1.4637320041656494,
+   "m3_c5_s2_stored": 1.4640369415283203,
+   "true_1": 1.4637320041656494,
+   "true_2": 1.4637320041656494,
+   "shuffled_from_episode": 8,
+   "shuffled": 1.4641655683517456,
+   "diff_shuffled_minus_true": 0.0004335641860961914,
+   "noise_true2_minus_true1": 0.0,
+   "token_rel_l2": 0.2549651563167572,
+   "zero_tokens": 1.482466459274292
+  },
+  {
+   "episode": 65,
+   "anchor": 302,
+   "anchor_k": 5,
+   "m3_clean_stored": 1.5235666036605835,
+   "m3_c5_s2_stored": 1.522017240524292,
+   "true_1": 1.5235666036605835,
+   "true_2": 1.5235666036605835,
+   "shuffled_from_episode": 59,
+   "shuffled": 1.5224978923797607,
+   "diff_shuffled_minus_true": -0.001068711280822754,
+   "noise_true2_minus_true1": 0.0,
+   "token_rel_l2": 0.2204141467809677,
+   "zero_tokens": 1.517704725265503
+  }
+ ],
+ "mean_abs_diff_shuffled": 0.0006967067718505859,
+ "mean_abs_noise": 0.0,
+ "mean_abs_diff_stored_c5_s2_vs_clean": 0.0006751537322998047,
+ "mean_true": 1.4352036476135255
+}

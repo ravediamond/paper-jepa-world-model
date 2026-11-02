@@ -50,6 +50,9 @@ if (E / "controls.json").exists():
     for m in ("auroc_seed_averaged", "auroc_seed0"):
         f = r["features"]
         check(f"anchor {m}: W1 > W2p > joints", f["W1"][m] > f["W2p"][m] > f["joints"][m])
+    m3 = json.loads((E / "M3_diag_action_shuffle.json").read_text())
+    check("M3 diag: forward deterministic (noise 0), mean |shuffle diff| recomputes from rows",
+          m3["mean_abs_noise"] == 0 and abs(sum(abs(r["diff_shuffled_minus_true"]) for r in m3["rows"]) / len(m3["rows"]) - m3["mean_abs_diff_shuffled"]) < 1e-9)
     k = json.loads((E / "vla_jepa_keyset.json").read_text())
     check("VLA-JEPA world-model keys: none missing", k["world_model_keys_missing"] == 0)
 else:

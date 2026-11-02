@@ -59,14 +59,15 @@ def register():
     t = (R / "register/expected/FEASIBILITY.md").read_text().split("## 2.", 1)[1].split("## 3.", 1)[0]
     rows = [[x.strip() for x in l.split("|")] for l in t.splitlines() if l.startswith("| ") and not l.startswith("| gate")]
     uses = json.loads((R / "register/expected/uses.json").read_text())["rows"]
-    assert len(uses) == len(rows)
+    pa = json.loads((R / "register/expected/prereg_audited.json").read_text())["rows"]
+    assert len(uses) == len(rows) == len(pa)
     plt.rcParams["font.size"] = 6
     fig, ax = plt.subplots(figsize=(5.0, 2.9))
     ax.set_xlim(0, 8.2); ax.set_ylim(-0.7, len(rows) - 0.3); ax.axis("off")
     for x, h in ((0, "use"), (2.9, "takes from W1"), (4.6, "bar"), (6.3, "verdict")):
         ax.text(x, len(rows) - 0.4, h, fontsize=6.5, color=MUTED, va="bottom", weight="bold")
-    for i, (r, u) in enumerate(zip(rows, uses)):
-        assert r[1].startswith(u["gate"]), (r[1], u["gate"])
+    for i, (r, u, q) in enumerate(zip(rows, uses, pa)):
+        assert r[1].startswith(u["gate"]) and r[1].startswith(q["register_gate"]), (r[1], u["gate"], q["register_gate"])
         y = len(rows) - 1 - i
         name = r[1].split(" (")[0].replace("**", "").replace(" on device", "").replace("REAP v1", "REAP v1 / v2")
         v = r[6].replace("**", "").replace(" (retrospective)", " (retro.)").replace(" (policy confound)", "")
@@ -75,7 +76,8 @@ def register():
         ax.text(0, y, name[:24], va="center", color=INK)
         ax.plot(2.97, y, "s", ms=4, color=NEEDS[u["needs"]], mec="white", mew=0.5)
         ax.text(3.12, y, u["needs"], va="center", color=INK)
-        ax.text(4.6, y, r[7] if r[7] != "—" else "— (not W1)", va="center", color=INK if r[7] == "bar-first" else MUTED)
+        c = q["class"] + (" (not W1)" if r[7] == "—" else "")
+        ax.text(4.6, y, c, va="center", color=INK if q["class"] == "bar-first" else MUTED)
         ax.text(6.3, y, v[:20], va="center", color=INK, weight="bold" if ("pass" in v.lower() and "fail" not in v.lower()) or "met" in v.lower() else "normal")
     fig.savefig(OUT / "register.pdf", bbox_inches="tight", metadata=META); plt.close(fig)
 

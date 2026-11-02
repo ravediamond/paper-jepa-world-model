@@ -1,0 +1,454 @@
+{
+ "about": "The paper's 20 register rows mapped to journal/papers/reproducibility-study/prereg_check.json (road-to-robotics); 'class' = the audited class of the matched rows (WS-136 audit), 'class_v1' kept for reference. Built by journal/papers/jepa-world-model/gaps/prereg_map.py.",
+ "source": "road-to-robotics journal/papers/reproducibility-study/prereg_check.json",
+ "source_commit": "7c9998c",
+ "source_sha256": "65b0463adea47bd9339982bbdc6e7486fac9b42250329e1238bf95adad4c4fc6",
+ "unmatched": [],
+ "rows": [
+  {
+   "register_gate": "G0",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 13,
+     "gate": "G0",
+     "date": "2026-10-11",
+     "bar_commit": "bdd1dc1",
+     "bar_date": "2026-10-10T07:54",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "52a1074",
+     "result_date": "2026-10-11T09:59",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "pass"
+    }
+   ]
+  },
+  {
+   "register_gate": "C1 probe",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 14,
+     "gate": "C1 probe",
+     "date": "2026-10-11",
+     "bar_commit": "500e37a",
+     "bar_date": "2026-10-10T08:53",
+     "bar_how": "protocol file PROBE_PROTOCOL.md",
+     "result_commit": "5fc1779",
+     "result_date": "2026-10-16T09:34",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "not proven (data confounded with policy)"
+    }
+   ]
+  },
+  {
+   "register_gate": "G1b W1",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 15,
+     "gate": "G1b W1",
+     "date": "2026-10-12",
+     "bar_commit": "572fa06",
+     "bar_date": "2026-10-12T10:20",
+     "bar_how": "protocol file G1_PROTOCOL.md",
+     "result_commit": "5fc1779",
+     "result_date": "2026-10-16T09:34",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail"
+    }
+   ]
+  },
+  {
+   "register_gate": "G1 probes",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 16,
+     "gate": "G1 probes",
+     "date": "2026-10-12",
+     "bar_commit": "786ff14",
+     "bar_date": "2026-10-11T21:40",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "c8bb0ba",
+     "result_date": "2026-10-12T13:13",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "W2 pass on this item"
+    }
+   ]
+  },
+  {
+   "register_gate": "G1 W2 dynamics",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 18,
+     "gate": "G1 W2 dynamics",
+     "date": "2026-10-12",
+     "bar_commit": "572fa06",
+     "bar_date": "2026-10-12T10:20",
+     "bar_how": "protocol file G1_PROTOCOL.md",
+     "result_commit": "5fc1779",
+     "result_date": "2026-10-16T09:34",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail, so W3 not run"
+    }
+   ]
+  },
+  {
+   "register_gate": "G6a",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 25,
+     "gate": "G6a",
+     "date": "2026-10-14",
+     "bar_commit": "cb75bc6",
+     "bar_date": "2026-10-14T13:12",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "e36dd41",
+     "result_date": "2026-10-14T15:06",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "done detector: unadopted sanity pass; st"
+    }
+   ]
+  },
+  {
+   "register_gate": "G10",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 32,
+     "gate": "G10",
+     "date": "2026-10-17",
+     "bar_commit": "983d055",
+     "bar_date": "2026-10-16T16:46",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "330c642",
+     "result_date": "2026-10-17T21:28",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "PASS; world model acts as pre-execution "
+    }
+   ]
+  },
+  {
+   "register_gate": "G6b",
+   "class": "same-commit",
+   "prereg_rows": [
+    {
+     "index": 33,
+     "gate": "G6b",
+     "date": "2026-10-18",
+     "bar_commit": "074d1c0",
+     "bar_date": "2026-10-18T08:29",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "074d1c0",
+     "result_date": "2026-10-18T08:29",
+     "class": "same-commit",
+     "class_v1": "same-commit",
+     "verdict": "FAIL"
+    }
+   ]
+  },
+  {
+   "register_gate": "W1-A",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 48,
+     "gate": "W1-A (screening)",
+     "date": "2026-10-19",
+     "bar_commit": "37497f0",
+     "bar_date": "2026-10-19T13:26",
+     "bar_how": "cited hash",
+     "result_commit": "75f81bf",
+     "result_date": "2026-10-19T13:49",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail → W1 stays a reflex; G11-B's 2.2 / "
+    }
+   ]
+  },
+  {
+   "register_gate": "W1-B",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 49,
+     "gate": "W1-B (screening)",
+     "date": "2026-10-19",
+     "bar_commit": "37497f0",
+     "bar_date": "2026-10-19T13:26",
+     "bar_how": "cited hash",
+     "result_commit": "75f81bf",
+     "result_date": "2026-10-19T13:49",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail (better than G15's 48.5 / 46.7)"
+    }
+   ]
+  },
+  {
+   "register_gate": "G11-B-cal",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 50,
+     "gate": "G11-B-cal (offline)",
+     "date": "2026-10-19",
+     "bar_commit": "1ae071d",
+     "bar_date": "2026-10-19T13:54",
+     "bar_how": "cited hash",
+     "result_commit": "156eb30",
+     "result_date": "2026-10-19T14:07",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail → W1 reflex in shadow mode on robot"
+    }
+   ]
+  },
+  {
+   "register_gate": "W1-C1",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 52,
+     "gate": "W1-C1 (offline)",
+     "date": "2026-10-19",
+     "bar_commit": "2bcd2ff",
+     "bar_date": "2026-10-19T18:35",
+     "bar_how": "cited hash",
+     "result_commit": "83ca81a",
+     "result_date": "2026-10-19T18:49",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail → W1 stays a logged signal"
+    }
+   ]
+  },
+  {
+   "register_gate": "W1-C2",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 53,
+     "gate": "W1-C2 (offline)",
+     "date": "2026-10-19",
+     "bar_commit": "2bcd2ff",
+     "bar_date": "2026-10-19T18:35",
+     "bar_how": "cited hash",
+     "result_commit": "83ca81a",
+     "result_date": "2026-10-19T18:49",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail → shadow mode stays; registered ban"
+    }
+   ]
+  },
+  {
+   "register_gate": "W1-R",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 57,
+     "gate": "W1-R (NEXT_ANGLES §1, D-JEPA operator on frozen W1)",
+     "date": "2026-10-22",
+     "bar_commit": "902e8b1",
+     "bar_date": "2026-10-22T19:36",
+     "bar_how": "protocol file D_JEPA_PROTOCOL.md",
+     "result_commit": "5676474",
+     "result_date": "2026-10-22T20:28",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail; does not test D-JEPA's claim (no e"
+    }
+   ]
+  },
+  {
+   "register_gate": "REAP v1",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 62,
+     "gate": "REAP monitors (NEXT_ANGLES §2)",
+     "date": "2026-10-23",
+     "bar_commit": "75f81bf",
+     "bar_date": "2026-10-19T13:49",
+     "bar_how": "pickaxe",
+     "result_commit": "6100e80",
+     "result_date": "2026-10-23T09:22",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "not proven pending the onset check (ep 1"
+    },
+    {
+     "index": 67,
+     "gate": "REAP v2 (NEXT_ANGLES §2 amendment)",
+     "date": "2026-10-23",
+     "bar_commit": "c0f1b0d",
+     "bar_date": "2026-10-22T21:17",
+     "bar_how": "§3 pending entry",
+     "result_commit": "accd99d",
+     "result_date": "2026-10-23T19:35",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail (no monitor at the bar); both W1 he"
+    }
+   ]
+  },
+  {
+   "register_gate": "§30 inverse dynamics",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 78,
+     "gate": "§30 inverse dynamics (pre-registered 35f4600)",
+     "date": "2026-10-26",
+     "bar_commit": "35f4600",
+     "bar_date": "2026-10-25T18:45",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "003e09d",
+     "result_date": "2026-10-26T01:57",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "NOT PROVEN (random-init control blocks; "
+    }
+   ]
+  },
+  {
+   "register_gate": "LeJEPA",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 70,
+     "gate": "LeJEPA identifiability, gate 0 (WS-047, arXiv 2605.26379)",
+     "date": "2026-10-27",
+     "bar_commit": "ad40675",
+     "bar_date": "2026-10-27T22:14",
+     "bar_how": "cited hash",
+     "result_commit": "a057f59",
+     "result_date": "2026-10-27T22:52",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "B1–B3 met: anisotropic recovery as predi"
+    },
+    {
+     "index": 73,
+     "gate": "LeJEPA identifiability, gate 0 — correction (WS-047)",
+     "date": "2026-10-28",
+     "bar_commit": "ad40675",
+     "bar_date": "2026-10-27T22:14",
+     "bar_how": "cited hash",
+     "result_commit": "db5460d",
+     "result_date": "2026-10-28T01:17",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "B1–B3 still met (verdict unchanged, numb"
+    }
+   ]
+  },
+  {
+   "register_gate": "SURVEYOR",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 71,
+     "gate": "SURVEYOR τ, gate 0 (WS-050, NeurIPS 2026 workshop)",
+     "date": "2026-10-27",
+     "bar_commit": "02928b7",
+     "bar_date": "2026-10-27T22:53",
+     "bar_how": "cited hash",
+     "result_commit": "d1d83ac",
+     "result_date": "2026-10-27T23:14",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail (S1, S2): no operating point; the s"
+    },
+    {
+     "index": 72,
+     "gate": "SURVEYOR accept rule, gate 1 (WS-050)",
+     "date": "2026-10-27",
+     "bar_commit": "02928b7",
+     "bar_date": "2026-10-27T22:53",
+     "bar_how": "cited hash",
+     "result_commit": "d1d83ac",
+     "result_date": "2026-10-27T23:14",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "fail (S3 both S; S4 met at S = 30 only):"
+    }
+   ]
+  },
+  {
+   "register_gate": "HWM",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 74,
+     "gate": "HWM crossover, gate 0 (WS-051, CoRL 2026, arXiv 2604.03208)",
+     "date": "2026-10-28",
+     "bar_commit": "4643775",
+     "bar_date": "2026-10-27T22:24",
+     "bar_how": "cited hash",
+     "result_commit": "bb9f71c",
+     "result_date": "2026-10-28T02:02",
+     "class": "bar-first",
+     "class_v1": "bar-first",
+     "verdict": "bars: H1 fail, H2 fail (ratio 1.35), H3 "
+    }
+   ]
+  },
+  {
+   "register_gate": "RoboJEPA",
+   "class": "bar-first",
+   "prereg_rows": [
+    {
+     "index": 21,
+     "gate": "RoboJEPA Gate B",
+     "date": "2026-10-13",
+     "bar_commit": "90d3c68",
+     "bar_date": "2026-10-13T16:10",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "2a24097",
+     "result_date": "2026-10-13T18:41",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "no-go on device; world model goes off-bo"
+    },
+    {
+     "index": 22,
+     "gate": "RoboJEPA Gate B'",
+     "date": "2026-10-13",
+     "bar_commit": "90d3c68",
+     "bar_date": "2026-10-13T16:10",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "2a24097",
+     "result_date": "2026-10-13T18:41",
+     "class": "bar-first",
+     "class_v1": "unresolved",
+     "verdict": "no-go; off-board host must be CUDA"
+    },
+    {
+     "index": 23,
+     "gate": "RoboJEPA Gate A",
+     "date": "2026-10-13",
+     "bar_commit": "90d3c68",
+     "bar_date": "2026-10-13T16:10",
+     "bar_how": "audit (WS-136)",
+     "result_commit": "20f820d",
+     "result_date": "2026-10-13T21:38",
+     "class": "bar-first",
+     "class_v1": "same-commit",
+     "verdict": "no-go for the primary; 1B borderline on "
+    }
+   ]
+  }
+ ]
+}

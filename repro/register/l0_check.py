@@ -37,7 +37,14 @@ else:
     got = (len(rows), cls.count("pass"), cls.count("met"), cls.count("np"), cls.count("fail"))
     check(f"register rows / pass / met / not proven / fail = {got} as stated in §2 Counts {stated}", got == stated)
     p = [l.split("|")[7].strip() for l in rows]
-    check("pre-reg: 13 bar-first, 6 same-commit", (p.count("bar-first"), p.count("same-commit")) == (13, 6))
+    check("pre-reg by commit order (FEASIBILITY column): 13 bar-first, 6 same-commit", (p.count("bar-first"), p.count("same-commit")) == (13, 6))
+    pa = json.loads((E / "prereg_audited.json").read_text())
+    check("prereg_audited.json: one entry per register row, in order",
+          len(pa["rows"]) == len(rows) and all(r[2:].strip().startswith(x["register_gate"]) for r, x in zip(rows, pa["rows"])))
+    check("prereg_audited.json: every row matched, row class = class of each matched prereg row",
+          not pa["unmatched"] and all(x["prereg_rows"] and all(h["class"] == x["class"] for h in x["prereg_rows"]) for x in pa["rows"]))
+    ac = [x["class"] for x in pa["rows"]]
+    print(f"     audited: {ac.count('bar-first')} bar-first, {ac.count('same-commit')} same-commit, {len(pa['unmatched'])} unmatched")
     u = json.loads((E / "uses.json").read_text())["rows"]
     check("uses.json: one entry per register row, in order", len(u) == len(rows) and all(r[2:].strip().startswith(x["gate"]) for r, x in zip(rows, u)))
     s = json.loads((E / "split.json").read_text())
