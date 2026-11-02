@@ -82,6 +82,21 @@ def main():
     for k in ("encoder", "predictor", "both"):
         put(f"uses_{k}", str(sum(u["needs"] == k for u in uses)), f"repro/register/expected/uses.json rows, needs = {k}")
 
+    g5 = json.loads((G / "gap5_pooled_rerun.json").read_text()); a = "repro/gaps/expected/gap5_pooled_rerun.json"
+    put("g5_w1", f4(g5["terms"]["W1"]), a + " terms/W1"); put("g5_rand", f4(g5["terms"]["W1_random_init"]), a + " terms/W1_random_init")
+    put("g5_val", str(g5["val_episodes"]), a + " val_episodes")
+    d = g5["pairs"]["W1_minus_W1_random_init"]
+    put("g5_diff", f4(d["point"]).replace("-", "−"), a + " pairs/W1_minus_W1_random_init/point")
+    put("g5_lo", f4(d["ci95"][0]).replace("-", "−"), a + " pairs/W1_minus_W1_random_init/ci95[0]")
+    put("g5_hi", "+" + f4(d["ci95"][1]), a + " pairs/W1_minus_W1_random_init/ci95[1]")
+    lit_file("g5_unstable", "gaps/expected/gap5_floor_stability.md", "It was 1.4383 on the first", "1.4383")
+    lit_file("g5_orin", "gaps/expected/gap5_floor_stability.md", "0.8042 on the Orin", "0.8042")
+    m1 = json.loads((G / "M1_diag_g0_repro.json").read_text()); a = "repro/gaps/expected/M1_diag_g0_repro.json"
+    for k, name in {"xep": "cross_episode_ratio", "cf": "constant_first_ratio"}.items():
+        put(f"m1_{k}", f"{m1['by_k']['30'][name]:.3f}", a + f" by_k/30/{name}")
+        put(f"m1_{k}_g0", f"{m1['g0_k30'][name]:.3f}", a + f" g0_k30/{name}")
+    lit_file("m1_auroc", "gaps/expected/M1_diag_note.md", "AUROC 0.775 < 0.9", "0.775")
+
     lit("g0_err", "G0", "0.31"); lit("g0_copy", "G0", "0.89")
     lit("g1b_top1", "G1b", "0.60"); lit("g1b_actions", "G1b", "0.68–0.90"); lit("g1b_bar", "G1b", "≥ 0.8", "0.8")
     lit("w1a_hits", "W1-A", "2/8 at 2/42")

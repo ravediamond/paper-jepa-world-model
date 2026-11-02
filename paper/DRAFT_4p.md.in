@@ -52,6 +52,8 @@ At rest W1 is level with the colour judge (CIs overlap) and above the frozen enc
 
 The cleanest contrast is W1-C1: same encoder, same anchor, current latent {{c1_current}} vs imagined {{c1_imagined}} (bar {{c1_bar}} over current). Imagining forward loses outcome information the encoder had. On SURVEYOR's scale check, W2′ (τ {{surv_tau_W2p}}) and the joints (τ {{surv_tau_joints}}) pass where W1 fails, which points at W1's latent geometry rather than the task.
 
+*Exploratory, two further lines.* (1) On the distillation probe's §30 term (pooled, {{g5_val}} teleop validation episodes), trained W1 ({{g5_w1}}) is not distinguishable from its own random init ({{g5_rand}}): difference {{g5_diff}}, 95 % paired episode-bootstrap CI [{{g5_lo}}, {{g5_hi}}] (`gap5_pooled_rerun.json`). The term is sensitive to BLAS / ridge conditioning: the same untrained network scored {{g5_unstable}} on one machine and {{g5_rand}} / {{g5_orin}} on two others. (2) The surprise scorer that gives W1 a class-5 AUROC of {{m1_auroc}} (below its sanity bar) reproduces G0's K = 30 corruption ratios (cross-episode {{m1_xep}} vs {{m1_xep_g0}}, constant-first {{m1_cf}} vs {{m1_cf_g0}}; `M1_diag_g0_repro.json`), so {{m1_auroc}} is a real value, not a load or scorer bug.
+
 *Objection: G10 step 2 is a predictive pass.* The imagined latent beat policy identity by {{g10_anticip}} — but that bar is same-commit and retrospective, and the two bar-first reruns of the same idea (W1-C1, G11-B-cal) fail.
 
 ## 6. Related work

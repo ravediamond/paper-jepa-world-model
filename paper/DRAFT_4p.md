@@ -52,6 +52,8 @@ At rest W1 is level with the colour judge (CIs overlap) and above the frozen enc
 
 The cleanest contrast is W1-C1: same encoder, same anchor, current latent 0.82 vs imagined 0.70 (bar ≥ 0.85, ≥ +0.05 over current). Imagining forward loses outcome information the encoder had. On SURVEYOR's scale check, W2′ (τ 0.3601) and the joints (τ 0.0265) pass where W1 fails, which points at W1's latent geometry rather than the task.
 
+*Exploratory, two further lines.* (1) On the distillation probe's §30 term (pooled, 25 teleop validation episodes), trained W1 (0.7476) is not distinguishable from its own random init (0.7974): difference −0.0499, 95 % paired episode-bootstrap CI [−0.7403, +0.6559] (`gap5_pooled_rerun.json`). The term is sensitive to BLAS / ridge conditioning: the same untrained network scored 1.4383 on one machine and 0.7974 / 0.8042 on two others. (2) The surprise scorer that gives W1 a class-5 AUROC of 0.775 (below its sanity bar) reproduces G0's K = 30 corruption ratios (cross-episode 3.428 vs 3.341, constant-first 2.558 vs 2.543; `M1_diag_g0_repro.json`), so 0.775 is a real value, not a load or scorer bug.
+
 *Objection: G10 step 2 is a predictive pass.* The imagined latent beat policy identity by +0.179 — but that bar is same-commit and retrospective, and the two bar-first reruns of the same idea (W1-C1, G11-B-cal) fail.
 
 ## 6. Related work

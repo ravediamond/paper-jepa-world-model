@@ -91,6 +91,38 @@
   "value": "0.60",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row G1b: '0.60'"
  },
+ "g5_diff": {
+  "value": "−0.0499",
+  "anchor": "repro/gaps/expected/gap5_pooled_rerun.json pairs/W1_minus_W1_random_init/point"
+ },
+ "g5_hi": {
+  "value": "+0.6559",
+  "anchor": "repro/gaps/expected/gap5_pooled_rerun.json pairs/W1_minus_W1_random_init/ci95[1]"
+ },
+ "g5_lo": {
+  "value": "−0.7403",
+  "anchor": "repro/gaps/expected/gap5_pooled_rerun.json pairs/W1_minus_W1_random_init/ci95[0]"
+ },
+ "g5_orin": {
+  "value": "0.8042",
+  "anchor": "repro/gaps/expected/gap5_floor_stability.md: '0.8042 on the Orin'"
+ },
+ "g5_rand": {
+  "value": "0.7974",
+  "anchor": "repro/gaps/expected/gap5_pooled_rerun.json terms/W1_random_init"
+ },
+ "g5_unstable": {
+  "value": "1.4383",
+  "anchor": "repro/gaps/expected/gap5_floor_stability.md: 'It was 1.4383 on the first'"
+ },
+ "g5_val": {
+  "value": "25",
+  "anchor": "repro/gaps/expected/gap5_pooled_rerun.json val_episodes"
+ },
+ "g5_w1": {
+  "value": "0.7476",
+  "anchor": "repro/gaps/expected/gap5_pooled_rerun.json terms/W1"
+ },
  "lejepa_w1": {
   "value": "0.565",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row LeJEPA: 'R² 0.565'"
@@ -98,6 +130,26 @@
  "lejepa_w2p": {
   "value": "0.867",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row LeJEPA: 'W2′ 0.867'"
+ },
+ "m1_auroc": {
+  "value": "0.775",
+  "anchor": "repro/gaps/expected/M1_diag_note.md: 'AUROC 0.775 < 0.9'"
+ },
+ "m1_cf": {
+  "value": "2.558",
+  "anchor": "repro/gaps/expected/M1_diag_g0_repro.json by_k/30/constant_first_ratio"
+ },
+ "m1_cf_g0": {
+  "value": "2.543",
+  "anchor": "repro/gaps/expected/M1_diag_g0_repro.json g0_k30/constant_first_ratio"
+ },
+ "m1_xep": {
+  "value": "3.428",
+  "anchor": "repro/gaps/expected/M1_diag_g0_repro.json by_k/30/cross_episode_ratio"
+ },
+ "m1_xep_g0": {
+  "value": "3.341",
+  "anchor": "repro/gaps/expected/M1_diag_g0_repro.json g0_k30/cross_episode_ratio"
  },
  "n": {
   "value": "69",

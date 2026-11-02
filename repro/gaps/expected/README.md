@@ -60,3 +60,12 @@ the grasp anchor, W1 > W2′ > joints. On SURVEYOR, W2′ and joints separate th
 ## 4-page outline
 
 Superseded by `../OUTLINE_4PAGE.md` (claim reworded on the owner's go, 2026-11-01: "knows what happened, not what will").
+
+## §5 exploratory lines (added 2026-11-02)
+
+- `gap5_pooled_rerun.json` — road-to-robotics `projects/jepa-distill-edge/results/gap5_pooled_rerun.json` @ fb68283
+  (pooled §30 term, teleop val, paired episode bootstrap): trained W1 vs its random init. `gap5_floor_stability.md`:
+  the README excerpt on the random-init term's machine dependence (BLAS / ill-conditioned ridge).
+- `M1_diag_g0_repro.json` — road-to-robotics `projects/jepa-surprise-receptive-field/results/M1_diag_g0_repro.json`
+  @ fb68283 (WS-116 M1 diagnosis): the surprise scorer reproduces G0's K=30 corruption ratios (`by_k/30` vs `g0_k30`).
+- `M1_diag_note.md` — the README excerpt stating M1's class-5 step-2 AUROC (0.775) and that it stands as measured.
