@@ -75,9 +75,17 @@
   "value": "200",
   "anchor": "repro/register/expected/FEASIBILITY.md: 'on a $200 robot'"
  },
+ "audit_dropped": {
+  "value": "192",
+  "anchor": "repro/register/expected/AUDIT_W1_LOADS.md: '192 encoder tensors dropped'"
+ },
  "audit_random": {
   "value": "1",
   "anchor": "repro/register/expected/AUDIT_W1_LOADS.md: '**random: 1**'"
+ },
+ "audit_tf": {
+  "value": "5.5.4",
+  "anchor": "repro/register/expected/AUDIT_W1_LOADS.md: 'transformers 5.5.4'"
  },
  "audit_trained": {
   "value": "26",

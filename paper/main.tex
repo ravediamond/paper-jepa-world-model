@@ -8,24 +8,56 @@
 \shissorepo{github.com/ravediamond/paper-jepa-world-model}
 \renewcommand{\dbltopfraction}{0.95}\renewcommand{\topfraction}{0.9}\renewcommand{\textfraction}{0.05}\setcounter{dbltopnumber}{2}
 \begin{document}
-\title{A small JEPA world model: the encoder knows, the predictor does not add}
+\title{A small JEPA world model on a low-cost arm: the encoder reads the outcome, the predictor adds nothing to it}
 \author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@gmail.com}}
 \date{}
 \maketitle
+
+
+
+
 \begin{abstract}
-We trained a small JEPA world model in the LeWorldModel recipe on teleoperated demonstrations of one tabletop task on a low-cost SO-101 arm. Then we re-tested on it every use of such a model that we found in recent world-model papers, each under a bar fixed in a public register. In exploratory probes on policy rollouts the model never saw in training, a linear readout of the encoder's final-frame latent separates success from failure as well as a hand-built colour judge (AUROC 0.95 vs 0.94) and better than a frozen DINOv2 encoder, the commanded joints or the policy's identity. The predictor does not add to it. At the grasp, the imagined latent reads the outcome worse than the current one (0.70 vs 0.82), and every use that needs a multi-step rollout --- chunk ranking, surprise monitoring, risk prediction --- misses its bar. One rig, one model, one data scale.
+
+
+We trained a small JEPA world model in the LeWorldModel recipe on 182 teleoperated demonstrations of one tabletop task on an SO-101 arm, for \$3.30 of rented GPU time. We then took every use of such a model that we found in recent world-model papers and re-tested it on ours, each against a bar written into a public register. Every use that needs a multi-step rollout of the predictor misses its bar, among them chunk ranking, surprise monitoring and risk prediction. The encoder does better. In exploratory probes on policy rollouts the model never saw in training, a linear readout of the last-frame latent separates success from failure about as well as a hand-built colour judge (AUROC 0.95 against 0.94), and better than a frozen DINOv2 encoder, the commanded joints or the identity of the policy. At the grasp, the imagined latent reads the outcome worse than the current one does (0.70 against 0.82). All of it comes from one rig, one model and one data scale.
+
+
 \end{abstract}
 \section{Introduction}
-A world model in the sense of LeWorldModel (LeWM)~\citep{maes2026lewm} has two parts: an encoder that maps camera frames to a latent vector, and a predictor that, given the current latent and a sequence of actions, imagines the latents that follow. Both are trained together from pixels with a joint-embedding predictive (JEPA) loss. Papers built on such models propose \emph{uses} of them: ranking a policy's candidate action chunks by their imagined outcome, flagging a failure when the observed latent departs from the predicted one, reading the outcome of a grasp before it happens, planning over several time scales. Each paper reports the use that worked, on its own robot and data.
-We take the opposite view of one model. One arm, one task, one small JEPA world model --- and on it, every use we could take from the literature. Each re-test is a row of a register: a bar written down before the result where we could, a dataset, a result and a verdict. Pre-registration here means only that. The bar and the decision rule are committed to the repository before the number exists. Audited against the commit history, all 20 rows match a pre-registration record; 19 bars were committed before their result and 1 in the same commit as its result (the two-level hierarchical progress use). One row, the on-device latency of the pretrained RoboJEPA and V-JEPA 2.1 encoders~\citep{zholus2026robojepa,murlabadia2026vjepa21}, is not a use of our model. Of the 20 rows, 3 pass, 1 is met as predicted, 2 are not proven, and the remaining 14 fail or are no-go.
-On the 69 rollouts, and in exploratory probes only, the result splits along the model. The \emph{encoder} reads the episode's outcome from the current frame, better than a frozen foundation encoder or the robot's own joint commands, and it does so at the grasp anchor too, 15 frames before the gripper first closes. The \emph{predictor}, which every forecasting use relies on, does not improve on that reading by imagining forward. The contribution is threefold: the register itself, with an audit of how every use loaded the checkpoint (Table~\ref{tab:register}); exploratory controls that separate encoder from predictor (Table~\ref{tab:controls}, Fig.~\ref{fig:controls}); and the exploratory reading that, at this data scale, the predictor is the weak link.
-\textbf{Caveats stated up front.} The encoder readouts are linear probes fit with leave-one-session-out (LOSO) cross-validation on 69 rollouts (44 success / 25 failure, 13 sessions) with operator labels. The model was trained on teleoperation only and never saw these rollouts, but the controls were chosen after the data and are \textbf{exploratory}. Among the 3 passes, 3 have bars committed before the result, and the bar of the outcome-readout use was written retrospectively. Ordered by commit alone, without the audit, the register reads 13 bar-first and 6 same-commit.
+
+
+A world model in the sense of LeWorldModel (LeWM)~\citep{maes2026lewm} has two parts. The encoder maps camera frames to a latent vector. The predictor takes the current latent and a sequence of actions and imagines the latents that follow. Both are trained together from pixels with a joint-embedding predictive (JEPA) loss. Papers built on such models propose uses for them: ranking a policy's candidate action chunks by their imagined outcome, flagging a failure when the observed latent drifts from the predicted one, reading the outcome of a grasp before it happens, planning over several time scales. Each paper reports the use that worked, on its own robot and data.
+
+
+We had one such model, trained on our own arm, and wanted to know which of these uses we could build on. So we ran every use we could find on that one model. Each re-test is a row of a register with a bar, a dataset, a result and a verdict, and where we managed it, the bar and the decision rule went into the repository before the result existed. That commit order is all we mean by pre-registration. Checked against the commit history, all 20 rows match a pre-registration record. In 19 the bar was committed before the result, and in 1 (the two-level hierarchical progress use) in the same commit. One row is not a use of our model: it times the pretrained RoboJEPA and V-JEPA 2.1 encoders on our on-board computer~\citep{zholus2026robojepa,murlabadia2026vjepa21}. Of the 20 rows, 3 pass and 1 is met as predicted. Another 2 are not proven, and the remaining 14 fail or are no-go.
+
+
+Our first reading of the failures was that the latent mostly encodes the arm's pose, so a frozen image encoder or the commanded joints would do at least as well in each of them. We ran those controls on 69 policy rollouts, and they did not bear it out. The encoder reads how the episode went from the current frame better than either control, and it still does at the grasp anchor, 15 frames before the gripper first closes. The predictor, which every forecasting use relies on, does not improve that reading by imagining forward. We changed the claim of the paper to match: at this data scale the predictor, not the encoder, is the weak link.
+
+
+The controls came after the data, and that limits what they can show. Each readout is a linear probe fit with leave-one-session-out (LOSO) cross-validation on the 69 rollouts (44 success, 25 failure, 13 sessions) and scored against the operator's labels. The model was trained on teleoperation only and never saw these rollouts. No bar was committed for these comparisons, so everything this paper says about the split between encoder and predictor is exploratory. Of the 3 register passes, 3 have their bar committed before the result, though the register marks the outcome-readout verdict as retrospective. Without the audit, ordering by commit alone gives 13 bar-first and 6 same-commit rows.
+
+
 \section{Setup}
-\textbf{Robot and data.} The robot is one SO-101 arm~\citep{so101} driven through LeRobot~\citep{cadene2024lerobot}, with two cameras (top and wrist) and one task family: put a bowl into another bowl. The world model is trained on \texttt{ravediamond/so101\_bowls\_all\_trimmed} (157 training and 25 validation episodes, split by grid layout). The evaluation rollouts are \texttt{ravediamond/so101-bowls-policy-rollouts}, a separate dataset of SmolVLA~\citep{shukor2025smolvla} rollouts recorded after the world model was trained.
-\textbf{Model.} Our world model, named W1 in the repository, follows the LeWM recipe~\citep{maes2026lewm}: a multi-view ViT encoder, an action-conditioned predictor and the SIGReg regulariser. It was trained on one rented GPU for \$3.30. \textbf{Controls.} The frozen DINOv2-S control is a frozen DINOv2 small encoder~\citep{oquab2023dinov2}, mean-pooled over the top and wrist views, the design of DINO-WM~\citep{zhou2024dinowm}. The joints control is the commanded joint vector. The colour judge is a hand-built rule on the final frame with no learning. The policy-identity control is the checkpoint that ran the episode.
-\textbf{Load audit.} One early use loaded the checkpoint with \texttt{strict=False} and so ran a random encoder. We therefore re-traced the load path of every use: 26 ran the trained model, 1 ran a random one (already voided) and none is unknown. The world-model block of VLA-JEPA, used in one diagnostic, loads 351 of 351 keys (0 missing).
+
+
+The robot is one SO-101 arm~\citep{so101} driven through LeRobot~\citep{cadene2024lerobot}, with a top and a wrist camera. The task is to put a bowl into another bowl. Our model is trained on \texttt{ravediamond/so101\_bowls\_all\_trimmed}, split by grid layout into 157 training and 25 validation episodes. The evaluation rollouts come from a separate dataset, \texttt{ravediamond/so101-bowls-policy-rollouts}: SmolVLA~\citep{shukor2025smolvla} runs recorded after our model was trained.
+
+
+Our model follows the LeWM recipe~\citep{maes2026lewm}, with a multi-view ViT encoder, an action-conditioned predictor and the SIGReg regulariser, and was trained on one rented GPU. We compare it with four signals. The frozen DINOv2-S control is a frozen DINOv2 small encoder~\citep{oquab2023dinov2} mean-pooled over the top and wrist views, the design of DINO-WM~\citep{zhou2024dinowm}. The joints control is the commanded joint vector. The colour judge is a hand-built rule on the final frame with no learning, and policy identity is the checkpoint that ran the episode.
+
+
+In October, a timing test on the on-board computer loaded our checkpoint with \texttt{strict=False}. Under the transformers version on that image (5.5.4), 192 encoder tensors did not match and were silently dropped, so the test timed a random encoder. We voided its latents and traced how every other use loaded the model: 26 ran the trained model, 1 ran a random one (that test) and none is unknown. The world-model block of VLA-JEPA, which one diagnostic below uses, loads all 351 of its keys.
+
+
 \section{The register}
-Table~\ref{tab:register} lists the 20 uses with what each takes from the model: the encoder alone (7), the predictor (8) or both (5).
+
+
+Table~\ref{tab:register} lists the 20 uses and what each takes from our model: the encoder alone (7), the predictor (8) or both (5). Read that column against the verdicts.
+
+
+
+
 \begin{table*}[!t]\centering\setlength{\tabcolsep}{3pt}\scriptsize
 \caption{The register: every pre-registered use of our world model (and the frozen-DINOv2 and RoboJEPA rows beside it), the paper it re-tests, what it takes from the model, whether the bar was committed before the result (audited against the commit history), the bar, the result and the verdict. Bar, result and verdict are quoted from repro/register/expected/FEASIBILITY.md §2 with the model names made plain; the code names the repro folder.}\label{tab:register}
 \begin{tabular}{>{\raggedright}p{2.2cm}>{\raggedright}p{1.0cm}p{1.25cm}>{\raggedright}p{0.9cm}>{\raggedright}p{2.1cm}>{\raggedright}p{4.2cm}>{\raggedright}p{1.5cm}p{1.1cm}}
@@ -55,9 +87,22 @@ on-device latency of RoboJEPA / V-JEPA 2.1 & \citep{zholus2026robojepa,murlabadi
 \bottomrule
 \end{tabular}
 \end{table*}
-\emph{Encoder reads.} The outcome readout at rest passes, with a retrospective bar; the current-latent arm of the grasp probe reads the grasp at the anchor (0.82). The pose probes~\citep{klindt2026lejepa} measure what else the latent holds: our encoder holds about half of the joint variance linearly (R$^2$ 0.565, against 0.867 for the frozen DINOv2-S control). Encoder uses that read progress or stage rather than outcome fail: progress monotonicity, two-level hierarchical progress~\citep{zhang2026hjepa}, the latent stage tracker, and SURVEYOR's latent-distance scale~\citep{surveyor2026} ($\tau$ 1.2488 against 0.20 in the paper).
-\emph{Predictor forecasts.} Open-loop prediction beats copying the last latent (0.31 vs 0.89 at K = 30): the predictor does predict its own latent. Every use of that prediction fails. Chunk ranking~\citep{maes2026lewm} reaches a top-1 accuracy of 0.60 against a bar of 0.8, while the commanded actions alone reach 0.68--0.90. The surprise monitor catches 2/8 at 2/42 failures. In the grasp probe the imagined latent (0.70) reads less than the current one. The hierarchical planner~\citep{zhang2026hwm} shows no crossover, and the conformal surprise band, the re-ranking of chunk candidates, the action-conditioned risk head~\citep{liu2026reap} and the calibrated surprise reflex all miss their bars.
+
+
+Among the encoder uses, reading the outcome works and reading progress does not. The outcome readout at rest passes, and at the grasp anchor the current latent reads the grasp at 0.82. The four uses that ask the latent for progress or task stage all fail: progress monotonicity, two-level hierarchical progress~\citep{zhang2026hjepa}, the latent stage tracker and the latent-distance scale of SURVEYOR~\citep{surveyor2026}. The pose probes of LeJEPA~\citep{klindt2026lejepa} say what else the latent holds. A linear readout recovers about half of the joint variance from our encoder (R$^2$ 0.565), less than from the frozen DINOv2-S control (0.867).
+
+
+The predictor does predict its own latent. At K = 30 its open-loop error is 0.31, against 0.89 for copying the last latent. What fails is every use of that prediction. Chunk ranking~\citep{maes2026lewm} puts the executed chunk first in 0.60 of anchors against a bar of 0.8, while the commanded actions alone reach 0.68--0.90. The surprise monitor catches 2/8 at 2/42 failures. The hierarchical planner~\citep{zhang2026hwm} shows no crossover. The conformal surprise band, the re-ranking of chunk candidates, the action-conditioned risk head~\citep{liu2026reap} and the calibrated surprise reflex each miss their bar by the margin in Table~\ref{tab:register}.
+
+
 \section{What the encoder knows}
+
+
+Table~\ref{tab:controls} sets our model beside the four other signals on the same 69 rollouts, at rest and at the grasp anchor. The question is whether the encoder adds anything a frozen encoder or the joints do not already carry.
+
+
+
+
 \begin{table}[!t]\centering\setlength{\tabcolsep}{3pt}\scriptsize
 \caption{Outcome AUROC on the same 69 rollouts. Exploratory (controls chosen after the data), LOSO linear probes, operator labels. At rest: 95 \% episode-bootstrap CI. At the anchor: 95 \% episode-bootstrap CI on the mean over 5 seeds of the out-of-fold AUROC (episodes resampled jointly across the seeds, 2,000 resamples, percentile).}\label{tab:controls}
 \resizebox{\columnwidth}{!}{\begin{tabular}{lll}
@@ -72,14 +117,43 @@ policy identity & 0.5882 [0.4084, 0.7515] & --- \\
 \bottomrule
 \end{tabular}}
 \end{table}
+
+
 \begin{figure}[t]\centering
 \includegraphics[width=\columnwidth]{fig/table2.pdf}
 \caption{The controls table as a dot plot. Left: AUROC at rest with its 95 \% bootstrap CI. Right: AUROC at the grasp anchor, mean of 5 seeds with the seed range (not a CI). Exploratory, LOSO, operator labels.}\label{fig:controls}
 \end{figure}
-In this exploratory comparison on the 69 rollouts, our world model is level with the colour judge at rest (the CIs overlap) and above the frozen encoder and the joints; at the grasp anchor, where no judge applies, it leads both controls. The anchor column depends on how the seeds are aggregated (exploratory): the AUROC of the 5-seed-averaged predictions is 0.8377 / 0.7175 / 0.5346 (ours / frozen DINOv2-S / joints), and seed 0 alone gives 0.7554 / 0.7024 / 0.5574, a smaller gap between our model and the frozen encoder; the ordering holds in both. The pose probes hold the joints better than our encoder does but the outcome worse, so on these rollouts the encoder holds outcome information they do not (exploratory). The original outcome-readout gate scored our model at 1.000, but against the colour judge's labels rather than the operator's, on 87 rollouts; the rerun here, on the 69 Orin rollouts against operator labels with the controls beside it, gives 0.9545.
+
+
+At rest our model is level with the colour judge, whose CI overlaps its own, and above the frozen encoder and the joints. At the grasp anchor no judge applies, and our model leads both controls. Since the pose probes hold the joints better than our encoder does but the outcome worse, the encoder carries outcome information they lack, at least on these rollouts.
+
+
+The anchor column depends on how the five seeds are combined. Averaging the predictions before scoring gives 0.8377, 0.7175 and 0.5346 for our model, frozen DINOv2-S and the joints. Seed 0 alone gives 0.7554, 0.7024 and 0.5574, a smaller gap between our model and the frozen encoder. The order holds either way.
+
+
+One control does beat our model. On SURVEYOR's scale check, frozen DINOv2-S ($\tau$ 0.3601) and the joints ($\tau$ 0.0265) pass where our model fails ($\tau$ 1.2488, against 0.20 reported by SURVEYOR). The same task and the same rollouts pass with other features, so the failure points at the geometry of our latent space rather than at the task.
+
+
+The register's own outcome-readout row reports 1.000. That number was scored against the colour judge's labels, on 87 rollouts, so it partly measures agreement with the judge. Against the operator's labels on the 69 rollouts, with the controls beside it, the same readout gives 0.9545.
+
+
 \section{Where the predictor fails}
-The cleanest contrast is the grasp probe, which ContactGuard~\citep{zheng2026contactguard} motivates: same encoder, same anchor, current latent 0.82 against imagined latent 0.70, where the bar was $\geq$ 0.85, $\geq$ +0.05 over the current latent. On these rollouts, imagining forward loses outcome information the encoder had; this pre-registered row fails, and the encoder/predictor reading built on it stays exploratory. On SURVEYOR's scale check, the frozen DINOv2-S control ($\tau$ 0.3601) and the joints ($\tau$ 0.0265) pass where our model fails, which points at our model's latent geometry rather than the task.
-\emph{Three further exploratory lines.} (1) On the inverse-dynamics term of the distillation probe (pooled, 25 teleoperation validation episodes), the trained model (0.7476) is not distinguishable from its own random initialisation (0.7974): the difference is −0.0499, with a 95 \% paired episode-bootstrap CI of [−0.7403, +0.6559] (\texttt{gap5\_pooled\_rerun.json}). The term is sensitive to BLAS and ridge conditioning: the same untrained network scored 1.4383 on one machine and 0.7974 / 0.8042 on two others. (2) The surprise scorer that gives our model a failure-class AUROC of 0.775, below its sanity bar, reproduces the open-loop corruption ratios at K = 30 (cross-episode 3.428 vs 3.341, constant-first 2.558 vs 2.543; \texttt{M1\_diag\_g0\_repro.json}), so that AUROC is a real value and not a load or scorer bug. (3) The predictor of VLA-JEPA is close to action-blind (exploratory, 5 anchors; Table~\ref{tab:vlajepa}): action tokens from another episode change the tokens by 21--28 \% (relative L2) and the loss by about 0.05 \%; zeroing the tokens changes the loss by about 1.05 \% on average (|Δ| 0.4--2.2 \%), and the forward pass is deterministic. Its failure-class AUROC of 0.501, below the same sanity bar, is therefore a real value, and its table stays unread under the frozen bar.
+
+
+ContactGuard~\citep{zheng2026contactguard} finds that probes on the imagined latent beat probes on the current one for grasp tasks, so we expected the imagined latent to help at our grasp anchor. The bar asked it for $\geq$ 0.85, $\geq$ +0.05 over the current latent. With the same encoder and the same anchor, the current latent reads the outcome at 0.82 and the imagined one at 0.70. This pre-registered row fails: on these rollouts, imagining forward loses outcome information the encoder had. The encoder and predictor reading we build on it stays exploratory.
+
+
+Our model's inverse-dynamics term is no better than that of its own untrained network. On the distillation probe, pooled over the 25 teleoperation validation episodes, the trained model scores 0.7476 and its random initialisation 0.7974, a difference of −0.0499 with a 95 \% paired episode-bootstrap CI of [−0.7403, +0.6559] (\texttt{gap5\_pooled\_rerun.json}). The term itself is fragile: the same untrained network scored 1.4383 on one machine and 0.7974 and 0.8042 on two others, because it is sensitive to the BLAS library and to ridge conditioning.
+
+
+We checked whether the surprise monitor's poor failure-class AUROC (0.775, below its sanity bar) came from a bug in loading or scoring. It did not. The same scorer reproduces the open-loop corruption ratios at K = 30: cross-episode 3.428 against 3.341 in the original run, constant-first 2.558 against 2.543 (\texttt{M1\_diag\_g0\_repro.json}). The low AUROC is a real value.
+
+
+The predictor of VLA-JEPA barely uses its actions. At 5 anchors (Table~\ref{tab:vlajepa}), action tokens taken from another episode differ from the true ones by 21--28 \% in relative L2 but move the loss by only about 0.05 \%. Zeroing the tokens moves it by about 1.05 \% on average, and the forward pass is deterministic. Its failure-class AUROC of 0.501, below the same sanity bar, is therefore real, and we leave its table unread under the frozen bar.
+
+
+
+
 \begin{table}[!t]\centering\setlength{\tabcolsep}{3pt}\scriptsize
 \caption{VLA-JEPA world-model loss at 5 anchors with the true action tokens, tokens from another episode (Δ shuffled) and zeroed tokens; the token change is the relative L2 of the shuffled tokens. Exploratory, a spot check, not a power analysis. Source: repro/gaps/expected/M3\_diag\_action\_shuffle.json.}\label{tab:vlajepa}
 \resizebox{\columnwidth}{!}{\begin{tabular}{lllll}
@@ -94,13 +168,27 @@ The cleanest contrast is the grasp probe, which ContactGuard~\citep{zheng2026con
 \bottomrule
 \end{tabular}}
 \end{table}
-\emph{Objection: the anticipation step of the outcome-readout gate is a predictive pass.} There the imagined latent beat policy identity by +0.179, but that bar is retrospective, and the two bar-first reruns of the same idea, the grasp probe and the calibrated surprise reflex, both fail.
+
+
+A reader may object that one pass in the register is predictive. In the anticipation step of the outcome-readout gate, the imagined latent beat policy identity by +0.179. That bar is retrospective, though, and the two reruns of the same idea with the bar committed first, the grasp probe and the calibrated surprise reflex, both fail.
+
+
 \section{Related work}
-LeWorldModel~\citep{maes2026lewm} trains the JEPA recipe we use end to end from pixels and plans with it in Push-T and in simulation; its planning uses fail here (chunk ranking, re-ranking). The identifiability analysis of LeJEPA~\citep{klindt2026lejepa} predicts that SIGReg latents identify the state up to anisotropy, which holds here partially. DINO-WM~\citep{zhou2024dinowm} plans on frozen DINOv2~\citep{oquab2023dinov2} patches, the design of our frozen control. V-JEPA 2.1~\citep{murlabadia2026vjepa21} and RoboJEPA~\citep{zholus2026robojepa} are too slow on our on-board computer. ContactGuard~\citep{zheng2026contactguard} finds that imagined-latent probes beat current-latent ones on grasp tasks; we find the opposite. ReAP~\citep{liu2026reap} predicts action-conditioned risk, and its re-test misses its bar here, as do the hierarchical planners of HWM~\citep{zhang2026hwm} and H-JEPA~\citep{zhang2026hjepa} and the latent-distance scale of SURVEYOR~\citep{surveyor2026}. Two results agree with ours from the control side: SaiVLA-JEPA~\citep{xiao2026saivla} finds that a training-only future-latent head adds +0.03 points to control on 10,030 paired episodes, and HIJP~\citep{hijp2026} finds LeWM below goal-conditioned behaviour cloning in simulation.
+
+
+LeWorldModel~\citep{maes2026lewm} trains the recipe we use end to end from pixels and plans with it in Push-T and in simulation. Its two planning uses, chunk ranking and re-ranking, fail on our arm. LeJEPA's identifiability analysis~\citep{klindt2026lejepa} predicts that SIGReg latents identify the state up to anisotropy; our pose probes support that only in part. DINO-WM~\citep{zhou2024dinowm} plans on frozen DINOv2~\citep{oquab2023dinov2} patches, which is why our frozen control is built that way. V-JEPA 2.1~\citep{murlabadia2026vjepa21} and RoboJEPA~\citep{zholus2026robojepa} are too slow on our on-board computer; timing them is the one register row that is not a use of our model. ContactGuard~\citep{zheng2026contactguard} is the result we contradict most directly: it finds imagined-latent probes better than current-latent ones on grasp tasks, and we find the reverse. The re-tests of ReAP's action-conditioned risk~\citep{liu2026reap}, the hierarchical planners of HWM~\citep{zhang2026hwm} and H-JEPA~\citep{zhang2026hjepa} and SURVEYOR's latent-distance scale~\citep{surveyor2026} all miss their bars here. Two papers agree with us from the control side. SaiVLA-JEPA~\citep{xiao2026saivla} reports that a training-only future-latent head adds +0.03 points to control on 10,030 paired episodes, and HIJP~\citep{hijp2026} finds LeWM below goal-conditioned behaviour cloning in simulation.
+
+
 \section{Limitations}
-The controls are exploratory: 69 rollouts, operator labels, probes chosen after the data. Fresh rollouts scored under a bar committed first are the test, and until it runs every statement of the encoder/predictor split above is exploratory. One rig, one model, one data scale: a second scale point (653 episodes) is costed and queued separately, and the scale curve belongs to a longer version. Not run: the surprise monitor and the imagined-latent grasp probe with the frozen DINOv2-S control or the joints (each needs its own predictor), and progress monotonicity with the controls (it needs a reimplementation). The bar of the outcome-readout use is retrospective, and the one same-commit bar is that of the two-level hierarchical progress use.
+
+
+Every statement about the split between encoder and predictor rests on 69 rollouts, labels from one operator and probes chosen after the data. Fresh rollouts scored under a bar committed first would test it, and until that runs the split stays exploratory. All results come from one rig, one model and one data scale. A second scale point at 653 episodes is costed and queued, and a scale curve belongs to a longer version. Three controls were not run. The surprise monitor and the imagined arm of the grasp probe would each need a predictor trained on frozen DINOv2-S features or on the joints, and progress monotonicity with the controls would need a reimplementation. The outcome-readout verdict is retrospective, and the two-level hierarchical progress use has its bar in the same commit as its result.
+
+
 \section{Conclusion}
-On a small teleoperation dataset, a JEPA world model learns an encoder that reads how the episode went, a short horizon ahead included --- and, in exploratory probes on the 69 rollouts, a predictor whose imagination adds nothing to that reading. One habit made this visible. We report every pre-registered use, not the best one.
+
+
+Before building on the predictor of a world model this size, probe its encoder. On our 182 demonstrations, the current latent read the grasp outcome better than the imagined one, and every use that needed the predictor to forecast missed its bar.
 \bibliographystyle{unsrtnat}
 \bibliography{refs}
 \end{document}

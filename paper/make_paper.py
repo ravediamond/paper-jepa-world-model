@@ -72,6 +72,8 @@ def main():
     put("train_eps", str(sp["n_train"]), "repro/register/expected/split.json n_train")
     put("val_eps", str(sp["n_val"]), "repro/register/expected/split.json n_val")
     put("teleop_eps", str(sp["n_train"] + sp["n_val"]), "repro/register/expected/split.json n_train + n_val")
+    lit_file("audit_dropped", "register/expected/AUDIT_W1_LOADS.md", "192 encoder tensors dropped", "192")
+    lit_file("audit_tf", "register/expected/AUDIT_W1_LOADS.md", "transformers 5.5.4", "5.5.4")
 
     rows = [l for l in (REG / "FEASIBILITY.md").read_text().split("## 2.", 1)[1].split("## 3.", 1)[0].splitlines()
             if l.startswith("| ") and not l.startswith("| gate")]
@@ -291,6 +293,8 @@ def to_tex(md, bib):
             continue
         elif l.startswith("*Ravindu"):
             pass
+        elif not l.strip():
+            out.append("\n")  # keep paragraph breaks: an empty markdown line ends the paragraph in LaTeX too
         else:
             out.append(cell(l))
         i += 1
