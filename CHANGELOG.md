@@ -6,3 +6,4 @@
 - 2026-11-05: prose updated to WRITING_RULES.md groups H and I (rules 41-70: ranked limitations, the author named as labeller, opening from the belief tested, abstract at most four numbers, shorter captions, running example, practical close) and road-to-robotics MY_STYLE.md. No verdict or existing number changed. main.pdf rebuilt with xelatex in the chat container; run make check on the Orin for the tectonic build. Register caption in make_paper.py shortened.
 - 2026-11-05: rules 13, 23, 42, 65 (owner changes) and 71-74 (triads, tone) applied. Only the question in 'What the encoder knows' removed (rule 65).
 - 2026-11-05: rules 13 (varied sentence length), 23 (varied wording), 71 (no tidy triads) and 72-74 (limitations in the method's voice, failures framed by condition, strengths and cost first) applied. No number changed.
+- 2026-11-05: rule 75: the count-list sentences in the introduction replaced (the register table carries the counts). No number changed.
