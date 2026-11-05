@@ -265,7 +265,7 @@ def to_tex(md, bib):
         l = lines[i]
         if l.startswith("# "):
             out += [r"\title{" + esc(l[2:]) + "}",
-                    r"\author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@gmail.com}}",
+                    r"\author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@shissorobotics.com}}",
                     r"\date{}", r"\maketitle"]
         elif l.startswith("## Abstract"):
             out.append(r"\begin{abstract}"); abstract = True
