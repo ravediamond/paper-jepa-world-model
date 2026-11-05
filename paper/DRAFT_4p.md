@@ -61,7 +61,7 @@ The predictor does predict its own latent: at K = 30 its open-loop error is 0.31
 
 ## What the encoder knows
 
-Does the encoder carry anything that a frozen encoder or the joints do not? Table 2 sets our model beside the four other signals on the same 69 rollouts. Every probe is a LOSO linear probe against the author's labels. At rest the interval is a 95 % episode-bootstrap CI; at the anchor it is a bootstrap of the mean over 5 seeds of the out-of-fold AUROC (episodes resampled jointly across the seeds, 2,000 resamples, percentile).
+The test here is whether the encoder carries anything that a frozen encoder or the joints do not. Table 2 sets our model beside the four other signals on the same 69 rollouts. Every probe is a LOSO linear probe against the author's labels. At rest the interval is a 95 % episode-bootstrap CI; at the anchor it is a bootstrap of the mean over 5 seeds of the out-of-fold AUROC (episodes resampled jointly across the seeds, 2,000 resamples, percentile).
 
 Table 2: Outcome AUROC of each signal on the same 69 rollouts (exploratory: controls chosen after the data). Look at the anchor column, where no judge applies.
 
