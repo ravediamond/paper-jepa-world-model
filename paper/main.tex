@@ -27,7 +27,7 @@ We trained a small JEPA world model in the LeWorldModel recipe for \$3.30 of ren
 \section{Introduction}
 
 
-LeWorldModel (LeWM)~\citep{maes2026lewm} trains a world model in two parts. The encoder maps camera frames to a latent vector. The predictor takes the current latent and a sequence of actions and imagines the latents that follow. Both are trained together from pixels with a joint-embedding predictive (JEPA) loss. Papers built on these models propose several uses. Most of them need the predictor. One ranks a policy's candidate action chunks by their imagined outcome. Others flag a failure when the observed latent drifts from the predicted one, read the outcome of a grasp before it happens, or plan over several time scales. Each paper reports the use that worked on its own robot and data.
+LeWorldModel (LeWM)~\citep{maes2026lewm} trains a world model in two parts. The encoder maps camera frames to a latent vector. The predictor takes the current latent and a sequence of actions and imagines the latents that follow. Both are trained together from pixels with a joint-embedding predictive (JEPA) loss. Most of the uses that later papers propose need the predictor. LeWM itself ranks a policy's candidate action chunks by their imagined outcome. ContactGuard~\citep{zheng2026contactguard} reads the outcome of a grasp before it happens, HWM~\citep{zhang2026hwm} and H-JEPA~\citep{zhang2026hjepa} plan over several time scales, and other papers flag a failure when the observed latent drifts from the predicted one. Each of these papers reports that its use worked on its own robot and data.
 
 
 We had one such model, trained on our own arm. We ran every use we could find on it. Each re-test is a row of a register with a threshold, a dataset, a result and a verdict. Where we managed it, the threshold and the decision rule went into the repository before the result existed. That commit order is what we mean by pre-registration. All 20 rows match a pre-registration record in the commit history. In 19 of them the bar was in place before the result. The two-level hierarchical progress use had it in the same commit. One more row is not a use of our model. It times the pretrained RoboJEPA~\citep{zholus2026robojepa} and V-JEPA 2.1~\citep{murlabadia2026vjepa21} encoders on our on-board computer. 14 of the 20 rows fail or are no-go. Table~\ref{tab:register} lists all of them.
@@ -39,7 +39,7 @@ The first version of this paper argued something completely different. We read t
 We come back several times to one moment, the grasp anchor. It is 15 frames before the gripper first closes. There the current latent reads the outcome at 0.82 and the imagined latent at 0.70.
 
 
-The controls came after the data. Each readout is a linear probe with leave-one-session-out (LOSO) cross-validation on the 69 rollouts (44 success, 25 failure, 13 sessions). The labels were given at rest by the author. The model was trained on teleoperation only and never saw these rollouts. No threshold was committed for these comparisons. Everything this paper says about the split between encoder and predictor is therefore exploratory. 3 of the 3 register passes have their bar committed before the result. The register still marks the outcome-readout verdict as retrospective.
+We added the controls after the data. Each readout is a linear probe with leave-one-session-out (LOSO) cross-validation on the 69 rollouts (44 success, 25 failure, 13 sessions). The author gave the labels at rest. The model was trained on teleoperation only and never saw these rollouts. No threshold was committed for these comparisons, so everything this paper says about the split between encoder and predictor is exploratory. 3 of the 3 register passes have their bar committed before the result. The register still marks the outcome-readout verdict as retrospective.
 
 
 \section{Setup}
@@ -51,7 +51,7 @@ The robot is one SO-101 arm~\citep{so101} driven through LeRobot~\citep{cadene20
 Our model follows the LeWM recipe~\citep{maes2026lewm}, with a multi-view ViT encoder, an action-conditioned predictor and the SIGReg regulariser. We compare it with four cheaper signals. The frozen DINOv2-S control is a frozen DINOv2 small encoder~\citep{oquab2023dinov2}, mean-pooled over the top and wrist views as in DINO-WM~\citep{zhou2024dinowm}. The joints control is the commanded joint vector. The colour judge is a hand-built rule on the final frame with no learning. Policy identity is the checkpoint that ran the episode.
 
 
-In October we found a loading bug. A timing test on the on-board computer loaded our checkpoint with \texttt{strict=False}. The image had transformers 5.5.4, and under that version 192 encoder tensors did not match. They were dropped without an error, so the test timed a random encoder. We voided its latents. We then traced how every other use loaded the model. 26 ran the trained model and 1 ran a random one (that test). The world-model block of VLA-JEPA, which one diagnostic below uses, loads all 351 of its keys.
+In October we found a loading bug. A timing test on the on-board computer loaded our checkpoint with \texttt{strict=False}. The image had transformers 5.5.4, and under that version 192 encoder tensors did not match. They were dropped without an error, so the test timed a random encoder, and we voided its latents. We then traced how every other use loaded the model. 26 ran the trained model and 1 ran a random one, the timing test. The world-model block of VLA-JEPA, which one diagnostic below uses, loads all 351 of its keys.
 
 
 \section{The register}
@@ -159,7 +159,7 @@ The register's own outcome-readout row reports 1.000. That number was scored aga
 \section{Where the predictor fails}
 
 
-ContactGuard~\citep{zheng2026contactguard} finds that probes on the imagined latent beat probes on the current latent for grasp tasks. We expected the same at our grasp anchor. The pre-registered threshold asked the imagined latent for $\geq$ 0.85, $\geq$ +0.05 over the current one. We find the reverse. With the same encoder and the same anchor, the current latent reads the outcome at 0.82 and the imagined latent at 0.70. The row fails.
+ContactGuard~\citep{zheng2026contactguard} finds that probes on the imagined latent beat probes on the current latent for grasp tasks. We expected the same at our grasp anchor, and the pre-registered threshold asked the imagined latent for $\geq$ 0.85, $\geq$ +0.05 over the current one. We found the reverse. With the same encoder and the same anchor, the current latent reads the outcome at 0.82 and the imagined latent at 0.70. The row fails.
 
 
 We also ran the distillation probe on our model's inverse-dynamics term, pooled over the 25 teleoperation validation episodes. The trained model scores 0.7476. Its random initialisation scores 0.7974. The difference is −0.0499, with a 95 \% paired episode-bootstrap CI of [−0.7403, +0.6559] (\texttt{gap5\_pooled\_rerun.json}). The term depends on the machine. The same untrained network scored 1.4383 on one machine and 0.7974 and 0.8042 on two others. It is sensitive to the BLAS library and to ridge conditioning.
@@ -189,7 +189,7 @@ We ran an action-shuffle check on the predictor of VLA-JEPA at 5 anchors (Table~
 \end{table}
 
 
-One pass in the register uses the imagined latent. In the anticipation step of the outcome-readout gate, the imagined latent beat policy identity by +0.179. That bar is retrospective. We reran the same idea twice with the threshold committed first, in the grasp probe and in the calibrated surprise reflex. Both fail.
+The outcome-readout gate has one pass that uses the imagined latent. In its anticipation step the imagined latent beat policy identity by +0.179. We set that bar after the result. We then reran the idea twice with the threshold committed first, once in the grasp probe and once in the calibrated surprise reflex, and both runs fail.
 
 
 \section{Related work}
@@ -201,7 +201,7 @@ LeWorldModel~\citep{maes2026lewm} trains the recipe we use end to end from pixel
 \section{Limitations}
 
 
-The split between encoder and predictor is exploratory. We chose its probes after the data and fit them on 69 rollouts labelled by a single operator, the author. The model never saw these rollouts, and every probe is cross-validated by session. A fresh set of rollouts scored under a threshold committed first would confirm or reject the split. That needs a day on the arm. All results come from one model at one data scale. A second point at 653 episodes is costed and queued. We did not run three controls. The surprise monitor and the imagined arm of the grasp probe would each need a predictor trained on frozen DINOv2-S features or on the joints. Progress monotonicity with the controls would need a reimplementation. In the register, the outcome-readout verdict is retrospective. The two-level hierarchical progress use has its bar in the same commit as its result. Ordered by commit alone, without the audit, the register reads 13 bar-first and 6 same-commit rows.
+We chose the probes for the encoder and predictor split after the data, so the split is exploratory. They are fitted on 69 rollouts that one operator, the author, labelled. The model never saw these rollouts, and every probe is cross-validated by session. To confirm or reject the split we need a fresh set of rollouts scored under a threshold committed first. That takes a day on the arm. All results come from one model at one data scale. A second point at 653 episodes is costed and queued. Three controls were not run. The surprise monitor and the imagined arm of the grasp probe would each need a predictor trained on frozen DINOv2-S features or on the joints. Progress monotonicity with the controls would need a reimplementation. In the register the outcome-readout verdict is retrospective, and the two-level hierarchical progress use has its bar in the same commit as its result. Ordered by commit alone, without the audit, the register reads 13 bar-first and 6 same-commit rows.
 
 
 \section{Conclusion}

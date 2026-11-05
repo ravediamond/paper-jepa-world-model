@@ -11,3 +11,4 @@
 - 2026-11-05: merge pass (rule 78g) reverted. The 15:01 EditLens run scored it higher than the split version in all four papers (colon and 'X, with Y' set-ups pushed up; sentence length had no effect). Back to the 14:12 text.
 - 2026-11-05: the paragraph with the highest EditLens score rewritten by the author (grammar fixes only, numbers back as placeholders).
 - 2026-11-05: the LOSO probe (loso() from repro/gaps/scripts/analyze_controls.py) shown as code in 'What the encoder knows'. make_paper.py prints fenced code with listings. No number changed.
+- 2026-11-05: prose rewritten paragraph by paragraph against EditLens (open 3B) scores and WRITING_RULES group L (named things, split list sentences, case before label). No number, placeholder or verdict changed; main.pdf rebuilt. Data and tools: road-to-robotics journal/papers/ai-map/2026-11-05_rewrite/.
