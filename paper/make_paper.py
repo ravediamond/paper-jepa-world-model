@@ -182,7 +182,7 @@ def plain(s):
 def register_md(rows, uses, pa):
     names = json.loads((HERE / "register_names.json").read_text())["rows"]
     assert len(names) == len(rows) == len(uses) == len(pa)
-    out = ["Table @tab:register: The register: every pre-registered use of our world model (and the frozen-DINOv2 and RoboJEPA rows beside it), the paper it re-tests, what it takes from the model, whether the bar was committed before the result (audited against the commit history), the bar, the result and the verdict. Bar, result and verdict are quoted from repro/register/expected/FEASIBILITY.md §2 with the model names made plain; the code names the repro folder.",
+    out = ["Table @tab:register: The register: every use of our world model re-tested here (with the frozen-DINOv2 and RoboJEPA rows beside it), what it takes from the model, whether its bar came before the result, and the verdict. Read the takes column against the verdict: the predictor uses fail. Bar, result and verdict are quoted from repro/register/expected/FEASIBILITY.md §2.",
            "", "| use | re-tests | takes | bar first | bar | result | verdict | code |", "|---|---|---|---|---|---|---|---|"]
     for l, u, q, nm in zip(rows, uses, pa, names):
         cells = [x.strip() for x in l.split("|")]
