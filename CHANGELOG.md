@@ -8,4 +8,4 @@
 - 2026-11-05: rules 13 (varied sentence length), 23 (varied wording), 71 (no tidy triads) and 72-74 (limitations in the method's voice, failures framed by condition, strengths and cost first) applied. No number changed.
 - 2026-11-05: rule 75: the count-list sentences in the introduction replaced (the register table carries the counts). No number changed.
 - 2026-11-05: rule 78 (de-polish) applied to all prose: dense sentences split, semicolons and colon set-ups removed, advice and closers removed except one practical sentence in the conclusion, contrast kept only where a result contradicts a paper, plain description with the citation in the sentence. No number changed.
-- 2026-11-05: rule 78g merge pass: related short sentences joined with commas and dependent clauses (average sentence about 18-20 words, wider spread), no em-dashes, no intensifiers, no new claims. No number changed.
+- 2026-11-05: merge pass (rule 78g) reverted. The 15:01 EditLens run scored it higher than the split version in all four papers (colon and 'X, with Y' set-ups pushed up; sentence length had no effect). Back to the 14:12 text.
