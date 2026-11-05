@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{style/shisso}
+\usepackage{listings}\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible,keepspaces=true,frame=tb,framerule=0.3pt,aboveskip=4pt,belowskip=4pt,upquote=true}
 \shissorepo{github.com/ravediamond/paper-jepa-world-model}
 \renewcommand{\dbltopfraction}{0.95}\renewcommand{\topfraction}{0.9}\renewcommand{\textfraction}{0.05}\setcounter{dbltopnumber}{2}
 \begin{document}
@@ -101,7 +102,22 @@ The predictor does predict its own latent. At K = 30 its open-loop error is 0.31
 \section{What the encoder knows}
 
 
-We tested whether the encoder carries anything that a frozen encoder or the joints do not. Table~\ref{tab:controls} sets our model beside the four other signals on the same 69 rollouts. Every probe is a LOSO linear probe against the author's labels. At rest the interval is a 95 \% episode-bootstrap CI. At the anchor it is a bootstrap of the mean over 5 seeds of the out-of-fold AUROC, with episodes resampled jointly across the seeds (2,000 resamples, percentile).
+We tested whether the encoder carries anything that a frozen encoder or the joints do not. Table~\ref{tab:controls} sets our model beside the four other signals on the same 69 rollouts. Every probe is the same leave-one-session-out logistic regression, fit against the author's labels (\texttt{repro/gaps/scripts/analyze\_controls.py}):
+
+
+\begin{lstlisting}
+def loso(X, y, groups):
+    p = np.zeros(len(y))
+    for g in np.unique(groups):
+        te = groups == g
+        sc = StandardScaler().fit(X[~te])
+        m = LogisticRegression(C=1.0, class_weight="balanced", max_iter=5000).fit(sc.transform(X[~te]), y[~te])
+        p[te] = m.predict_proba(sc.transform(X[te]))[:, 1]
+    return p
+\end{lstlisting}
+
+
+ At rest the interval is a 95 \% episode-bootstrap CI. At the anchor it is a bootstrap of the mean over 5 seeds of the out-of-fold AUROC, with episodes resampled jointly across the seeds (2,000 resamples, percentile).
 
 
 

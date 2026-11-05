@@ -258,11 +258,18 @@ def cell(s):
 
 def to_tex(md, bib):
     out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{array}", r"\usepackage{graphicx}",
-           r"\usepackage[numbers,sort&compress]{natbib}", r"\usepackage{style/shisso}", r"\shissorepo{github.com/ravediamond/paper-jepa-world-model}",
+           r"\usepackage[numbers,sort&compress]{natbib}", r"\usepackage{style/shisso}", r"\usepackage{listings}\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible,keepspaces=true,frame=tb,framerule=0.3pt,aboveskip=4pt,belowskip=4pt,upquote=true}", r"\shissorepo{github.com/ravediamond/paper-jepa-world-model}",
            r"\renewcommand{\dbltopfraction}{0.95}\renewcommand{\topfraction}{0.9}\renewcommand{\textfraction}{0.05}\setcounter{dbltopnumber}{2}", r"\begin{document}"]
     lines, i, abstract, cap, lab = md.splitlines(), 0, False, "", ""
     while i < len(lines):
         l = lines[i]
+        if l.startswith("```"):  # fenced code from the repository: printed verbatim
+            j = i + 1
+            while j < len(lines) and not lines[j].startswith("```"):
+                j += 1
+            out.append("\\begin{lstlisting}\n" + "\n".join(lines[i + 1:j]) + "\n\\end{lstlisting}")
+            i = j + 1
+            continue
         if l.startswith("# "):
             out += [r"\title{" + esc(l[2:]) + "}",
                     r"\author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@shissorobotics.com}}",

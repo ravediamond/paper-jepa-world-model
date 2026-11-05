@@ -10,3 +10,4 @@
 - 2026-11-05: rule 78 (de-polish) applied to all prose: dense sentences split, semicolons and colon set-ups removed, advice and closers removed except one practical sentence in the conclusion, contrast kept only where a result contradicts a paper, plain description with the citation in the sentence. No number changed.
 - 2026-11-05: merge pass (rule 78g) reverted. The 15:01 EditLens run scored it higher than the split version in all four papers (colon and 'X, with Y' set-ups pushed up; sentence length had no effect). Back to the 14:12 text.
 - 2026-11-05: the paragraph with the highest EditLens score rewritten by the author (grammar fixes only, numbers back as placeholders).
+- 2026-11-05: the LOSO probe (loso() from repro/gaps/scripts/analyze_controls.py) shown as code in 'What the encoder knows'. make_paper.py prints fenced code with listings. No number changed.
