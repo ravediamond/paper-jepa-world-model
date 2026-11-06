@@ -12,19 +12,18 @@
 \title{A small JEPA world model on a low-cost arm: the encoder reads the outcome, the predictor adds nothing to it}
 \author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@shissorobotics.com}}
 \date{}
-\maketitle
 
 
 
 
-\begin{abstract}
-
-
-We trained a small JEPA world model in the LeWorldModel recipe for \$3.30 of rented GPU time. The training data are teleoperated demonstrations of one tabletop task on an SO-101 arm. We then re-tested on this model the uses of such models that recent papers propose. Each use has a threshold in a public register. We tested the encoder on policy rollouts the model never saw. A linear probe on its last-frame latent separates success from failure about as well as a hand-built colour judge. It does better than a frozen DINOv2 encoder and better than the commanded joints. The predictor adds nothing to this. At the grasp, the imagined latent reads the outcome at 0.70 and the current latent at 0.82. Every use that needs the predictor to roll forward misses its threshold. It still does when we train the same recipe on 45 to 2,909 episodes, which adds a second dataset and then another lab's rollouts. The controls are exploratory and come from one rig and one model per size.
-
-
-\end{abstract}
+\twocolumn[\vspace*{0.32in}\shissopanel{A small JEPA world model on a low-cost arm: the encoder reads the outcome, the predictor adds nothing to it}{Ravindu Somawansa\\[1pt]Shisso Robotics, Paris\\[1pt]\texttt{ravindu.somawansa@shissorobotics.com}}{We trained a small JEPA world model in the LeWorldModel recipe for \$3.30 of rented GPU time. The training data are teleoperated demonstrations of one tabletop task on an SO-101 arm. We then re-tested on this model the uses of such models that recent papers propose. Each use has a threshold in a public register. We tested the encoder on policy rollouts the model never saw. A linear probe on its last-frame latent separates success from failure about as well as a hand-built colour judge. It does better than a frozen DINOv2 encoder and better than the commanded joints. The predictor adds nothing to this. At the grasp, the imagined latent reads the outcome at 0.70 and the current latent at 0.82. Every use that needs the predictor to roll forward misses its threshold. It still does when we train the same recipe on 45 to 2,909 episodes, which adds a second dataset and then another lab's rollouts. The controls are exploratory and come from one rig and one model per size.}{\textbf{Code and rows:} \texttt{github.com/ravediamond/paper-jepa-world-model}\quad\textbf{Reproduce:} \texttt{make check}. Every number carries its source file.}\vspace{4pt}]
 \section{Introduction}
+
+
+\begin{figure*}[t]\centering
+\includegraphics[width=\textwidth]{fig/encoder_predictor.pdf}
+\caption{What the world model reads and what it forecasts. The encoder's last-frame latent separates success from failure on rollouts the model never saw about as well as a hand-built colour judge, and it keeps doing so when we retrain on 45 to 2,909 episodes. The predictor misses its threshold at the original size and at every other size: the commanded actions rank the executed chunk better than the imagined latents do.}\label{fig:teaser}
+\end{figure*}
 
 
 LeWorldModel (LeWM)~\citep{maes2026lewm} trains a world model in two parts. The encoder maps camera frames to a latent vector. The predictor takes the current latent and a sequence of actions and imagines the latents that follow. Both are trained together from pixels with a joint-embedding predictive (JEPA) loss. Most of the uses that later papers propose need the predictor. LeWM itself ranks a policy's candidate action chunks by their imagined outcome. ContactGuard~\citep{zheng2026contactguard} reads the outcome of a grasp before it happens, HWM~\citep{zhang2026hwm} and H-JEPA~\citep{zhang2026hjepa} plan over several time scales, and other papers flag a failure when the observed latent drifts from the predicted one. Each of these papers reports that its use worked on its own robot and data.
@@ -68,26 +67,26 @@ Table~\ref{tab:register} lists the 20 uses. The takes column says what each one 
 \toprule
 \shissohead use & re-tests & takes & bar first & bar & result & verdict & code \tabularnewline
 \midrule
-open-loop latent prediction & \citep{maes2026lewm} & predictor & yes & beats copy-last; ratios $\geq$ 1.3 & open loop K = 30: 0.31 vs copy-last 0.89; timing shifts 1.99 / 1.58; rank 24--30 & \textbf{pass} & G0 \tabularnewline
-imagined- vs current-latent outcome probe (first run) & \citep{zheng2026contactguard} & both & yes & imagined beats current & imagined 0.72, current 0.68; policy identity 0.76 & not proven (policy confound) & C1 \tabularnewline
-action-chunk ranking & \citep{maes2026lewm} & predictor & yes & top-1 $\geq$ 0.8 & top-1 best 0.60; action-only 0.68--0.90, regret $\approx$ 0 (52) & \textbf{fail} & G1b \tabularnewline
-arm-pose linear probe & \citep{maes2026lewm,zhou2024dinowm} & encoder & yes & > 0.57 & arm-pose R$^2$ ours 0.57, \textbf{DINOv2-S 0.92} & DINOv2-S pass & G1 \tabularnewline
-chunk ranking with a frozen-DINOv2 world model & \citep{zhou2024dinowm} & predictor & yes & $\geq$ 0.8 & DINOv2-S top-1 0.55--0.61 & \textbf{fail} & G1-W2 \tabularnewline
-progress monotonicity and done detection & this project & encoder & yes & ρ ≤ −0.8; AUROC $\geq$ 0.95 & monotonicity −0.32 to −0.50; done AUROC ours 0.97 (easy contrast); 32 \% false stalls & T1 \textbf{fail}, T2 sanity & G6a \tabularnewline
-outcome readout at rest; imagined-latent anticipation & \citep{zheng2026contactguard} & both & yes & $\geq$ 0.90; +0.10 & readout at rest AUROC ours 1.000, DINOv2-S 0.976; anticipation +0.179 over policy identity & \textbf{pass} (retrospective) & G10 \tabularnewline
-two-level hierarchical progress & \citep{zhang2026hjepa} & encoder & same commit & ≤ −0.80; ≤ 10 \% & H-JEPA level 2 ρ −0.727; false stalls 52 \% & \textbf{fail} & G6b \tabularnewline
-surprise monitor & this project & predictor & yes & $\geq$ 5/8 at ≤ 1/20 & L2 surprise 2/8 at 2/42 (AUROC 0.86); drift 0/8; live reflex 42/42 successes flagged & \textbf{fail} & W1-A \tabularnewline
-latent stage tracker & this project & encoder & yes & ≤ 2 \%, ≤ 10 \% & 22.1 \% premature, 31.1 \% missed & \textbf{fail} & W1-B \tabularnewline
-calibrated surprise reflex & this project & predictor & yes & recall $\geq$ 50 \% & 3/25 failures at 1/44 & \textbf{fail} & G11-B-cal \tabularnewline
-imagined-latent grasp probe & \citep{zheng2026contactguard} & both & yes & $\geq$ 0.85, $\geq$ +0.05 & imagined 0.70 < current 0.82 & \textbf{fail} & W1-C1 \tabularnewline
-conformal surprise band & this project & predictor & yes & ≤ 1/20, $\geq$ 50 \% & successes 22.7 \% flagged, failures 46 \% & \textbf{fail} & W1-C2 \tabularnewline
-re-ranking chunk candidates & \citep{maes2026lewm} & predictor & yes & ≤ 0.10 & regret 0.2631 vs ours 0.2630, action-only −0.0075 & \textbf{fail} & W1-R \tabularnewline
-action-conditioned risk head & \citep{liu2026reap} & both & yes & $\geq$ 5/8 at ≤ 1/20 & first version 0.93 withdrawn (time leak); second version 3/8 at 5/42, AUROC 0.79 vs shuffled 0.71 & \textbf{fail} & REAP \tabularnewline
-inverse dynamics from a latent pair & this project & encoder & yes & random-init < half ours & latent pair +0.748 over one frame, but random-init ours 1.254 vs ours 1.180; beyond state +0.007 & \textbf{not proven} & §30 \tabularnewline
+\rowcolor{shissopass}open-loop latent prediction & \citep{maes2026lewm} & predictor & yes & beats copy-last; ratios $\geq$ 1.3 & open loop K = 30: 0.31 vs copy-last 0.89; timing shifts 1.99 / 1.58; rank 24--30 & \textbf{pass} & G0 \tabularnewline
+\rowcolor{shissoamber}imagined- vs current-latent outcome probe (first run) & \citep{zheng2026contactguard} & both & yes & imagined beats current & imagined 0.72, current 0.68; policy identity 0.76 & not proven (policy confound) & C1 \tabularnewline
+\rowcolor{shissofail}action-chunk ranking & \citep{maes2026lewm} & predictor & yes & top-1 $\geq$ 0.8 & top-1 best 0.60; action-only 0.68--0.90, regret $\approx$ 0 (52) & \textbf{fail} & G1b \tabularnewline
+\rowcolor{shissopass}arm-pose linear probe & \citep{maes2026lewm,zhou2024dinowm} & encoder & yes & > 0.57 & arm-pose R$^2$ ours 0.57, \textbf{DINOv2-S 0.92} & DINOv2-S pass & G1 \tabularnewline
+\rowcolor{shissofail}chunk ranking with a frozen-DINOv2 world model & \citep{zhou2024dinowm} & predictor & yes & $\geq$ 0.8 & DINOv2-S top-1 0.55--0.61 & \textbf{fail} & G1-W2 \tabularnewline
+\rowcolor{shissofail}progress monotonicity and done detection & this project & encoder & yes & ρ ≤ −0.8; AUROC $\geq$ 0.95 & monotonicity −0.32 to −0.50; done AUROC ours 0.97 (easy contrast); 32 \% false stalls & T1 \textbf{fail}, T2 sanity & G6a \tabularnewline
+\rowcolor{shissopass}outcome readout at rest; imagined-latent anticipation & \citep{zheng2026contactguard} & both & yes & $\geq$ 0.90; +0.10 & readout at rest AUROC ours 1.000, DINOv2-S 0.976; anticipation +0.179 over policy identity & \textbf{pass} (retrospective) & G10 \tabularnewline
+\rowcolor{shissofail}two-level hierarchical progress & \citep{zhang2026hjepa} & encoder & same commit & ≤ −0.80; ≤ 10 \% & H-JEPA level 2 ρ −0.727; false stalls 52 \% & \textbf{fail} & G6b \tabularnewline
+\rowcolor{shissofail}surprise monitor & this project & predictor & yes & $\geq$ 5/8 at ≤ 1/20 & L2 surprise 2/8 at 2/42 (AUROC 0.86); drift 0/8; live reflex 42/42 successes flagged & \textbf{fail} & W1-A \tabularnewline
+\rowcolor{shissofail}latent stage tracker & this project & encoder & yes & ≤ 2 \%, ≤ 10 \% & 22.1 \% premature, 31.1 \% missed & \textbf{fail} & W1-B \tabularnewline
+\rowcolor{shissofail}calibrated surprise reflex & this project & predictor & yes & recall $\geq$ 50 \% & 3/25 failures at 1/44 & \textbf{fail} & G11-B-cal \tabularnewline
+\rowcolor{shissofail}imagined-latent grasp probe & \citep{zheng2026contactguard} & both & yes & $\geq$ 0.85, $\geq$ +0.05 & imagined 0.70 < current 0.82 & \textbf{fail} & W1-C1 \tabularnewline
+\rowcolor{shissofail}conformal surprise band & this project & predictor & yes & ≤ 1/20, $\geq$ 50 \% & successes 22.7 \% flagged, failures 46 \% & \textbf{fail} & W1-C2 \tabularnewline
+\rowcolor{shissofail}re-ranking chunk candidates & \citep{maes2026lewm} & predictor & yes & ≤ 0.10 & regret 0.2631 vs ours 0.2630, action-only −0.0075 & \textbf{fail} & W1-R \tabularnewline
+\rowcolor{shissofail}action-conditioned risk head & \citep{liu2026reap} & both & yes & $\geq$ 5/8 at ≤ 1/20 & first version 0.93 withdrawn (time leak); second version 3/8 at 5/42, AUROC 0.79 vs shuffled 0.71 & \textbf{fail} & REAP \tabularnewline
+\rowcolor{shissoamber}inverse dynamics from a latent pair & this project & encoder & yes & random-init < half ours & latent pair +0.748 over one frame, but random-init ours 1.254 vs ours 1.180; beyond state +0.007 & \textbf{not proven} & §30 \tabularnewline
 linear identifiability of the latent & \citep{klindt2026lejepa} & encoder & yes & R$^2$ < 0.80; $\geq$ 0.20 & ours mean R$^2$ 0.565, anisotropy 0.639; DINOv2-S 0.867 / 0.301 & B1--B3 met & LeJEPA \tabularnewline
-latent-distance scale for plan consumption & \citep{surveyor2026} & encoder & yes & $\tau$ ≤ 0.40; $\geq$ 5/8 at ≤ 1/20 & $\tau$ 1.249 (paper 0.20); monitor 3/8 at 6/42 & \textbf{fail} & SURVEYOR \tabularnewline
-hierarchical vs flat prediction horizon & \citep{zhang2026hwm} & predictor & yes & crossover in [1, 2] s & no crossover: high level 0.76 vs ours 0.56 at 2 s & H1, H2 \textbf{fail} & HWM \tabularnewline
-on-device latency of RoboJEPA / V-JEPA 2.1 & \citep{zholus2026robojepa,murlabadia2026vjepa21} & both & yes & ≤ 200 ms; $\geq$ 15 \% & encoder 526 ms (2 views); ≤ copy-last + 12 \% & \textbf{no-go} & RoboJEPA \tabularnewline
+\rowcolor{shissofail}latent-distance scale for plan consumption & \citep{surveyor2026} & encoder & yes & $\tau$ ≤ 0.40; $\geq$ 5/8 at ≤ 1/20 & $\tau$ 1.249 (paper 0.20); monitor 3/8 at 6/42 & \textbf{fail} & SURVEYOR \tabularnewline
+\rowcolor{shissofail}hierarchical vs flat prediction horizon & \citep{zhang2026hwm} & predictor & yes & crossover in [1, 2] s & no crossover: high level 0.76 vs ours 0.56 at 2 s & H1, H2 \textbf{fail} & HWM \tabularnewline
+\rowcolor{shissofail}on-device latency of RoboJEPA / V-JEPA 2.1 & \citep{zholus2026robojepa,murlabadia2026vjepa21} & both & yes & ≤ 200 ms; $\geq$ 15 \% & encoder 526 ms (2 views); ≤ copy-last + 12 \% & \textbf{no-go} & RoboJEPA \tabularnewline
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -144,7 +143,9 @@ policy identity & 0.5882 [0.4084, 0.7515] & --- \\
 \end{figure}
 
 
+\begin{shissofinding}[Finding.]
 At rest our model is level with the colour judge. The two CIs overlap. Our model is above the frozen encoder and the joints. At the grasp anchor no judge applies, and our model is above both controls. The pose probes hold the joints better than our encoder does. They hold the outcome worse. On these rollouts the encoder has outcome information that the pose alone does not give.
+\end{shissofinding}
 
 
 The anchor column depends on how the five seeds are combined. If we average the predictions before scoring, our model gets 0.8377, frozen DINOv2-S 0.7175 and the joints 0.5346. With seed 0 alone they get 0.7554, 0.7024 and 0.5574. The gap to the frozen encoder is smaller with seed 0. The order is the same.
@@ -215,10 +216,10 @@ All of this comes from one model trained on 157 episodes. We trained the same re
 \end{table*}
 
 
-No predictor use leaves its floor. The commanded actions rank the executed chunk first at 0.873 at d = 30, and the model stays below them at every scale with a CI that excludes zero. Its best cell goes from 0.422 at 45 episodes to 0.605 at 157 and then down to 0.279 and 0.230 when the other datasets are added, so it never gets near the 0.8 threshold. We did not test why more data made the ranking worse. The added episodes are other tasks and another rig, and the ranking is scored on the same 25 bowls episodes at every scale, so the added data may take capacity from the task we score. The surprise monitor catches 1, 2, 1 and 0 of 8 failures, against the threshold of 5.
+At d = 30 the commanded actions rank the executed chunk first at 0.873. Our model is below them at every size by a gap whose CI excludes zero. Its best cell was 0.422 with 45 episodes, 0.605 with 157, then 0.279 and 0.230 after we added the cubes dataset and ArmnetBench. The 0.8 threshold is out of reach at all four sizes. We have not tested why the larger sets did worse. The added episodes are other tasks and another rig, and the ranking is scored on the same 25 bowls episodes each time, so the added data may take capacity from the task we score. The surprise monitor caught 1, 2, 1 and 0 of 8 failures. It needed 5.
 
 
-The encoder does not move much either. The joints R$^2$ stays between 0.556 and 0.573. The rest readout stays level with the colour judge (0.943) at every scale: the CI of the paired difference includes zero in each row, and the lowest value, 0.897, belongs to the largest model. The beyond-state probe has the same verdict at every scale, not proven. The latent now and 5 frames later predict the commanded action better than the latent now alone (the gain is at least 0.62). What they add to the measured joints stays between 0.006 and 0.009, against a threshold of 0.02, and the untrained encoder gains 1.25 from the same extra latent, which is not under half of what any trained one gains.
+Neither encoder probe moves with the data. The joints R$^2$ is 0.556 at the smallest size and 0.573 at the largest. The rest readout is level with the colour judge (0.943) in every row, since the CI of the paired difference includes zero, although the largest model has the lowest AUROC, 0.897. For the beyond-state probe, the gain of the latent 5 frames later over the latent now alone is at least 0.62, but what it adds to the measured joints is 0.006 to 0.009 against a threshold of 0.02, and the untrained encoder gains 1.25 from the same extra latent, more than half of any trained one's gain. The verdict is not proven at every size.
 
 
 This is one run per size with one seed. The decision rule asks for two seeds at the smallest and the largest size, and for a predictor trained on frozen DINOv2-S features at every size as the floor of the surprise monitor. We ran neither. Read it as four runs in which no use of the predictor improves with data, not as a statement about the model class.
@@ -239,7 +240,15 @@ We chose the probes for the encoder and predictor split after the data, so the s
 \section{Conclusion}
 
 
-We tested 20 published uses on a \$3.30 world model. At its data scale the encoder reads the outcome and the predictor adds nothing to that reading, and training on up to 2,909 episodes did not change either. In chunk ranking the commanded actions did better than the predictor, so they are worth keeping as a baseline for any model of this size.
+\begin{shissofinding}[Conclusion.]
+We ran 20 published uses on a world model that cost \$3.30 to train. The encoder can tell a success from a failure after the fact. The predictor does not add to that, and training on up to 2,909 episodes did not change it. For ranking chunks the commanded actions were better than the predictor, and they need no model.
+\end{shissofinding}
+
+
+\begin{figure*}[t]\centering
+\includegraphics[width=\textwidth]{fig/number_chain.pdf}
+\caption{How every number in this paper is made. A protocol with its threshold is committed before any number exists (1). The run stores its rows under repro/ (2). The result is committed after the threshold, and the commit order is audited (3). make l0 recomputes every number from the stored rows (4). make\_paper.py writes numbers.json, with each value's anchor, and fills the text from it (5). make check regenerates the paper and fails on any difference.}\label{fig:chain}
+\end{figure*}
 \bibliographystyle{unsrtnat}
 \bibliography{refs}
 \end{document}

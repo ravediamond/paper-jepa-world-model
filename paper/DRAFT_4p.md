@@ -8,6 +8,8 @@ We trained a small JEPA world model in the LeWorldModel recipe for $3.30 of rent
 
 ## Introduction
 
+![What the world model reads and what it forecasts. The encoder's last-frame latent separates success from failure on rollouts the model never saw about as well as a hand-built colour judge, and it keeps doing so when we retrain on 45 to 2,909 episodes. The predictor misses its threshold at the original size and at every other size: the commanded actions rank the executed chunk better than the imagined latents do.](fig/encoder_predictor.pdf){full}
+
 LeWorldModel (LeWM) [1] trains a world model in two parts. The encoder maps camera frames to a latent vector. The predictor takes the current latent and a sequence of actions and imagines the latents that follow. Both are trained together from pixels with a joint-embedding predictive (JEPA) loss. Most of the uses that later papers propose need the predictor. LeWM itself ranks a policy's candidate action chunks by their imagined outcome. ContactGuard [2] reads the outcome of a grasp before it happens, HWM [3] and H-JEPA [4] plan over several time scales, and other papers flag a failure when the observed latent drifts from the predicted one. Each of these papers reports that its use worked on its own robot and data.
 
 We had one such model, trained on our own arm. We ran every use we could find on it. Each re-test is a row of a register with a threshold, a dataset, a result and a verdict. Where we managed it, the threshold and the decision rule went into the repository before the result existed. That commit order is what we mean by pre-registration. All 20 rows match a pre-registration record in the commit history. In 19 of them the bar was in place before the result. The two-level hierarchical progress use had it in the same commit. One more row is not a use of our model. It times the pretrained RoboJEPA [5] and V-JEPA 2.1 [6] encoders on our on-board computer. 14 of the 20 rows fail or are no-go. Table 1 lists all of them.
@@ -88,7 +90,7 @@ Table 2: Outcome AUROC of each signal on the same 69 rollouts (exploratory: cont
 
 ![Table 2 as a dot plot. Left: at rest, with the 95 % CI. Right: at the grasp anchor, with the seed range (not a CI).](fig/table2.pdf)
 
-At rest our model is level with the colour judge. The two CIs overlap. Our model is above the frozen encoder and the joints. At the grasp anchor no judge applies, and our model is above both controls. The pose probes hold the joints better than our encoder does. They hold the outcome worse. On these rollouts the encoder has outcome information that the pose alone does not give.
+> **Finding.** At rest our model is level with the colour judge. The two CIs overlap. Our model is above the frozen encoder and the joints. At the grasp anchor no judge applies, and our model is above both controls. The pose probes hold the joints better than our encoder does. They hold the outcome worse. On these rollouts the encoder has outcome information that the pose alone does not give.
 
 The anchor column depends on how the five seeds are combined. If we average the predictions before scoring, our model gets 0.8377, frozen DINOv2-S 0.7175 and the joints 0.5346. With seed 0 alone they get 0.7554, 0.7024 and 0.5574. The gap to the frozen encoder is smaller with seed 0. The order is the same.
 
@@ -131,9 +133,9 @@ Table 4: The probe battery on one model per training-set size. Chunk ranking is 
 | 810 (275,015) | 0.565 | 0.273, gap -0.600 [-0.652, -0.545] | 0.63 / 0.007 | 1 of 8 | 0.956 [0.899, 0.996] |
 | 2,909 (1,282,161) | 0.573 | 0.222, gap -0.651 [-0.696, -0.602] | 1.17 / 0.009 | 0 of 8 | 0.897 [0.813, 0.964] |
 
-No predictor use leaves its floor. The commanded actions rank the executed chunk first at 0.873 at d = 30, and the model stays below them at every scale with a CI that excludes zero. Its best cell goes from 0.422 at 45 episodes to 0.605 at 157 and then down to 0.279 and 0.230 when the other datasets are added, so it never gets near the 0.8 threshold. We did not test why more data made the ranking worse. The added episodes are other tasks and another rig, and the ranking is scored on the same 25 bowls episodes at every scale, so the added data may take capacity from the task we score. The surprise monitor catches 1, 2, 1 and 0 of 8 failures, against the threshold of 5.
+At d = 30 the commanded actions rank the executed chunk first at 0.873. Our model is below them at every size by a gap whose CI excludes zero. Its best cell was 0.422 with 45 episodes, 0.605 with 157, then 0.279 and 0.230 after we added the cubes dataset and ArmnetBench. The 0.8 threshold is out of reach at all four sizes. We have not tested why the larger sets did worse. The added episodes are other tasks and another rig, and the ranking is scored on the same 25 bowls episodes each time, so the added data may take capacity from the task we score. The surprise monitor caught 1, 2, 1 and 0 of 8 failures. It needed 5.
 
-The encoder does not move much either. The joints R² stays between 0.556 and 0.573. The rest readout stays level with the colour judge (0.943) at every scale: the CI of the paired difference includes zero in each row, and the lowest value, 0.897, belongs to the largest model. The beyond-state probe has the same verdict at every scale, not proven. The latent now and 5 frames later predict the commanded action better than the latent now alone (the gain is at least 0.62). What they add to the measured joints stays between 0.006 and 0.009, against a threshold of 0.02, and the untrained encoder gains 1.25 from the same extra latent, which is not under half of what any trained one gains.
+Neither encoder probe moves with the data. The joints R² is 0.556 at the smallest size and 0.573 at the largest. The rest readout is level with the colour judge (0.943) in every row, since the CI of the paired difference includes zero, although the largest model has the lowest AUROC, 0.897. For the beyond-state probe, the gain of the latent 5 frames later over the latent now alone is at least 0.62, but what it adds to the measured joints is 0.006 to 0.009 against a threshold of 0.02, and the untrained encoder gains 1.25 from the same extra latent, more than half of any trained one's gain. The verdict is not proven at every size.
 
 This is one run per size with one seed. The decision rule asks for two seeds at the smallest and the largest size, and for a predictor trained on frozen DINOv2-S features at every size as the floor of the surprise monitor. We ran neither. Read it as four runs in which no use of the predictor improves with data, not as a statement about the model class.
 
@@ -147,7 +149,9 @@ We chose the probes for the encoder and predictor split after the data, so the s
 
 ## Conclusion
 
-We tested 20 published uses on a $3.30 world model. At its data scale the encoder reads the outcome and the predictor adds nothing to that reading, and training on up to 2,909 episodes did not change either. In chunk ranking the commanded actions did better than the predictor, so they are worth keeping as a baseline for any model of this size.
+> **Conclusion.** We ran 20 published uses on a world model that cost $3.30 to train. The encoder can tell a success from a failure after the fact. The predictor does not add to that, and training on up to 2,909 episodes did not change it. For ranking chunks the commanded actions were better than the predictor, and they need no model.
+
+![How every number in this paper is made. A protocol with its threshold is committed before any number exists (1). The run stores its rows under repro/ (2). The result is committed after the threshold, and the commit order is audited (3). make l0 recomputes every number from the stored rows (4). make_paper.py writes numbers.json, with each value's anchor, and fills the text from it (5). make check regenerates the paper and fails on any difference.](fig/number_chain.pdf){full}
 
 ## References
 

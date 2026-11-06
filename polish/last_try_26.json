@@ -1,0 +1,1 @@
+{"para": 26, "cands": ["We ran {{rows}} published uses on a world model that cost ${{cost_w1}} to train. The encoder can tell a success from a failure after the fact. The predictor does not add to that, and training on up to {{sc5_eps}} episodes did not change it. For ranking chunks the commanded actions were better than the predictor, and they need no model."]}

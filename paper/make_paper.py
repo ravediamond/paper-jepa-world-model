@@ -194,8 +194,51 @@ def main():
     (HERE / "DRAFT_4p.md").write_text(to_md(src, bib))
     (HERE / "numbers.json").write_text(json.dumps({k: {"value": N[k], "anchor": A[k]} for k in sorted(N)}, indent=1, ensure_ascii=False) + "\n")
     (HERE / "main.tex").write_text(to_tex(src, bib))
-    import make_figs; make_figs.OUT.mkdir(exist_ok=True); make_figs.table2()
+    import make_figs; make_figs.OUT.mkdir(exist_ok=True); make_figs.table2(); design_figures()
     print(f"{len(N)} numbers; DRAFT_4p.md, main.tex, numbers.json written")
+
+
+def design_figures():
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+    import sys
+    sys.path.insert(0, str(HERE / "style")); import shisso_colors as sc; sc.use()
+    FIGD = HERE / "fig"; FIGD.mkdir(exist_ok=True)
+    GREEN, RED = sc.CATEGORICAL[2], sc.CATEGORICAL[3]
+    fig, ax = plt.subplots(figsize=(7.0, 1.85)); ax.set_xlim(0, 100); ax.set_ylim(0, 22); ax.axis("off")
+    lanes = [(12.0, "the encoder: what the world model reads", "last-frame latent, linear probe\non {} rollouts it never saw".format(N["n"]),
+              "outcome AUROC {} (colour judge {},\nfrozen DINOv2-S {}, joints {})".format(N["rest_W1"], N["rest_judge"], N["rest_W2p"], N["rest_joints"]), GREEN,
+              "45 to {} episodes: {} to {}\nlevel with the judge at every size".format(N["sc5_eps"], N["sc1_p5"], N["sc5_p5"]), GREEN),
+             (1.0, "the predictor: what it forecasts", "imagined latents from the current\nlatent and the commanded actions",
+              "chunk ranking {} of anchors (bar {}), commanded actions\nalone {}; surprise monitor catches {} failures with {} false alarms".format(N["g1b_top1"], N["g1b_bar"], N["g1b_actions"], N["w1a_hits"].split(" at ")[0], N["w1a_hits"].split(" at ")[1]), RED,
+              "45 to {} episodes: best cell {}, {},\n{}, {}; never above the floor".format(N["sc5_eps"], N["sc1_top1"], N["sc3_top1"], N["sc4_top1"], N["sc5_top1"]), RED)]
+    cols = [(1.0, 24.0), (30.0, 36.0), (72.0, 27.0)]
+    for y, head, a, b, cb, c, cc in lanes:
+        for (x, w), txt, col in zip(cols, [a, b, c], ["#8A90A0", cb, cc]):
+            ax.add_patch(FancyBboxPatch((x, y), w, 7.4, boxstyle="round,pad=0,rounding_size=1.0", fc="white", ec=col, lw=1.7))
+            ax.text(x + w / 2, y + 3.7, txt, ha="center", va="center", fontsize=5.6, linespacing=1.2)
+        ax.text(1.0, y + 8.6, head, fontsize=6.3, fontweight="bold", color=sc.ACCENT)
+        for x0, x1 in [(25.0, 30.0), (66.0, 72.0)]:
+            ax.add_patch(FancyArrowPatch((x0, y + 3.7), (x1, y + 3.7), arrowstyle="-|>", mutation_scale=6, lw=1.0, color=sc.ACCENT))
+    for i, (lab, c) in enumerate([("reads the outcome, level with the judge", GREEN), ("misses its threshold", RED)]):
+        lx = 62 + i * 21.0; ax.add_patch(FancyBboxPatch((lx, 20.4), 1.4, 1.4, boxstyle="round,pad=0", fc=c, ec="none")); ax.text(lx + 2.1, 21.1, lab, fontsize=5.2, va="center")
+    fig.subplots_adjust(0, 0, 1, 1); fig.savefig(FIGD / "encoder_predictor.pdf"); fig.savefig(FIGD / "encoder_predictor.png", dpi=200); plt.close(fig)
+
+    # the chain
+    fig, ax = plt.subplots(figsize=(7.0, 1.05)); ax.set_xlim(0, 100); ax.set_ylim(0, 15); ax.axis("off")
+    steps = [("1  bar committed", "protocol commit\nbefore any number"), ("2  run", "rows stored in\nrepro/<exp>/expected"), ("3  result committed", "result commit\nafter the bar"),
+             ("4  L0 recompute", "make l0: every number\nfrom the stored rows"), ("5  paper", "numbers.json: value\nand its anchor")]
+    bw, gap = 16.2, 4.0
+    for i, (a, b) in enumerate(steps):
+        xx = 1 + i * (bw + gap); ax.add_patch(FancyBboxPatch((xx, 3), bw, 10, boxstyle="round,pad=0,rounding_size=1.2", fc="#EDF2FB" if i != 4 else sc.ACCENT, ec=sc.ACCENT, lw=1.0))
+        ax.text(xx + bw / 2, 10.3, a, ha="center", va="center", fontsize=6.4, fontweight="bold", color="white" if i == 4 else sc.ACCENT)
+        ax.text(xx + bw / 2, 6.0, b, ha="center", va="center", fontsize=5.6, color="white" if i == 4 else "black", linespacing=1.15)
+        if i < 4:
+            ax.add_patch(FancyArrowPatch((xx + bw, 8), (xx + bw + gap, 8), arrowstyle="-|>", mutation_scale=6, lw=1.0, color=sc.ACCENT))
+    ax.text(50, 0.7, "make check regenerates the paper from the stored rows and fails on any difference", ha="center", fontsize=5.8, color=sc.DARKGREY, style="italic")
+    fig.subplots_adjust(0, 0, 1, 1); fig.savefig(FIGD / "number_chain.pdf"); fig.savefig(FIGD / "number_chain.png", dpi=200); plt.close(fig)
 
 
 # register table: one row per FEASIBILITY.md §2 row; names and citations from register_names.json, the rest verbatim
@@ -287,6 +330,15 @@ def cell(s):
     return refs(esc(s)).lstrip("~")
 
 
+LINKS = r"\textbf{Code and rows:} \texttt{github.com/ravediamond/paper-jepa-world-model}\quad\textbf{Reproduce:} \texttt{make check}. Every number carries its source file."
+
+
+def tint(v):
+    v = v.lower()
+    c = "shissofail" if ("fail" in v or "no-go" in v) else "shissoamber" if "not proven" in v else "shissopass" if "pass" in v else None
+    return "\\rowcolor{" + c + "}" if c else ""
+
+
 def to_tex(md, bib):
     out = [r"\documentclass[10pt,twocolumn]{article}", r"\usepackage[margin=0.75in]{geometry}", r"\usepackage{booktabs}", r"\usepackage{array}", r"\usepackage{graphicx}",
            r"\usepackage[numbers,sort&compress]{natbib}", r"\usepackage{style/shisso}", r"\usepackage{listings}\lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,columns=fullflexible,keepspaces=true,frame=tb,framerule=0.3pt,aboveskip=4pt,belowskip=4pt,upquote=true}", r"\shissorepo{github.com/ravediamond/paper-jepa-world-model}",
@@ -302,18 +354,19 @@ def to_tex(md, bib):
             i = j + 1
             continue
         if l.startswith("# "):
-            out += [r"\title{" + esc(l[2:]) + "}",
+            title = esc(l[2:]); out += [r"\title{" + title + "}",
                     r"\author{Ravindu Somawansa\thanks{Code, data pointers and every number's source: \url{https://github.com/ravediamond/paper-jepa-world-model}.}\\Shisso Robotics, Paris\\\texttt{ravindu.somawansa@shissorobotics.com}}",
-                    r"\date{}", r"\maketitle"]
+                    r"\date{}"]
         elif l.startswith("## Abstract"):
-            out.append(r"\begin{abstract}"); abstract = True
+            abs_at = len(out); abstract = True
         elif l.startswith("## "):
             if abstract:
-                out.append(r"\end{abstract}"); abstract = False
+                body = " ".join(x.strip() for x in out[abs_at:] if x.strip()); del out[abs_at:]; abstract = False
+                out.append(r"\twocolumn[\vspace*{0.32in}\shissopanel{" + title + "}{Ravindu Somawansa\\\\[1pt]Shisso Robotics, Paris\\\\[1pt]\\texttt{ravindu.somawansa@shissorobotics.com}}{" + body + "}{" + LINKS + r"}\vspace{4pt}]")
             out.append(r"\section{" + esc(l[3:]) + "}")
         elif l.startswith("!["):
-            m = re.match(r"!\[(.*)\]\((.*)\)\{#(fig:\w+)\}(\{wide\})?", l); env = "figure*" if m.group(4) else "figure"
-            out += [r"\begin{" + env + "}[t]\\centering", r"\includegraphics[width=" + (r"0.72\textwidth" if m.group(4) else r"\columnwidth") + "]{" + m.group(2) + "}",
+            m = re.match(r"!\[(.*)\]\((.*)\)\{#(fig:\w+)\}(\{wide\}|\{full\})?", l); env = "figure*" if m.group(4) else "figure"
+            out += [r"\begin{" + env + "}[t]\\centering", r"\includegraphics[width=" + (r"\textwidth" if m.group(4) == "{full}" else r"0.72\textwidth" if m.group(4) else r"\columnwidth") + "]{" + m.group(2) + "}",
                     r"\caption{" + cell(m.group(1)) + r"}\label{" + m.group(3) + "}", r"\end{" + env + "}"]
         elif re.match(r"Table @tab:\w+: ", l):
             lab, cap = re.match(r"Table @(tab:\w+): (.*)", l).groups()
@@ -326,11 +379,15 @@ def to_tex(md, bib):
             size, spec = COLS.get(lab, (r"\scriptsize", "l" * len(t[0])))
             end, env = (r" \tabularnewline", "table*") if lab in COLS else (r" \\", "table")
             out += [r"\begin{" + env + r"}[!t]\centering\setlength{\tabcolsep}{3pt}" + size, r"\caption{" + cell(cap) + r"}\label{" + lab + "}", (r"\resizebox{\columnwidth}{!}{" if env == "table" else "") + r"\begin{tabular}{" + spec + "}", r"\toprule",
-                    r"\shissohead " + " & ".join(t[0]) + end, r"\midrule"] + [" & ".join(r) + end for r in t[1:]] + \
+                    r"\shissohead " + " & ".join(t[0]) + end, r"\midrule"] + [(tint(r[6]) if lab == "tab:register" else "") + " & ".join(r) + end for r in t[1:]] + \
                    [r"\bottomrule", r"\end{tabular}" + ("}" if env == "table" else ""), r"\end{" + env + "}"]
             continue
         elif l.startswith("*Ravindu"):
             pass
+        elif l.startswith("> "):
+            mm = re.match(r"\*\*(.+?)\*\*\s*(.*)", l[2:]); i += 1
+            out.append(r"\begin{shissofinding}[" + cell(mm.group(1)) + "]\n" + cell(mm.group(2)) + "\n" + r"\end{shissofinding}")
+            continue
         elif not l.strip():
             out.append("\n")  # keep paragraph breaks: an empty markdown line ends the paragraph in LaTeX too
         else:
