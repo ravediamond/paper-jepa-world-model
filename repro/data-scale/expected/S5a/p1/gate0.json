@@ -1,0 +1,82 @@
+{
+ "frames": {
+  "train": 17724,
+  "val": 8447
+ },
+ "models": {
+  "W1": {
+   "alpha": 0.01,
+   "cv_mean_r2": {
+    "0.001": 0.6257,
+    "0.01": 0.6264,
+    "0.1": 0.6218,
+    "1.0": 0.5993,
+    "10.0": 0.551,
+    "100.0": 0.5109,
+    "1000.0": 0.4839
+   },
+   "r2_per_joint": {
+    "shoulder_pan": 0.5776,
+    "shoulder_lift": 0.9058,
+    "elbow_flex": 0.8763,
+    "wrist_flex": 0.2214,
+    "wrist_roll": 0.3581,
+    "gripper": 0.5009
+   },
+   "mean_r2": 0.5733,
+   "anisotropy": 0.6843,
+   "epsilon": 4.2194,
+   "rho_hat": 0.9978,
+   "delta": -0.136,
+   "g1b_top1": 0.6046,
+   "dim": 192
+  },
+  "W2p": {
+   "alpha": 100.0,
+   "cv_mean_r2": {
+    "0.001": 0.8644,
+    "0.01": 0.8644,
+    "0.1": 0.8644,
+    "1.0": 0.8646,
+    "10.0": 0.8658,
+    "100.0": 0.8665,
+    "1000.0": 0.8503
+   },
+   "r2_per_joint": {
+    "shoulder_pan": 0.9231,
+    "shoulder_lift": 0.9832,
+    "elbow_flex": 0.9693,
+    "wrist_flex": 0.7356,
+    "wrist_roll": 0.6825,
+    "gripper": 0.9094
+   },
+   "mean_r2": 0.8672,
+   "anisotropy": 0.3007,
+   "epsilon": 3.6147,
+   "rho_hat": 0.9018,
+   "delta": -5.5726,
+   "g1b_top1": 0.6458,
+   "dim": 768
+  }
+ },
+ "bars": {
+  "B1": {
+   "value": 0.5733,
+   "bar": "< 0.80",
+   "met": true
+  },
+  "B2": {
+   "value": 0.6843,
+   "bar": ">= 0.20",
+   "met": true
+  },
+  "B3": {
+   "spearman": 1.0,
+   "top_r2": "W2p",
+   "top_g1b": "W2p",
+   "n": 2,
+   "met": true,
+   "note": "n = 2: a sighting, not a test"
+  }
+ }
+}

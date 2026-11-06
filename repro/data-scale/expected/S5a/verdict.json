@@ -1,0 +1,227 @@
+{
+ "dir": "runs/WS-106/probes/S5a",
+ "P1": {
+  "mean_r2": 0.5733,
+  "anisotropy": 0.6843,
+  "source": "runs/WS-106/probes/S5a/p1/gate0.json"
+ },
+ "P2": {
+  "best_top1": 0.2304,
+  "largest_d_bar_0.8": null,
+  "largest_d_floor": null,
+  "largest_d_bar_and_floor": null,
+  "cells": {
+   "d5": {
+    "model_top1": 0.155,
+    "model_ci95": [
+     0.1329,
+     0.1775
+    ],
+    "action_only_top1": 0.6842,
+    "action_only_ci95": [
+     0.6495,
+     0.718
+    ],
+    "diff": -0.5292,
+    "diff_ci95": [
+     -0.5718,
+     -0.488
+    ]
+   },
+   "d10": {
+    "model_top1": 0.1764,
+    "model_ci95": [
+     0.1469,
+     0.2068
+    ],
+    "action_only_top1": 0.8777,
+    "action_only_ci95": [
+     0.8551,
+     0.9003
+    ],
+    "diff": -0.7013,
+    "diff_ci95": [
+     -0.7353,
+     -0.6629
+    ]
+   },
+   "d15": {
+    "model_top1": 0.2262,
+    "model_ci95": [
+     0.1913,
+     0.2604
+    ],
+    "action_only_top1": 0.9047,
+    "action_only_ci95": [
+     0.8844,
+     0.9243
+    ],
+    "diff": -0.6785,
+    "diff_ci95": [
+     -0.7222,
+     -0.6335
+    ]
+   },
+   "d20": {
+    "model_top1": 0.2304,
+    "model_ci95": [
+     0.1901,
+     0.27
+    ],
+    "action_only_top1": 0.9033,
+    "action_only_ci95": [
+     0.8812,
+     0.925
+    ],
+    "diff": -0.6728,
+    "diff_ci95": [
+     -0.7219,
+     -0.6214
+    ]
+   },
+   "d30": {
+    "model_top1": 0.2219,
+    "model_ci95": [
+     0.1826,
+     0.2606
+    ],
+    "action_only_top1": 0.8734,
+    "action_only_ci95": [
+     0.8535,
+     0.8921
+    ],
+    "diff": -0.6515,
+    "diff_ci95": [
+     -0.6962,
+     -0.6019
+    ]
+   }
+  }
+ },
+ "P3": {
+  "bar": {
+   "primary": "W1|both|5|ridge, teleop_val",
+   "arm_ii_minus_max_i_iii": 1.1698284149169922,
+   "both_cis_exclude_0": true,
+   "arm_v_minus_iv": {
+    "value": 0.008600890636444092,
+    "ci95": [
+     0.005313074588775635,
+     0.011704178154468536
+    ]
+   },
+   "gripper_v_minus_iv": {
+    "value": 0.0014847809948032031,
+    "ci95": [
+     0.0,
+     0.002875390614350926
+    ]
+   },
+   "random_init_arm_ii_minus_i": 1.2540779113769531,
+   "w1_arm_ii_minus_i": 1.5189037322998047,
+   "branch": "NOT PROVEN"
+  },
+  "diffs_W1_both_5": {
+   "arm_ii-i": {
+    "value": 1.5189037322998047,
+    "ci95": [
+     0.9713579654693604,
+     2.0223940134048455
+    ]
+   },
+   "arm_ii-iii": {
+    "value": 1.1698284149169922,
+    "ci95": [
+     0.5976431369781494,
+     1.6633773326873778
+    ]
+   },
+   "arm_v-iv": {
+    "value": 0.008600890636444092,
+    "ci95": [
+     0.005313074588775635,
+     0.011704178154468536
+    ]
+   },
+   "gripper_v-iv": {
+    "value": 0.0014847809948032031,
+    "ci95": [
+     0.0,
+     0.002875390614350926
+    ]
+   }
+  }
+ },
+ "P4": {
+  "g16_set": {
+   "l2": {
+    "tau": 14.9007,
+    "false_intervention_rate": 0.0476,
+    "caught_failed": 0.0,
+    "failed_episodes": 8,
+    "success_episodes": 42,
+    "auroc": 0.5,
+    "frames_before_end_when_caught": []
+   },
+   "cos": {
+    "tau": 1.661,
+    "false_intervention_rate": 0.0476,
+    "caught_failed": 0.0,
+    "failed_episodes": 8,
+    "success_episodes": 42,
+    "auroc": 0.47023809523809523,
+    "frames_before_end_when_caught": []
+   }
+  },
+  "all_69": {
+   "l2": {
+    "tau": 14.9007,
+    "false_intervention_rate": 0.0455,
+    "caught_failed": 0.0,
+    "failed_episodes": 25,
+    "success_episodes": 44,
+    "auroc": 0.30272727272727273,
+    "frames_before_end_when_caught": []
+   },
+   "cos": {
+    "tau": 1.5926,
+    "false_intervention_rate": 0.0455,
+    "caught_failed": 8.0,
+    "failed_episodes": 25,
+    "success_episodes": 44,
+    "auroc": 0.6372727272727273,
+    "frames_before_end_when_caught": [
+     101,
+     108,
+     109,
+     158,
+     224,
+     234,
+     258,
+     299
+    ]
+   }
+  },
+  "verdict_source": "FAIL (W1 stays a reflex only)"
+ },
+ "P5": {
+  "latents": "runs/WS-106/probes/S5a/p4/latents",
+  "n": 69,
+  "success": 44,
+  "sessions": 13,
+  "auroc": 0.8973,
+  "ci95": [
+   0.8131,
+   0.9639
+  ],
+  "judge_auroc_valid": 0.9432,
+  "n_valid": 69,
+  "model_auroc_valid": 0.8973,
+  "diff_vs_judge_valid": -0.0459,
+  "diff_ci95": [
+   -0.1073,
+   0.0127
+  ],
+  "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+ }
+}

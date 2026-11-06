@@ -152,6 +152,37 @@ def main():
     lit_file("audit_trained", "register/expected/AUDIT_W1_LOADS.md", "**Trained: 26 rows**", "26")
     lit_file("audit_random", "register/expected/AUDIT_W1_LOADS.md", "**random: 1**", "1")
 
+    # data-scale probes (repro/data-scale): one model per scale, the same probes, verdicts recomputed by repro/data-scale/l0_check.py
+    DS = R / "data-scale"
+    cv = json.loads((DS / "expected/curve.json").read_text())
+    n_eps = {"S1": 45, "S3": 157, "S4": 810, "S5a": 2909}
+    for k, s in (("1", "S1"), ("3", "S3"), ("4", "S4"), ("5", "S5a")):
+        v = json.loads((DS / f"expected/{s}/verdict.json").read_text()); a = f"repro/data-scale/expected/{s}/verdict.json "
+        put(f"sc{k}_eps", f"{n_eps[s]:,}", f"repro/data-scale/README.md scale table ({s}); list lengths checked by l0_check.py")
+        put(f"sc{k}_frames", f"{cv[s]['train_frames']:,}", "repro/data-scale/expected/curve.json train_frames")
+        put(f"sc{k}_r2", f"{v['P1']['mean_r2']:.3f}", a + "P1/mean_r2"); put(f"sc{k}_aniso", f"{v['P1']['anisotropy']:.3f}", a + "P1/anisotropy")
+        c30 = v["P2"]["cells"]["d30"]
+        put(f"sc{k}_top1", f"{v['P2']['best_top1']:.3f}", a + "P2/best_top1")
+        put(f"sc{k}_d30", f"{c30['model_top1']:.3f}", a + "P2/cells/d30/model_top1")
+        put(f"sc{k}_gap", f"{c30['diff']:.3f}", a + "P2/cells/d30/diff")
+        put(f"sc{k}_gap_lo", f"{c30['diff_ci95'][0]:.3f}", a + "P2/cells/d30/diff_ci95[0]"); put(f"sc{k}_gap_hi", f"{c30['diff_ci95'][1]:.3f}", a + "P2/cells/d30/diff_ci95[1]")
+        b = v["P3"]["bar"]
+        put(f"sc{k}_p3", f"{b['arm_ii_minus_max_i_iii']:.2f}", a + "P3/bar/arm_ii_minus_max_i_iii"); put(f"sc{k}_p3v", f"{b['arm_v_minus_iv']['value']:.3f}", a + "P3/bar/arm_v_minus_iv/value")
+        put(f"sc{k}_p3w1", f"{b['w1_arm_ii_minus_i']:.2f}", a + "P3/bar/w1_arm_ii_minus_i")
+        put(f"sc{k}_p4", f"{v['P4']['g16_set']['l2']['caught_failed']:.0f}", a + "P4/g16_set/l2/caught_failed")
+        p5 = v["P5"]
+        put(f"sc{k}_p5", f"{p5['auroc']:.3f}", a + "P5/auroc"); put(f"sc{k}_p5_lo", f"{p5['ci95'][0]:.3f}", a + "P5/ci95[0]"); put(f"sc{k}_p5_hi", f"{p5['ci95'][1]:.3f}", a + "P5/ci95[1]")
+        put(f"sc{k}_p5d", f"{p5['diff_vs_judge_valid']:+.3f}", a + "P5/diff_vs_judge_valid")
+    s3 = json.loads((DS / "expected/S3/verdict.json").read_text())
+    put("sc_floor30", f"{s3['P2']['cells']['d30']['action_only_top1']:.3f}", "repro/data-scale/expected/S3/verdict.json P2/cells/d30/action_only_top1 (the same ranker and anchors at every scale)")
+    put("sc_random_gain", f"{s3['P3']['bar']['random_init_arm_ii_minus_i']:.2f}", "repro/data-scale/expected/S3/verdict.json P3/bar/random_init_arm_ii_minus_i (one untrained encoder at every scale)")
+    put("sc_p3_floor", f"{min(json.loads((DS / f'expected/{s}/verdict.json').read_text())['P3']['bar']['arm_v_minus_iv']['value'] for s in n_eps):.3f}", "repro/data-scale/expected/*/verdict.json P3/bar/arm_v_minus_iv/value, minimum over the scales")
+    put("sc_p3_ceil", f"{max(json.loads((DS / f'expected/{s}/verdict.json').read_text())['P3']['bar']['arm_v_minus_iv']['value'] for s in n_eps):.3f}", "repro/data-scale/expected/*/verdict.json P3/bar/arm_v_minus_iv/value, maximum over the scales")
+    import math
+    put("sc_p3_min", f"{math.floor(100 * min(json.loads((DS / f'expected/{s}/verdict.json').read_text())['P3']['bar']['arm_ii_minus_max_i_iii'] for s in n_eps)) / 100:.2f}", "repro/data-scale/expected/*/verdict.json P3/bar/arm_ii_minus_max_i_iii, minimum over the scales, rounded down to 2 decimals")
+    put("sc_judge", f"{s3['P5']['judge_auroc_valid']:.3f}", "repro/data-scale/expected/S3/verdict.json P5/judge_auroc_valid")
+    put("sc_steps", f"{json.loads((DS / 'expected/S1/training_end.json').read_text())['step']:,}", "repro/data-scale/expected/S1/training_end.json step")
+
     assert N["same_commit_gates"] == "G6b", "prose names the same-commit row as the two-level hierarchical progress use"
     put("rest_W1_2", f"{c['gap2'][names['W1']]['auroc']:.2f}", f"repro/gaps/expected/controls.json gap2/{names['W1']}/auroc, 2 decimals")
     put("rest_judge_2", f"{c['gap2'][names['judge']]['auroc']:.2f}", f"repro/gaps/expected/controls.json gap2/{names['judge']}/auroc, 2 decimals")
@@ -242,7 +273,7 @@ def esc(s):
     return re.sub(r"\*([^*]+)\*", r"\\emph{\1}", s)
 
 
-COLS = {"tab:register": (r"\scriptsize", r">{\raggedright}p{2.2cm}>{\raggedright}p{1.0cm}p{1.25cm}>{\raggedright}p{0.9cm}>{\raggedright}p{2.1cm}>{\raggedright}p{4.2cm}>{\raggedright}p{1.5cm}p{1.1cm}")}
+COLS = {"tab:scale": (r"\scriptsize", r">{\raggedright}p{2.2cm}p{1.2cm}>{\raggedright}p{4.4cm}>{\raggedright}p{2.6cm}>{\raggedright}p{1.5cm}>{\raggedright}p{3.6cm}"), "tab:register": (r"\scriptsize", r">{\raggedright}p{2.2cm}>{\raggedright}p{1.0cm}p{1.25cm}>{\raggedright}p{0.9cm}>{\raggedright}p{2.1cm}>{\raggedright}p{4.2cm}>{\raggedright}p{1.5cm}p{1.1cm}")}
 
 
 def refs(s):

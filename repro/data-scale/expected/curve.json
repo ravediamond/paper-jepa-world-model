@@ -1,0 +1,899 @@
+{
+ "S1": {
+  "dir": "runs/WS-106/probes/S1",
+  "P1": {
+   "mean_r2": 0.5563,
+   "anisotropy": 0.5979,
+   "source": "runs/WS-106/probes/S1/p1/gate0.json"
+  },
+  "P2": {
+   "best_top1": 0.4225,
+   "largest_d_bar_0.8": null,
+   "largest_d_floor": null,
+   "largest_d_bar_and_floor": null,
+   "cells": {
+    "d5": {
+     "model_top1": 0.2831,
+     "model_ci95": [
+      0.2409,
+      0.3265
+     ],
+     "action_only_top1": 0.6842,
+     "action_only_ci95": [
+      0.6495,
+      0.718
+     ],
+     "diff": -0.4011,
+     "diff_ci95": [
+      -0.4504,
+      -0.3501
+     ]
+    },
+    "d10": {
+     "model_top1": 0.3613,
+     "model_ci95": [
+      0.3114,
+      0.4114
+     ],
+     "action_only_top1": 0.8777,
+     "action_only_ci95": [
+      0.8551,
+      0.9003
+     ],
+     "diff": -0.5164,
+     "diff_ci95": [
+      -0.5771,
+      -0.4572
+     ]
+    },
+    "d15": {
+     "model_top1": 0.3869,
+     "model_ci95": [
+      0.3343,
+      0.439
+     ],
+     "action_only_top1": 0.9047,
+     "action_only_ci95": [
+      0.8844,
+      0.9243
+     ],
+     "diff": -0.5178,
+     "diff_ci95": [
+      -0.5743,
+      -0.4644
+     ]
+    },
+    "d20": {
+     "model_top1": 0.4225,
+     "model_ci95": [
+      0.3757,
+      0.4689
+     ],
+     "action_only_top1": 0.9033,
+     "action_only_ci95": [
+      0.8812,
+      0.925
+     ],
+     "diff": -0.4808,
+     "diff_ci95": [
+      -0.5357,
+      -0.4274
+     ]
+    },
+    "d30": {
+     "model_top1": 0.4026,
+     "model_ci95": [
+      0.3447,
+      0.4598
+     ],
+     "action_only_top1": 0.8734,
+     "action_only_ci95": [
+      0.8535,
+      0.8921
+     ],
+     "diff": -0.4708,
+     "diff_ci95": [
+      -0.5387,
+      -0.4051
+     ]
+    }
+   }
+  },
+  "P3": {
+   "bar": {
+    "primary": "W1|both|5|ridge, teleop_val",
+    "arm_ii_minus_max_i_iii": 1.3296051025390625,
+    "both_cis_exclude_0": true,
+    "arm_v_minus_iv": {
+     "value": 0.006465792655944824,
+     "ci95": [
+      0.0030645564198493957,
+      0.009764760732650757
+     ]
+    },
+    "gripper_v_minus_iv": {
+     "value": 0.0007423904974016571,
+     "ci95": [
+      -0.000494948468824144,
+      0.0019990129903805693
+     ]
+    },
+    "random_init_arm_ii_minus_i": 1.2540779113769531,
+    "w1_arm_ii_minus_i": 1.6826744079589844,
+    "branch": "NOT PROVEN"
+   },
+   "diffs_W1_both_5": {
+    "arm_ii-i": {
+     "value": 1.6826744079589844,
+     "ci95": [
+      1.1671012401580811,
+      2.2340618133544914
+     ]
+    },
+    "arm_ii-iii": {
+     "value": 1.3296051025390625,
+     "ci95": [
+      0.837307071685791,
+      1.799267768859863
+     ]
+    },
+    "arm_v-iv": {
+     "value": 0.006465792655944824,
+     "ci95": [
+      0.0030645564198493957,
+      0.009764760732650757
+     ]
+    },
+    "gripper_v-iv": {
+     "value": 0.0007423904974016571,
+     "ci95": [
+      -0.000494948468824144,
+      0.0019990129903805693
+     ]
+    }
+   }
+  },
+  "P4": {
+   "g16_set": {
+    "l2": {
+     "tau": 16.6323,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 1.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.7291666666666666,
+     "frames_before_end_when_caught": []
+    },
+    "cos": {
+     "tau": 1.7411,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 0.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.24107142857142858,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "all_69": {
+    "l2": {
+     "tau": 16.6323,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 1.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.5754545454545454,
+     "frames_before_end_when_caught": []
+    },
+    "cos": {
+     "tau": 1.7411,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 0.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.3563636363636364,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "verdict_source": "FAIL (W1 stays a reflex only)"
+  },
+  "P5": {
+   "latents": "runs/WS-106/probes/S1/p4/latents",
+   "n": 69,
+   "success": 44,
+   "sessions": 13,
+   "auroc": 0.9309,
+   "ci95": [
+    0.8615,
+    0.9815
+   ],
+   "judge_auroc_valid": 0.9432,
+   "n_valid": 69,
+   "model_auroc_valid": 0.9309,
+   "diff_vs_judge_valid": -0.0123,
+   "diff_ci95": [
+    -0.0599,
+    0.0277
+   ],
+   "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+  },
+  "train_frames": 15032
+ },
+ "S3": {
+  "dir": "runs/WS-106/probes/S3",
+  "P1": {
+   "mean_r2": 0.5654,
+   "anisotropy": 0.6393,
+   "source": "runs/WS-106/probes/S3/p1/gate0.json"
+  },
+  "P2": {
+   "best_top1": 0.6046,
+   "largest_d_bar_0.8": null,
+   "largest_d_floor": null,
+   "largest_d_bar_and_floor": null,
+   "cells": {
+    "d5": {
+     "model_top1": 0.4509,
+     "model_ci95": [
+      0.4003,
+      0.5044
+     ],
+     "action_only_top1": 0.6842,
+     "action_only_ci95": [
+      0.6495,
+      0.718
+     ],
+     "diff": -0.2333,
+     "diff_ci95": [
+      -0.2859,
+      -0.1796
+     ]
+    },
+    "d10": {
+     "model_top1": 0.5064,
+     "model_ci95": [
+      0.4605,
+      0.5565
+     ],
+     "action_only_top1": 0.8777,
+     "action_only_ci95": [
+      0.8551,
+      0.9003
+     ],
+     "diff": -0.3713,
+     "diff_ci95": [
+      -0.4226,
+      -0.3186
+     ]
+    },
+    "d15": {
+     "model_top1": 0.5733,
+     "model_ci95": [
+      0.523,
+      0.6237
+     ],
+     "action_only_top1": 0.9047,
+     "action_only_ci95": [
+      0.8844,
+      0.9243
+     ],
+     "diff": -0.3314,
+     "diff_ci95": [
+      -0.3813,
+      -0.2824
+     ]
+    },
+    "d20": {
+     "model_top1": 0.6031,
+     "model_ci95": [
+      0.5478,
+      0.6566
+     ],
+     "action_only_top1": 0.9033,
+     "action_only_ci95": [
+      0.8812,
+      0.925
+     ],
+     "diff": -0.3001,
+     "diff_ci95": [
+      -0.354,
+      -0.2446
+     ]
+    },
+    "d30": {
+     "model_top1": 0.6046,
+     "model_ci95": [
+      0.5457,
+      0.6642
+     ],
+     "action_only_top1": 0.8734,
+     "action_only_ci95": [
+      0.8535,
+      0.8921
+     ],
+     "diff": -0.2688,
+     "diff_ci95": [
+      -0.3338,
+      -0.204
+     ]
+    }
+   }
+  },
+  "P3": {
+   "bar": {
+    "primary": "W1|both|5|ridge, teleop_val",
+    "arm_ii_minus_max_i_iii": 0.7481670379638672,
+    "both_cis_exclude_0": true,
+    "arm_v_minus_iv": {
+     "value": 0.006914973258972168,
+     "ci95": [
+      0.0030654311180114747,
+      0.01057232767343521
+     ]
+    },
+    "gripper_v_minus_iv": {
+     "value": 0.0002474634991338487,
+     "ci95": [
+      -0.0009933261277030787,
+      0.0015136321518954747
+     ]
+    },
+    "random_init_arm_ii_minus_i": 1.2540779113769531,
+    "w1_arm_ii_minus_i": 1.1796207427978516,
+    "branch": "NOT PROVEN"
+   },
+   "diffs_W1_both_5": {
+    "arm_ii-i": {
+     "value": 1.1796207427978516,
+     "ci95": [
+      0.7029569625854493,
+      1.6555819034576416
+     ]
+    },
+    "arm_ii-iii": {
+     "value": 0.7481670379638672,
+     "ci95": [
+      0.28648953437805175,
+      1.203991413116455
+     ]
+    },
+    "arm_v-iv": {
+     "value": 0.006914973258972168,
+     "ci95": [
+      0.0030654311180114747,
+      0.01057232767343521
+     ]
+    },
+    "gripper_v-iv": {
+     "value": 0.0002474634991338487,
+     "ci95": [
+      -0.0009933261277030787,
+      0.0015136321518954747
+     ]
+    }
+   }
+  },
+  "P4": {
+   "g16_set": {
+    "l2": {
+     "tau": 17.3143,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 2.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.8601190476190477,
+     "frames_before_end_when_caught": [
+      303,
+      412
+     ]
+    },
+    "cos": {
+     "tau": 1.6533,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 0.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.30357142857142855,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "all_69": {
+    "l2": {
+     "tau": 16.2081,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 4.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.7063636363636364,
+     "frames_before_end_when_caught": [
+      133,
+      301,
+      303,
+      412
+     ]
+    },
+    "cos": {
+     "tau": 1.7062,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 0.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.4172727272727273,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "verdict_source": "FAIL (W1 stays a reflex only)"
+  },
+  "P5": {
+   "latents": "/home/jetson/workspace/road-to-robotics/runs/WS-106/probes/S3/p4/latents",
+   "n": 69,
+   "success": 44,
+   "sessions": 13,
+   "auroc": 0.9545,
+   "ci95": [
+    0.9023,
+    0.9908
+   ],
+   "judge_auroc_valid": 0.9432,
+   "n_valid": 69,
+   "model_auroc_valid": 0.9545,
+   "diff_vs_judge_valid": 0.0114,
+   "diff_ci95": [
+    -0.028,
+    0.0523
+   ],
+   "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+  },
+  "train_frames": 53015
+ },
+ "S4": {
+  "dir": "runs/WS-106/probes/S4",
+  "P1": {
+   "mean_r2": 0.565,
+   "anisotropy": 0.637,
+   "source": "runs/WS-106/probes/S4/p1/gate0.json"
+  },
+  "P2": {
+   "best_top1": 0.2788,
+   "largest_d_bar_0.8": null,
+   "largest_d_floor": null,
+   "largest_d_bar_and_floor": null,
+   "cells": {
+    "d5": {
+     "model_top1": 0.1949,
+     "model_ci95": [
+      0.1646,
+      0.2243
+     ],
+     "action_only_top1": 0.6842,
+     "action_only_ci95": [
+      0.6495,
+      0.718
+     ],
+     "diff": -0.4893,
+     "diff_ci95": [
+      -0.5285,
+      -0.4472
+     ]
+    },
+    "d10": {
+     "model_top1": 0.2276,
+     "model_ci95": [
+      0.1924,
+      0.2635
+     ],
+     "action_only_top1": 0.8777,
+     "action_only_ci95": [
+      0.8551,
+      0.9003
+     ],
+     "diff": -0.6501,
+     "diff_ci95": [
+      -0.6883,
+      -0.6133
+     ]
+    },
+    "d15": {
+     "model_top1": 0.2688,
+     "model_ci95": [
+      0.2378,
+      0.2986
+     ],
+     "action_only_top1": 0.9047,
+     "action_only_ci95": [
+      0.8844,
+      0.9243
+     ],
+     "diff": -0.6358,
+     "diff_ci95": [
+      -0.6741,
+      -0.5989
+     ]
+    },
+    "d20": {
+     "model_top1": 0.2788,
+     "model_ci95": [
+      0.2438,
+      0.3118
+     ],
+     "action_only_top1": 0.9033,
+     "action_only_ci95": [
+      0.8812,
+      0.925
+     ],
+     "diff": -0.6245,
+     "diff_ci95": [
+      -0.6696,
+      -0.5825
+     ]
+    },
+    "d30": {
+     "model_top1": 0.2731,
+     "model_ci95": [
+      0.2285,
+      0.3191
+     ],
+     "action_only_top1": 0.8734,
+     "action_only_ci95": [
+      0.8535,
+      0.8921
+     ],
+     "diff": -0.6003,
+     "diff_ci95": [
+      -0.6524,
+      -0.5453
+     ]
+    }
+   }
+  },
+  "P3": {
+   "bar": {
+    "primary": "W1|both|5|ridge, teleop_val",
+    "arm_ii_minus_max_i_iii": 0.6250877380371094,
+    "both_cis_exclude_0": true,
+    "arm_v_minus_iv": {
+     "value": 0.00716167688369751,
+     "ci95": [
+      0.0037416622042655947,
+      0.010202459990978241
+     ]
+    },
+    "gripper_v_minus_iv": {
+     "value": 0.0007423904974016571,
+     "ci95": [
+      -0.00047503462678636363,
+      0.0020815625795161524
+     ]
+    },
+    "random_init_arm_ii_minus_i": 1.2540779113769531,
+    "w1_arm_ii_minus_i": 1.2632007598876953,
+    "branch": "NOT PROVEN"
+   },
+   "diffs_W1_both_5": {
+    "arm_ii-i": {
+     "value": 1.2632007598876953,
+     "ci95": [
+      0.8391357898712158,
+      1.6707893848419189
+     ]
+    },
+    "arm_ii-iii": {
+     "value": 0.6250877380371094,
+     "ci95": [
+      0.20330390930175782,
+      1.0143208503723142
+     ]
+    },
+    "arm_v-iv": {
+     "value": 0.00716167688369751,
+     "ci95": [
+      0.0037416622042655947,
+      0.010202459990978241
+     ]
+    },
+    "gripper_v-iv": {
+     "value": 0.0007423904974016571,
+     "ci95": [
+      -0.00047503462678636363,
+      0.0020815625795161524
+     ]
+    }
+   }
+  },
+  "P4": {
+   "g16_set": {
+    "l2": {
+     "tau": 18.7568,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 1.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.6994047619047619,
+     "frames_before_end_when_caught": [
+      156
+     ]
+    },
+    "cos": {
+     "tau": 1.7451,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 0.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.5416666666666666,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "all_69": {
+    "l2": {
+     "tau": 18.7568,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 1.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.48,
+     "frames_before_end_when_caught": [
+      156
+     ]
+    },
+    "cos": {
+     "tau": 1.7451,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 0.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.43363636363636365,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "verdict_source": "FAIL (W1 stays a reflex only)"
+  },
+  "P5": {
+   "latents": "runs/WS-106/probes/S4/p4/latents",
+   "n": 69,
+   "success": 44,
+   "sessions": 13,
+   "auroc": 0.9555,
+   "ci95": [
+    0.8995,
+    0.9958
+   ],
+   "judge_auroc_valid": 0.9432,
+   "n_valid": 69,
+   "model_auroc_valid": 0.9555,
+   "diff_vs_judge_valid": 0.0123,
+   "diff_ci95": [
+    -0.0241,
+    0.0541
+   ],
+   "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+  },
+  "train_frames": 275015
+ },
+ "S5a": {
+  "dir": "runs/WS-106/probes/S5a",
+  "P1": {
+   "mean_r2": 0.5733,
+   "anisotropy": 0.6843,
+   "source": "runs/WS-106/probes/S5a/p1/gate0.json"
+  },
+  "P2": {
+   "best_top1": 0.2304,
+   "largest_d_bar_0.8": null,
+   "largest_d_floor": null,
+   "largest_d_bar_and_floor": null,
+   "cells": {
+    "d5": {
+     "model_top1": 0.155,
+     "model_ci95": [
+      0.1329,
+      0.1775
+     ],
+     "action_only_top1": 0.6842,
+     "action_only_ci95": [
+      0.6495,
+      0.718
+     ],
+     "diff": -0.5292,
+     "diff_ci95": [
+      -0.5718,
+      -0.488
+     ]
+    },
+    "d10": {
+     "model_top1": 0.1764,
+     "model_ci95": [
+      0.1469,
+      0.2068
+     ],
+     "action_only_top1": 0.8777,
+     "action_only_ci95": [
+      0.8551,
+      0.9003
+     ],
+     "diff": -0.7013,
+     "diff_ci95": [
+      -0.7353,
+      -0.6629
+     ]
+    },
+    "d15": {
+     "model_top1": 0.2262,
+     "model_ci95": [
+      0.1913,
+      0.2604
+     ],
+     "action_only_top1": 0.9047,
+     "action_only_ci95": [
+      0.8844,
+      0.9243
+     ],
+     "diff": -0.6785,
+     "diff_ci95": [
+      -0.7222,
+      -0.6335
+     ]
+    },
+    "d20": {
+     "model_top1": 0.2304,
+     "model_ci95": [
+      0.1901,
+      0.27
+     ],
+     "action_only_top1": 0.9033,
+     "action_only_ci95": [
+      0.8812,
+      0.925
+     ],
+     "diff": -0.6728,
+     "diff_ci95": [
+      -0.7219,
+      -0.6214
+     ]
+    },
+    "d30": {
+     "model_top1": 0.2219,
+     "model_ci95": [
+      0.1826,
+      0.2606
+     ],
+     "action_only_top1": 0.8734,
+     "action_only_ci95": [
+      0.8535,
+      0.8921
+     ],
+     "diff": -0.6515,
+     "diff_ci95": [
+      -0.6962,
+      -0.6019
+     ]
+    }
+   }
+  },
+  "P3": {
+   "bar": {
+    "primary": "W1|both|5|ridge, teleop_val",
+    "arm_ii_minus_max_i_iii": 1.1698284149169922,
+    "both_cis_exclude_0": true,
+    "arm_v_minus_iv": {
+     "value": 0.008600890636444092,
+     "ci95": [
+      0.005313074588775635,
+      0.011704178154468536
+     ]
+    },
+    "gripper_v_minus_iv": {
+     "value": 0.0014847809948032031,
+     "ci95": [
+      0.0,
+      0.002875390614350926
+     ]
+    },
+    "random_init_arm_ii_minus_i": 1.2540779113769531,
+    "w1_arm_ii_minus_i": 1.5189037322998047,
+    "branch": "NOT PROVEN"
+   },
+   "diffs_W1_both_5": {
+    "arm_ii-i": {
+     "value": 1.5189037322998047,
+     "ci95": [
+      0.9713579654693604,
+      2.0223940134048455
+     ]
+    },
+    "arm_ii-iii": {
+     "value": 1.1698284149169922,
+     "ci95": [
+      0.5976431369781494,
+      1.6633773326873778
+     ]
+    },
+    "arm_v-iv": {
+     "value": 0.008600890636444092,
+     "ci95": [
+      0.005313074588775635,
+      0.011704178154468536
+     ]
+    },
+    "gripper_v-iv": {
+     "value": 0.0014847809948032031,
+     "ci95": [
+      0.0,
+      0.002875390614350926
+     ]
+    }
+   }
+  },
+  "P4": {
+   "g16_set": {
+    "l2": {
+     "tau": 14.9007,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 0.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.5,
+     "frames_before_end_when_caught": []
+    },
+    "cos": {
+     "tau": 1.661,
+     "false_intervention_rate": 0.0476,
+     "caught_failed": 0.0,
+     "failed_episodes": 8,
+     "success_episodes": 42,
+     "auroc": 0.47023809523809523,
+     "frames_before_end_when_caught": []
+    }
+   },
+   "all_69": {
+    "l2": {
+     "tau": 14.9007,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 0.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.30272727272727273,
+     "frames_before_end_when_caught": []
+    },
+    "cos": {
+     "tau": 1.5926,
+     "false_intervention_rate": 0.0455,
+     "caught_failed": 8.0,
+     "failed_episodes": 25,
+     "success_episodes": 44,
+     "auroc": 0.6372727272727273,
+     "frames_before_end_when_caught": [
+      101,
+      108,
+      109,
+      158,
+      224,
+      234,
+      258,
+      299
+     ]
+    }
+   },
+   "verdict_source": "FAIL (W1 stays a reflex only)"
+  },
+  "P5": {
+   "latents": "runs/WS-106/probes/S5a/p4/latents",
+   "n": 69,
+   "success": 44,
+   "sessions": 13,
+   "auroc": 0.8973,
+   "ci95": [
+    0.8131,
+    0.9639
+   ],
+   "judge_auroc_valid": 0.9432,
+   "n_valid": 69,
+   "model_auroc_valid": 0.8973,
+   "diff_vs_judge_valid": -0.0459,
+   "diff_ci95": [
+    -0.1073,
+    0.0127
+   ],
+   "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+  },
+  "train_frames": 1282161
+ }
+}

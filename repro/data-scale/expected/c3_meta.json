@@ -1,0 +1,188 @@
+{
+ "so101_bowls_all_trimmed": {
+  "repo": "ravediamond/so101_bowls_all_trimmed",
+  "revision": "4e5c6fda8dc5ce2252214bc086181d3df8b594b0",
+  "codebase_version": "v3.0",
+  "robot_type": "so_follower",
+  "episodes": 182,
+  "frames": 61462,
+  "fps": 30,
+  "episodes_in_meta": 182,
+  "frames_in_meta": 61462,
+  "cameras": {
+   "observation.images.front_top_camera": [
+    480,
+    640,
+    3
+   ],
+   "observation.images.wrist_camera": [
+    480,
+    640,
+    3
+   ]
+  },
+  "action_names": [
+   "shoulder_pan.pos",
+   "shoulder_lift.pos",
+   "elbow_flex.pos",
+   "wrist_flex.pos",
+   "wrist_roll.pos",
+   "gripper.pos"
+  ],
+  "state_names": [
+   "shoulder_pan.pos",
+   "shoulder_lift.pos",
+   "elbow_flex.pos",
+   "wrist_flex.pos",
+   "wrist_roll.pos",
+   "gripper.pos"
+  ],
+  "source": "Hub ravediamond/so101_bowls_all_trimmed@4e5c6fda8dc5 meta/info.json + meta/episodes/chunk-000/file-000.parquet"
+ },
+ "so101_cubes_bowls_20261015": {
+  "repo": "ravediamond/so101_cubes_bowls_20261015",
+  "revision": "671ee2263683c67d32b65ab80cff1f5b4e25db38",
+  "codebase_version": "v3.0",
+  "robot_type": "so_follower",
+  "episodes": 653,
+  "frames": 222000,
+  "fps": 30,
+  "episodes_in_meta": 653,
+  "frames_in_meta": 222000,
+  "cameras": {
+   "observation.images.front_top_camera": [
+    480,
+    640,
+    3
+   ],
+   "observation.images.wrist_camera": [
+    480,
+    640,
+    3
+   ]
+  },
+  "action_names": [
+   "shoulder_pan.pos",
+   "shoulder_lift.pos",
+   "elbow_flex.pos",
+   "wrist_flex.pos",
+   "wrist_roll.pos",
+   "gripper.pos"
+  ],
+  "state_names": [
+   "shoulder_pan.pos",
+   "shoulder_lift.pos",
+   "elbow_flex.pos",
+   "wrist_flex.pos",
+   "wrist_roll.pos",
+   "gripper.pos"
+  ],
+  "source": "Hub ravediamond/so101_cubes_bowls_20261015@671ee2263683 meta/info.json + meta/episodes/chunk-000/file-000.parquet"
+ },
+ "armnetbench": {
+  "repo": "armnet/armnetbench_v01_lerobot_so101",
+  "revision": "1db69c82b589c7172ee31a6b8f7ef58d1fc2c663",
+  "codebase_version": "v3.0",
+  "robot_type": "so-101",
+  "episodes": 2499,
+  "frames": 1127881,
+  "fps": 20,
+  "episodes_in_meta": 2499,
+  "frames_in_meta": 1127881,
+  "cameras": {
+   "observation.images.front": [
+    576,
+    1024,
+    3
+   ],
+   "observation.images.top": [
+    576,
+    1024,
+    3
+   ],
+   "observation.images.wrist": [
+    720,
+    1280,
+    3
+   ]
+  },
+  "action_names": [
+   "shoulder_pan.pos",
+   "shoulder_lift.pos",
+   "elbow_flex.pos",
+   "wrist_flex.pos",
+   "wrist_roll.pos",
+   "gripper.pos"
+  ],
+  "state_names": [
+   "shoulder_pan.pos",
+   "shoulder_lift.pos",
+   "elbow_flex.pos",
+   "wrist_flex.pos",
+   "wrist_roll.pos",
+   "gripper.pos"
+  ],
+  "source": "Hub armnet/armnetbench_v01_lerobot_so101@1db69c82b589 meta/info.json + meta/episodes/chunk-000/file-000.parquet",
+  "label_columns": [
+   "success",
+   "success_class",
+   "policy_type"
+  ],
+  "outcomes": {
+   "act": {
+    "failure": 254,
+    "suboptimal": 9,
+    "successful": 67
+   },
+   "diffusion": {
+    "failure": 184,
+    "suboptimal": 3,
+    "successful": 53
+   },
+   "grootn1.7": {
+    "failure": 145,
+    "suboptimal": 12,
+    "successful": 83
+   },
+   "molmoact2": {
+    "failure": 402,
+    "suboptimal": 7,
+    "successful": 71
+   },
+   "pi0": {
+    "failure": 147,
+    "suboptimal": 5,
+    "successful": 87
+   },
+   "pi0.5": {
+    "failure": 126,
+    "suboptimal": 5,
+    "successful": 109
+   },
+   "smolvla": {
+    "failure": 274,
+    "suboptimal": 11,
+    "successful": 45
+   },
+   "teleoperated": {
+    "failure": 0,
+    "suboptimal": 0,
+    "successful": 400
+   }
+  },
+  "rollouts": 2099,
+  "rollout_frames": 1007146,
+  "teleop": 400,
+  "s5b_success_rollouts": 515,
+  "s5b_success_rollout_frames": 129715
+ },
+ "train_frames_native": {
+  "S1": 15032,
+  "S2": 30469,
+  "S3": 53015,
+  "S4": 275015,
+  "S5a": 1282161,
+  "S5b": 404730
+ },
+ "train_frames_note": "native frames (bowls / cubes 30 Hz, ArmnetBench 20 Hz); C4 sets the ArmnetBench rate"
+}

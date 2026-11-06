@@ -1,0 +1,20 @@
+{
+ "latents": "/home/jetson/workspace/road-to-robotics/runs/WS-106/probes/S3/p4/latents",
+ "n": 69,
+ "success": 44,
+ "sessions": 13,
+ "auroc": 0.9545,
+ "ci95": [
+  0.9023,
+  0.9908
+ ],
+ "judge_auroc_valid": 0.9432,
+ "n_valid": 69,
+ "model_auroc_valid": 0.9545,
+ "diff_vs_judge_valid": 0.0114,
+ "diff_ci95": [
+  -0.028,
+  0.0523
+ ],
+ "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+}

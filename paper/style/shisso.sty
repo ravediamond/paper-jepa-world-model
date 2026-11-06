@@ -43,3 +43,19 @@
 \AddToShipoutPictureBG*{\ifnum\value{page}=1\AtPageUpperLeft{\put(\LenToUnit{\dimexpr\paperwidth-0.75in-3.2cm\relax},\LenToUnit{-0.5in}){\includegraphics[width=3.2cm]{\shissologo}}}\fi}
 % title rule in the accent
 \g@addto@macro\maketitle{\par\nointerlineskip{\color{shissoaccent}\hrule height 0.8pt}\vspace{4pt}}
+
+% --- design layer (2026-11-06): title panel, Finding box, verdict row tints, in-cell bar -------------------------------------------
+\RequirePackage{tcolorbox}\tcbuselibrary{skins,breakable}
+\definecolor{shissopass}{HTML}{E4F4EC}
+\definecolor{shissoamber}{HTML}{FDF1D6}
+\definecolor{shissofail}{HTML}{FBE7DD}
+\definecolor{shissoours}{HTML}{EDF2FB}
+% \shissopanel{title}{author lines}{abstract}{link strip}: put inside \twocolumn[ ... ]
+\newcommand{\shissopanel}[4]{\begin{tcolorbox}[enhanced,colback=shissoshade!55,colframe=shissoaccent!45,arc=4mm,boxrule=0.6pt,left=9pt,right=9pt,top=6pt,bottom=6pt]
+{\Large\bfseries\color{shissoaccent}#1\par}\vspace{4pt}{\normalsize #2\par}\vspace{5pt}{\color{shissoaccent!60}\hrule height 0.5pt}\vspace{5pt}
+{\small\textbf{\color{shissoaccent}Abstract.} #3\par}\vspace{5pt}{\footnotesize\color{shissogrey}#4\par}\end{tcolorbox}}
+\newtcolorbox{shissofinding}[1][Finding.]{enhanced,colback=shissoshade,colframe=shissoaccent,arc=2.5mm,boxrule=0.5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+  before skip=5pt,after skip=6pt,fontupper=\small,title={#1},coltitle=shissoaccent,colbacktitle=shissoshade,fonttitle=\bfseries,attach title to upper={\ },
+  boxed title style={empty,left=0pt,right=0pt,top=0pt,bottom=0pt,boxrule=0pt}}
+% \shissobar{fraction 0..1}{text}: a 0.9 cm bar filled to the fraction, then the text
+\newcommand{\shissobar}[2]{{\begin{tikzpicture}[baseline=0pt]\fill[shissoaccent!55] (0,-0.2ex) rectangle (#1*0.9cm,1.0ex);\draw[shissogrey!70,line width=0.3pt] (0,-0.2ex) rectangle (0.9cm,1.0ex);\end{tikzpicture}\,#2}}

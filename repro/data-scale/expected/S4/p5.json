@@ -1,0 +1,20 @@
+{
+ "latents": "runs/WS-106/probes/S4/p4/latents",
+ "n": 69,
+ "success": 44,
+ "sessions": 13,
+ "auroc": 0.9555,
+ "ci95": [
+  0.8995,
+  0.9958
+ ],
+ "judge_auroc_valid": 0.9432,
+ "n_valid": 69,
+ "model_auroc_valid": 0.9555,
+ "diff_vs_judge_valid": 0.0123,
+ "diff_ci95": [
+  -0.0241,
+  0.0541
+ ],
+ "protocol": "PROTOCOL.md \u00a73 P5; floor = G9c-3 judge score (AMENDMENT O1), paired on the valid-judge episodes"
+}

@@ -483,6 +483,306 @@
   "value": "G6b",
   "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (same-commit gates)"
  },
+ "sc1_aniso": {
+  "value": "0.598",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P1/anisotropy"
+ },
+ "sc1_d30": {
+  "value": "0.403",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P2/cells/d30/model_top1"
+ },
+ "sc1_eps": {
+  "value": "45",
+  "anchor": "repro/data-scale/README.md scale table (S1); list lengths checked by l0_check.py"
+ },
+ "sc1_frames": {
+  "value": "15,032",
+  "anchor": "repro/data-scale/expected/curve.json train_frames"
+ },
+ "sc1_gap": {
+  "value": "-0.471",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P2/cells/d30/diff"
+ },
+ "sc1_gap_hi": {
+  "value": "-0.405",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P2/cells/d30/diff_ci95[1]"
+ },
+ "sc1_gap_lo": {
+  "value": "-0.539",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P2/cells/d30/diff_ci95[0]"
+ },
+ "sc1_p3": {
+  "value": "1.33",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P3/bar/arm_ii_minus_max_i_iii"
+ },
+ "sc1_p3v": {
+  "value": "0.006",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P3/bar/arm_v_minus_iv/value"
+ },
+ "sc1_p3w1": {
+  "value": "1.68",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P3/bar/w1_arm_ii_minus_i"
+ },
+ "sc1_p4": {
+  "value": "1",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P4/g16_set/l2/caught_failed"
+ },
+ "sc1_p5": {
+  "value": "0.931",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P5/auroc"
+ },
+ "sc1_p5_hi": {
+  "value": "0.982",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P5/ci95[1]"
+ },
+ "sc1_p5_lo": {
+  "value": "0.862",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P5/ci95[0]"
+ },
+ "sc1_p5d": {
+  "value": "-0.012",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P5/diff_vs_judge_valid"
+ },
+ "sc1_r2": {
+  "value": "0.556",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P1/mean_r2"
+ },
+ "sc1_top1": {
+  "value": "0.422",
+  "anchor": "repro/data-scale/expected/S1/verdict.json P2/best_top1"
+ },
+ "sc3_aniso": {
+  "value": "0.639",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P1/anisotropy"
+ },
+ "sc3_d30": {
+  "value": "0.605",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P2/cells/d30/model_top1"
+ },
+ "sc3_eps": {
+  "value": "157",
+  "anchor": "repro/data-scale/README.md scale table (S3); list lengths checked by l0_check.py"
+ },
+ "sc3_frames": {
+  "value": "53,015",
+  "anchor": "repro/data-scale/expected/curve.json train_frames"
+ },
+ "sc3_gap": {
+  "value": "-0.269",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P2/cells/d30/diff"
+ },
+ "sc3_gap_hi": {
+  "value": "-0.204",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P2/cells/d30/diff_ci95[1]"
+ },
+ "sc3_gap_lo": {
+  "value": "-0.334",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P2/cells/d30/diff_ci95[0]"
+ },
+ "sc3_p3": {
+  "value": "0.75",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P3/bar/arm_ii_minus_max_i_iii"
+ },
+ "sc3_p3v": {
+  "value": "0.007",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P3/bar/arm_v_minus_iv/value"
+ },
+ "sc3_p3w1": {
+  "value": "1.18",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P3/bar/w1_arm_ii_minus_i"
+ },
+ "sc3_p4": {
+  "value": "2",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P4/g16_set/l2/caught_failed"
+ },
+ "sc3_p5": {
+  "value": "0.955",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P5/auroc"
+ },
+ "sc3_p5_hi": {
+  "value": "0.991",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P5/ci95[1]"
+ },
+ "sc3_p5_lo": {
+  "value": "0.902",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P5/ci95[0]"
+ },
+ "sc3_p5d": {
+  "value": "+0.011",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P5/diff_vs_judge_valid"
+ },
+ "sc3_r2": {
+  "value": "0.565",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P1/mean_r2"
+ },
+ "sc3_top1": {
+  "value": "0.605",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P2/best_top1"
+ },
+ "sc4_aniso": {
+  "value": "0.637",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P1/anisotropy"
+ },
+ "sc4_d30": {
+  "value": "0.273",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P2/cells/d30/model_top1"
+ },
+ "sc4_eps": {
+  "value": "810",
+  "anchor": "repro/data-scale/README.md scale table (S4); list lengths checked by l0_check.py"
+ },
+ "sc4_frames": {
+  "value": "275,015",
+  "anchor": "repro/data-scale/expected/curve.json train_frames"
+ },
+ "sc4_gap": {
+  "value": "-0.600",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P2/cells/d30/diff"
+ },
+ "sc4_gap_hi": {
+  "value": "-0.545",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P2/cells/d30/diff_ci95[1]"
+ },
+ "sc4_gap_lo": {
+  "value": "-0.652",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P2/cells/d30/diff_ci95[0]"
+ },
+ "sc4_p3": {
+  "value": "0.63",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P3/bar/arm_ii_minus_max_i_iii"
+ },
+ "sc4_p3v": {
+  "value": "0.007",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P3/bar/arm_v_minus_iv/value"
+ },
+ "sc4_p3w1": {
+  "value": "1.26",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P3/bar/w1_arm_ii_minus_i"
+ },
+ "sc4_p4": {
+  "value": "1",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P4/g16_set/l2/caught_failed"
+ },
+ "sc4_p5": {
+  "value": "0.956",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P5/auroc"
+ },
+ "sc4_p5_hi": {
+  "value": "0.996",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P5/ci95[1]"
+ },
+ "sc4_p5_lo": {
+  "value": "0.899",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P5/ci95[0]"
+ },
+ "sc4_p5d": {
+  "value": "+0.012",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P5/diff_vs_judge_valid"
+ },
+ "sc4_r2": {
+  "value": "0.565",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P1/mean_r2"
+ },
+ "sc4_top1": {
+  "value": "0.279",
+  "anchor": "repro/data-scale/expected/S4/verdict.json P2/best_top1"
+ },
+ "sc5_aniso": {
+  "value": "0.684",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P1/anisotropy"
+ },
+ "sc5_d30": {
+  "value": "0.222",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P2/cells/d30/model_top1"
+ },
+ "sc5_eps": {
+  "value": "2,909",
+  "anchor": "repro/data-scale/README.md scale table (S5a); list lengths checked by l0_check.py"
+ },
+ "sc5_frames": {
+  "value": "1,282,161",
+  "anchor": "repro/data-scale/expected/curve.json train_frames"
+ },
+ "sc5_gap": {
+  "value": "-0.651",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P2/cells/d30/diff"
+ },
+ "sc5_gap_hi": {
+  "value": "-0.602",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P2/cells/d30/diff_ci95[1]"
+ },
+ "sc5_gap_lo": {
+  "value": "-0.696",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P2/cells/d30/diff_ci95[0]"
+ },
+ "sc5_p3": {
+  "value": "1.17",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P3/bar/arm_ii_minus_max_i_iii"
+ },
+ "sc5_p3v": {
+  "value": "0.009",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P3/bar/arm_v_minus_iv/value"
+ },
+ "sc5_p3w1": {
+  "value": "1.52",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P3/bar/w1_arm_ii_minus_i"
+ },
+ "sc5_p4": {
+  "value": "0",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P4/g16_set/l2/caught_failed"
+ },
+ "sc5_p5": {
+  "value": "0.897",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P5/auroc"
+ },
+ "sc5_p5_hi": {
+  "value": "0.964",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P5/ci95[1]"
+ },
+ "sc5_p5_lo": {
+  "value": "0.813",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P5/ci95[0]"
+ },
+ "sc5_p5d": {
+  "value": "-0.046",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P5/diff_vs_judge_valid"
+ },
+ "sc5_r2": {
+  "value": "0.573",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P1/mean_r2"
+ },
+ "sc5_top1": {
+  "value": "0.230",
+  "anchor": "repro/data-scale/expected/S5a/verdict.json P2/best_top1"
+ },
+ "sc_floor30": {
+  "value": "0.873",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P2/cells/d30/action_only_top1 (the same ranker and anchors at every scale)"
+ },
+ "sc_judge": {
+  "value": "0.943",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P5/judge_auroc_valid"
+ },
+ "sc_p3_ceil": {
+  "value": "0.009",
+  "anchor": "repro/data-scale/expected/*/verdict.json P3/bar/arm_v_minus_iv/value, maximum over the scales"
+ },
+ "sc_p3_floor": {
+  "value": "0.006",
+  "anchor": "repro/data-scale/expected/*/verdict.json P3/bar/arm_v_minus_iv/value, minimum over the scales"
+ },
+ "sc_p3_min": {
+  "value": "0.62",
+  "anchor": "repro/data-scale/expected/*/verdict.json P3/bar/arm_ii_minus_max_i_iii, minimum over the scales, rounded down to 2 decimals"
+ },
+ "sc_random_gain": {
+  "value": "1.25",
+  "anchor": "repro/data-scale/expected/S3/verdict.json P3/bar/random_init_arm_ii_minus_i (one untrained encoder at every scale)"
+ },
+ "sc_steps": {
+  "value": "81,068",
+  "anchor": "repro/data-scale/expected/S1/training_end.json step"
+ },
  "scale_eps": {
   "value": "653",
   "anchor": "repro/register/expected/FEASIBILITY.md: '(653 episodes'"

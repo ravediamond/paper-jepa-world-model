@@ -1,0 +1,50 @@
+[
+ {
+  "check": "P1 mean R2",
+  "probes.py": 0.5654,
+  "published": 0.5654,
+  "match": true
+ },
+ {
+  "check": "P1 anisotropy",
+  "probes.py": 0.6393,
+  "published": 0.6393,
+  "match": true
+ },
+ {
+  "check": "P2 best cell",
+  "probes.py": 0.6046,
+  "published": 0.6046,
+  "match": true
+ },
+ {
+  "check": "P3 arm (ii)-max",
+  "probes.py": 0.7481670379638672,
+  "published": 0.748,
+  "match": true
+ },
+ {
+  "check": "P3 arm (v)-(iv)",
+  "probes.py": 0.006914973258972168,
+  "published": 0.007,
+  "match": true
+ },
+ {
+  "check": "P4 caught (L2, 50)",
+  "probes.py": 2.0,
+  "published": 2,
+  "match": true
+ },
+ {
+  "check": "P4 FI rate (L2, 50)",
+  "probes.py": 0.0476,
+  "published": 0.0476,
+  "match": true
+ },
+ {
+  "check": "P5 AUROC",
+  "probes.py": 0.9545,
+  "published": 0.9545,
+  "match": true
+ }
+]
