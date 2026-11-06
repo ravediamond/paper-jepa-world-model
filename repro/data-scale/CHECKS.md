@@ -73,11 +73,9 @@ Open before their numbers: C2 (probes.py reproduction), C4 rate rule (before S5a
 
 ## 2026-11-06 — C5 on the shipped splits, C7, C1 end steps
 
-- **C1 end steps:** S1, S4, S5a `metrics.jsonl` end record `"step": 81068` (`~/robot-data/wm/runs/<run>/out/multiview/metrics.jsonl`;
-  runs 20261103T1854_WS-106_59001611, 20261104T0657_WS-106_59070325, 20261104T1744_WS-106_59139781).
-- **C5:** the `split.json` each instance trained on (`out/multiview/split.json`): 0 of the 25 val episodes in any train list, the 25
-  val episodes listed as val, extras = cubes (S4) and cubes + ArmnetBench (S5a), no rollouts repo (`c5_check.txt`).
-- **C7:** the §30 random-init encoder is `id_latents.py` `W1Like(<w1>, True)` (same config, seed 0; README of
-  `shared/gate/data/2026-10-24_inverse_dynamics`), its latents `~/robot-data/id30_latents/<set>/W1_random_init.npz`;
-  `probes.py p3lat` links them unchanged into every scale's latent dir.
+C1: the `metrics.jsonl` end record of S1, S4 and S5a reads `"step": 81068` (`~/robot-data/wm/runs/<run>/out/multiview/metrics.jsonl`; runs 20261103T1854_WS-106_59001611, 20261104T0657_WS-106_59070325 and 20261104T1744_WS-106_59139781).
+
+C5: the `split.json` each instance trained on (`out/multiview/split.json`) has none of the 25 validation episodes in any training list and lists them as validation. The extras are the cubes dataset (S4) and cubes plus ArmnetBench (S5a), and no rollouts repo is in any list (`c5_check.txt`).
+
+C7: the random-init encoder of the §30 probe is `id_latents.py` `W1Like(<w1>, True)`, with the same config and seed 0 (README of `shared/gate/data/2026-10-24_inverse_dynamics`). Its latents are `~/robot-data/id30_latents/<set>/W1_random_init.npz`, and `probes.py p3lat` links them unchanged into every scale's latent dir.
 - **C2** runs through `probes.py c2 runs/WS-106/probes/S3` (`run_all.sh` stops the other scales on a mismatch).
