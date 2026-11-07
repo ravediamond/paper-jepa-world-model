@@ -1,5 +1,5 @@
 {
- "about": "Editorial layer of the register table (make_paper.py): the plain name of each FEASIBILITY.md §2 row (in row order), the refs.bib keys of the paper it re-tests ([] = a use designed in this project), and the short code that names its repro folder. Attributions follow the paper's Related work and the row text; the rows with [] are to be confirmed by the author.",
+ "about": "Editorial layer of the register table (make_paper.py): the plain name of each FEASIBILITY.md §2 row (in row order), the refs.bib keys of the paper it re-tests ([] = a use designed in this project), and the short code that names its repro folder. Attributions follow the paper's Related work and the row text; the six rows with [] (G6a, W1-A, W1-B, G11-B-cal, W1-C2, §30) were confirmed as designed in this project on 2026-11-07, owner-delegated to agent recommendation: the paper's Related work attributes none of them to a cited paper, and no attribution is added without a source check.",
  "rows": [
   {"gate": "G0", "use": "open-loop latent prediction", "cite": ["maes2026lewm"], "code": "G0"},
   {"gate": "C1 probe", "use": "imagined- vs current-latent outcome probe (first run)", "cite": ["zheng2026contactguard"], "code": "C1"},

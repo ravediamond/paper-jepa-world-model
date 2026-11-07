@@ -65,19 +65,25 @@ anchor (as in `run_w1c_offline.py`) and is counted. Bootstrap resampling, single
 3. The frozen probes re-scored on the 69 old rollouts reproduce an in-sample AUROC (sanity only, not a result).
 
 ## 7. Deviations
-(none)
+D1 (2026-11-07, before any fresh rollout; `expected/confirm_rows.jsonl` does not exist): the owner delegated the open items O1-O6 to the agent's recommendation. The answers are written beside each item below. Only O4 adds a rule (the "not proven" verdict on fewer than 8 failures); it can only turn a pass into not proven, and no bar value in §5 changes.
 
 ## 8. Exploratory
 Everything not in §5: per-failure-mode recall, seed sensitivity, any other frame or feature.
 
 ## Open items (wording, for the owner; no threshold changed)
 - O1: the prompt names the rest feature "the final-frame latent"; the 69 were read at `judge_frame` (the colour
+  **Answer (owner-delegated to agent recommendation 2026-11-07):** keep `judge_frame`. Reason: the frozen probe was fit at that frame on the 69, and a different frame type on the fresh episodes would be a refit or a distribution shift the frozen weights never saw.
   judge's rest frame). This protocol uses the same `judge_frame` rule so the frozen probe sees the same frame type.
 - O2: the prompt's "the LOSO linear probe" is read as the LOSO probe's estimator fit once on all 69 and frozen (a LOSO
+  **Answer (owner-delegated to agent recommendation 2026-11-07):** keep the reading (estimator of LOSO, fit once on all 69, frozen). Reason: a LOSO refit on the fresh rollouts is a refit, which the prompt rules out for the anchor probe and the owner's "freeze the probes" instruction rules out for all.
   refit on the fresh rollouts would be a refit, which the prompt rules out for the anchor probe).
 - O3: B3 has no CI clause in the prompt; the CI is reported, the bar is read on the point difference.
+  **Answer (owner-delegated to agent recommendation 2026-11-07):** keep: CI reported, B3 read on the point difference, as B3's wording in the prompt has no CI clause. Reason: adding a CI clause to B3 would make its bar stricter than the one committed first; B2 already carries its CI clause.
 - O4: the prompt gives no "not proven" rule (e.g. for fewer than 8 failures at the 40-rollout stop); until the owner
+  **Answer (owner-delegated to agent recommendation 2026-11-07):** if fewer than 8 failures after the stop at 40, a bar that would pass is reported **not proven** (the failure count beside it), never pass; a bar that fails on the point estimate stays fail. Reason: the prompt's target of at least 8 failures is the stated minimum for the test to say anything on failures, and the conservative reading never confirms the split on fewer; it cannot turn a fail into a pass.
   gives one, the verdict is pass / fail as stated and the failure count is reported beside it.
 - O5: whether episodes excluded for no operator label count toward the 30 / 40 is not given; until the owner says,
+  **Answer (owner-delegated to agent recommendation 2026-11-07):** keep: episodes excluded for no operator label do not count toward the 30 / 40, and their number is reported. Reason: only labelled episodes enter the AUROC, so only they can make the set fresh and sized as the bar assumes.
   they do not count, and their number is reported.
 - O6: "same SmolVLA checkpoints" sets no per-checkpoint balance or order; the operator's run order is recorded.
+  **Answer (owner-delegated to agent recommendation 2026-11-07):** keep: no balance or order constraint; the operator's run order and the per-checkpoint counts are recorded and reported. Reason: the prompt sets none, and adding one now would be a new rule; the policy-identity null already shows whether a checkpoint imbalance carries the result.
