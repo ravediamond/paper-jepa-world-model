@@ -26,7 +26,7 @@ The robot is one SO-101 arm [@so101] driven through LeRobot [@cadene2024lerobot]
 
 Our model follows the LeWM recipe [@maes2026lewm], with a multi-view ViT encoder, an action-conditioned predictor and the SIGReg regulariser. We compare it with four cheaper signals. The frozen DINOv2-S control is a frozen DINOv2 small encoder [@oquab2023dinov2], mean-pooled over the top and wrist views as in DINO-WM [@zhou2024dinowm]. The joints control is the commanded joint vector. The colour judge is a hand-built rule on the final frame with no learning. Policy identity is the checkpoint that ran the episode.
 
-In October we found a loading bug. A timing test on the on-board computer loaded our checkpoint with `strict=False`. The image had transformers {{audit_tf}}, and under that version {{audit_dropped}} encoder tensors did not match. They were dropped without an error, so the test timed a random encoder, and we voided its latents. We then traced how every other use loaded the model. {{audit_trained}} ran the trained model and {{audit_random}} ran a random one, the timing test. The world-model block of VLA-JEPA, which one diagnostic below uses, loads all {{wm_keys}} of its keys.
+In October we found a loading bug. A timing test on the on-board computer loaded our checkpoint with `strict=False`. The image had transformers {{audit_tf}}, and under that version {{audit_dropped}} encoder tensors did not match. They were dropped without an error. The test timed a random encoder, and we voided its latents. We then traced how every other use loaded the model. {{audit_trained}} ran the trained model and {{audit_random}} ran a random one, the timing test. The world-model block of VLA-JEPA, which one diagnostic below uses, loads all {{wm_keys}} of its keys.
 
 ## The register
 
@@ -36,7 +36,7 @@ Table @tab:register lists the {{rows}} uses. The takes column says what each one
 
 Among the encoder uses, reading the outcome works. The outcome readout at rest passes. At the grasp anchor the current latent reads the grasp at {{c1_current}}. Reading progress does not work. Four uses ask the latent for progress or task stage, and all four fail. They are progress monotonicity, two-level hierarchical progress [@zhang2026hjepa], the latent stage tracker and SURVEYOR's latent-distance scale [@surveyor2026]. We also ran the pose probes of LeJEPA [@klindt2026lejepa]. A linear readout recovers about half of the joint variance from our encoder (R² {{lejepa_w1}}). It recovers more from the frozen DINOv2-S control ({{lejepa_w2p}}).
 
-The predictor does predict its own latent. At K = 30 its open-loop error is {{g0_err}}. Copying the last latent gives {{g0_copy}}. The uses of this prediction fail. In chunk ranking [@maes2026lewm] the model puts the executed chunk first in {{g1b_top1}} of anchors. The threshold was {{g1b_bar}}. The commanded actions alone reach {{g1b_actions}}. The surprise monitor catches {{w1a_hits}} failures. The hierarchical planner [@zhang2026hwm], the conformal surprise band, re-ranking, the risk head [@liu2026reap] and the calibrated reflex also miss their thresholds. Table @tab:register gives the margins.
+The predictor does predict its own latent. At K = 30 its open-loop error is {{g0_err}}, and copying the last latent gives {{g0_copy}}. The uses of this prediction fail. In chunk ranking [@maes2026lewm] the model puts the executed chunk first in {{g1b_top1}} of anchors, against a threshold of {{g1b_bar}}. The commanded actions alone reach {{g1b_actions}}. The surprise monitor catches {{w1a_hits}} failures. The hierarchical planner [@zhang2026hwm] and the risk head [@liu2026reap] also miss their thresholds. So do the conformal surprise band, re-ranking and the calibrated reflex. Table @tab:register gives the margins.
 
 ## What the encoder knows
 
@@ -95,7 +95,7 @@ Table @tab:vlajepa: VLA-JEPA world-model loss at {{m3_n}} anchors with true, shu
 | {{m3_3_ep}} / {{m3_3_fr}} | {{m3_3_true}} | {{m3_3_sh}} | {{m3_3_tok}} | {{m3_3_zero}} |
 | {{m3_4_ep}} / {{m3_4_fr}} | {{m3_4_true}} | {{m3_4_sh}} | {{m3_4_tok}} | {{m3_4_zero}} |
 
-The outcome-readout gate has one pass that uses the imagined latent. In its anticipation step the imagined latent beat policy identity by {{g10_anticip}}. We set that bar after the result. We then reran the idea twice with the threshold committed first, once in the grasp probe and once in the calibrated surprise reflex, and both runs fail.
+The outcome-readout gate has one pass that uses the imagined latent. In its anticipation step the imagined latent beat policy identity by {{g10_anticip}}. We set that bar after the result, so it is exploratory. We then reran the idea twice with the threshold committed first. One run was the grasp probe and the other the calibrated surprise reflex. Both fail.
 
 ## Does more data change this?
 

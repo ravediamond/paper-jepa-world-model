@@ -26,7 +26,7 @@ The robot is one SO-101 arm [7] driven through LeRobot [8], with a top and a wri
 
 Our model follows the LeWM recipe [1], with a multi-view ViT encoder, an action-conditioned predictor and the SIGReg regulariser. We compare it with four cheaper signals. The frozen DINOv2-S control is a frozen DINOv2 small encoder [10], mean-pooled over the top and wrist views as in DINO-WM [11]. The joints control is the commanded joint vector. The colour judge is a hand-built rule on the final frame with no learning. Policy identity is the checkpoint that ran the episode.
 
-In October we found a loading bug. A timing test on the on-board computer loaded our checkpoint with `strict=False`. The image had transformers 5.5.4, and under that version 192 encoder tensors did not match. They were dropped without an error, so the test timed a random encoder, and we voided its latents. We then traced how every other use loaded the model. 26 ran the trained model and 1 ran a random one, the timing test. The world-model block of VLA-JEPA, which one diagnostic below uses, loads all 351 of its keys.
+In October we found a loading bug. A timing test on the on-board computer loaded our checkpoint with `strict=False`. The image had transformers 5.5.4, and under that version 192 encoder tensors did not match. They were dropped without an error. The test timed a random encoder, and we voided its latents. We then traced how every other use loaded the model. 26 ran the trained model and 1 ran a random one, the timing test. The world-model block of VLA-JEPA, which one diagnostic below uses, loads all 351 of its keys.
 
 ## The register
 
@@ -59,7 +59,7 @@ Table 1: The register: every use of our world model re-tested here (with the fro
 
 Among the encoder uses, reading the outcome works. The outcome readout at rest passes. At the grasp anchor the current latent reads the grasp at 0.82. Reading progress does not work. Four uses ask the latent for progress or task stage, and all four fail. They are progress monotonicity, two-level hierarchical progress [4], the latent stage tracker and SURVEYOR's latent-distance scale [14]. We also ran the pose probes of LeJEPA [13]. A linear readout recovers about half of the joint variance from our encoder (R² 0.565). It recovers more from the frozen DINOv2-S control (0.867).
 
-The predictor does predict its own latent. At K = 30 its open-loop error is 0.31. Copying the last latent gives 0.89. The uses of this prediction fail. In chunk ranking [1] the model puts the executed chunk first in 0.60 of anchors. The threshold was 0.8. The commanded actions alone reach 0.68–0.90. The surprise monitor catches 2/8 at 2/42 failures. The hierarchical planner [3], the conformal surprise band, re-ranking, the risk head [12] and the calibrated reflex also miss their thresholds. Table 1 gives the margins.
+The predictor does predict its own latent. At K = 30 its open-loop error is 0.31, and copying the last latent gives 0.89. The uses of this prediction fail. In chunk ranking [1] the model puts the executed chunk first in 0.60 of anchors, against a threshold of 0.8. The commanded actions alone reach 0.68–0.90. The surprise monitor catches 2/8 at 2/42 failures. The hierarchical planner [3] and the risk head [12] also miss their thresholds. So do the conformal surprise band, re-ranking and the calibrated reflex. Table 1 gives the margins.
 
 ## What the encoder knows
 
@@ -118,7 +118,7 @@ Table 3: VLA-JEPA world-model loss at 5 anchors with true, shuffled (Δ shuffled
 | 59 / 302 | 1.4637 | +0.030 | 25.5 | +1.28 |
 | 65 / 302 | 1.5236 | −0.070 | 22.0 | −0.38 |
 
-The outcome-readout gate has one pass that uses the imagined latent. In its anticipation step the imagined latent beat policy identity by +0.179. We set that bar after the result. We then reran the idea twice with the threshold committed first, once in the grasp probe and once in the calibrated surprise reflex, and both runs fail.
+The outcome-readout gate has one pass that uses the imagined latent. In its anticipation step the imagined latent beat policy identity by +0.179. We set that bar after the result, so it is exploratory. We then reran the idea twice with the threshold committed first. One run was the grasp probe and the other the calibrated surprise reflex. Both fail.
 
 ## Does more data change this?
 
