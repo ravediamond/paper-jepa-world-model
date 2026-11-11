@@ -1,0 +1,28 @@
+{
+ "_note": "Datasets behind the re-tests, with the road-to-robotics file (commit a15ef9d) each value was read from. Read, not recomputed here.",
+ "teleop": {
+  "name": "ravediamond/so101_bowls_all_trimmed",
+  "what": "teleoperated demonstrations on the SO-101, two short bowl tasks (one bowl into another), idle starts trimmed, top and wrist cameras",
+  "episodes": 182, "frames": 61462, "fps": 30,
+  "train_episodes": 157, "val_episodes": 25,
+  "source": "road-to-robotics journal/papers/jepa-data-scale/FEASIBILITY.md ('so101_bowls_all_trimmed`, 182 episodes, 61,462 frames at 30 fps'); split: journal/book/12b-jepa-planning-and-grounding-papers.md ('157 train / 25 val')"
+ },
+ "rollouts": {
+  "name": "ravediamond/so101-bowls-policy-rollouts",
+  "what": "our policies run on the arm on the bowl tasks, outcome labelled by the operator",
+  "episodes": 69, "success": 44, "failure": 25,
+  "primary_episodes": 50, "primary_success": 42, "primary_failure": 8,
+  "source": "road-to-robotics shared/gate/data/2026-10-19_g15/README.md ('69 episodes: 44 success / 25 failure'); primary set: shared/gate/data/2026-10-19_judge_tau/README.md ('50 episodes (TurboVLA policies excluded by the script's default): 42 success / 8 failure')"
+ },
+ "armnetbench": {
+  "name": "ArmnetBench (arXiv:2607.24481)",
+  "what": "public labelled rollouts of SO-101 arms from several policies",
+  "rollouts": 2099, "within_policy": 2047, "policies": 7,
+  "source": "road-to-robotics cron/paper-scan.md ('ArmnetBench (2 099 labelled SO-101 rollouts)'); journal/harness/bench/b04/input/RESULT.md ('ArmnetBench (n = 2,047, 515 successes, 7 policies)')"
+ },
+ "timing": {
+  "what": "recorded bowl-task episodes replayed for the chunking and latency tests",
+  "episodes": 20, "boundaries": 254,
+  "source": "repro/register/expected/register.json papers 15, 19, 20: n ('254 boundaries per delay, 20 episodes'; '254 decisions on 20 recorded episodes')"
+ }
+}

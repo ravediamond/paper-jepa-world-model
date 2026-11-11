@@ -183,11 +183,67 @@ def main():
     put("sc_judge", f"{s3['P5']['judge_auroc_valid']:.3f}", "repro/data-scale/expected/S3/verdict.json P5/judge_auroc_valid")
     put("sc_steps", f"{json.loads((DS / 'expected/S1/training_end.json').read_text())['step']:,}", "repro/data-scale/expected/S1/training_end.json step")
 
-    assert N["same_commit_gates"] == "G6b", "prose names the same-commit row as the two-level hierarchical progress use"
+    # numbers shared with paper-register-reproducibility (verbatim copies of its files, see from_register_paper/README.md)
+    X = "register/expected/from_register_paper/"; XA = "repro/" + X
+    ds = json.loads((R / X / "datasets.json").read_text())["rollouts"]
+    for k in ("primary_episodes", "primary_success", "primary_failure"):
+        put("ro_" + k.split("_")[1], str(ds[k]), XA + "datasets.json rollouts." + k)
+    cf = json.loads((R / X / "conformal_check.json").read_text())
+    pct0 = lambda x: f"{100 * x:.0f} %"; pct1 = lambda x: f"{100 * x:.1f} %"
+    put("cf_fp", pct1(cf["papers_band_eq2"]["success_flagged"]["median"]), XA + "conformal_check.json papers_band_eq2.success_flagged.median")
+    put("cf_tp", pct0(cf["papers_band_eq2"]["failure_flagged"]["median"]), XA + "conformal_check.json papers_band_eq2.failure_flagged.median")
+    put("cf_fp_old", pct1(cf["stored_band_replay"]["success_flagged"]["median"]), XA + "conformal_check.json stored_band_replay.success_flagged.median")
+    put("cf_tp_old", pct0(cf["stored_band_replay"]["failure_flagged"]["median"]), XA + "conformal_check.json stored_band_replay.failure_flagged.median")
+    put("cf_splits", str(cf["splits"]), XA + "conformal_check.json splits")
+    put("cf_cal", str(cf["n_A"]), XA + "conformal_check.json n_A (= n_B)")
+    rp = json.loads((R / X / "reap_results.json").read_text())["main_set"]["seed0"]["comb:true"]
+    put("reap_caught", str(rp["caught"]), XA + "reap_results.json main_set.seed0.comb:true.caught")
+    put("reap_fi", str(rp["fi"]), XA + "reap_results.json main_set.seed0.comb:true.fi")
+    lit("reap_v2", "REAP", "3/8 at 5/42")
+    bs = {e["claim"]: e for e in json.loads((R / X / "bootstrap.json").read_text())["claims"]}
+    sg = lambda x, d=2: f"{x:+.{d}f}".replace("-", "−")
+    ci = lambda c, d=2: f"[{sg(c[0], d)}, {sg(c[1], d)}]"
+    a = XA + "bootstrap.json claims "
+    put("bs_resamples", f"{json.loads((R / X / 'bootstrap.json').read_text())['resamples']:,}", XA + "bootstrap.json resamples")
+    cb = bs["C-001-1"]; put("bs_g0", f"{sg(cb['point_difference'])} {ci(cb['ci95'])}", a + "C-001-1 point_difference, ci95")
+    pd = bs["C-001-2"]["per_d"]; lo = min(pd, key=lambda k: pd[k]["point_difference"]); hi = max(pd, key=lambda k: pd[k]["point_difference"])
+    put("bs_rank_worst", f"{sg(pd[lo]['point_difference'])} {ci(pd[lo]['ci95'])} at d = {lo[1:]}", a + f"C-001-2 per_d.{lo} (lowest point_difference)")
+    put("bs_rank_best", f"{sg(pd[hi]['point_difference'])} {ci(pd[hi]['ci95'])} at d = {hi[1:]}", a + f"C-001-2 per_d.{hi} (highest point_difference)")
+    put("bs_rank_eps", str(bs["C-001-2"]["n_units"]), a + "C-001-2 n_units")
+    cb = bs["C-006-1"]; put("bs_cg", f"{sg(cb['point_difference'])} {ci(cb['ci95'])}", a + "C-006-1 point_difference, ci95")
+    put("bs_cg_n", str(cb["n_units"]), a + "C-006-1 n_units")
+    cb = bs["C-008-1"]; put("bs_reap", f"{sg(cb['point_difference'])} {ci(cb['ci95'])}", a + "C-008-1 point_difference, ci95")
+    put("bs_reap_m", f"{cb['method']:.2f}", a + "C-008-1 method"); put("bs_reap_b", f"{cb['baseline']:.2f}", a + "C-008-1 baseline")
+    cb = bs["C-003-1"]
+    put("rj_red", pct1(cb["point_difference"]), a + "C-003-1 point_difference"); put("rj_lo", pct1(cb["ci95"][0]), a + "C-003-1 ci95[0]")
+    put("rj_hi", pct1(cb["ci95"][1]), a + "C-003-1 ci95[1]"); put("rj_bar", pct0(cb["bar"]), a + "C-003-1 bar")
+    put("rj_eps", str(cb["n_units"]), a + "C-003-1 n_units"); put("rj_clips", str(cb["n_clips"]), a + "C-003-1 n_clips")
+    lit("rj_ms", "RoboJEPA", "encoder 526 ms", "526 ms")
+    rg = json.loads((R / X / "register.json").read_text())
+    cg = [cl for p in rg["papers"] for cl in p["claims"] if cl["id"] == "C-006-1"][0]
+    assert "Cup 0.98 vs 0.84" in cg["theirs"]
+    put("cg_theirs", "0.98 vs 0.84", XA + "register.json claim C-006-1 theirs: 'Cup 0.98 vs 0.84'")
+    lit_file("cost_round", "register/expected/FEASIBILITY.md", "($3.30)", "3")
+    A["cost_round"] += " (rounded down, written 'about $3')"
+    names_rows = json.loads((HERE / "register_names.json").read_text())["rows"]
+    tally = {}
+    for nm, l in zip(names_rows, rows):
+        v = [x.strip() for x in l.split("|")][6].lower()
+        cls_ = "np" if "not proven" in v else "hold" if ("met" in v or ("pass" in v and "fail" not in v)) else "fail"
+        t = tally.setdefault(nm["group"], {"n": 0, "hold": 0, "fail": 0, "np": 0}); t["n"] += 1; t[cls_] += 1
+    for g, t in tally.items():
+        for cc, x in t.items():
+            put(f"grp_{g}_{cc}", str(x), f"repro/register/expected/FEASIBILITY.md §2 rows with group '{g}' in paper/register_names.json, verdict class {cc}, counted by make_paper.py")
+    put("n_hold", str(int(N["n_pass"]) + int(N["n_met"])), "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict pass + met)")
+    tl = json.loads((R / X / "datasets.json").read_text())["teleop"]
+    put("tel_ep_s", f"{tl['frames'] / tl['episodes'] / tl['fps']:.0f}", XA + "datasets.json teleop.frames / episodes / fps")
+    put("tel_min", f"{tl['frames'] / tl['fps'] / 60:.0f}", XA + "datasets.json teleop.frames / fps / 60")
+    put("n_own", str(sum(nm["tier"] == "our own use" for nm in names_rows)), "paper/register_names.json rows with tier 'our own use'")
+    put("n_paper", str(int(N["rows"]) - int(N["n_own"])), "FEASIBILITY.md §2 rows minus the rows with tier 'our own use' in paper/register_names.json")
     put("rest_W1_2", f"{c['gap2'][names['W1']]['auroc']:.2f}", f"repro/gaps/expected/controls.json gap2/{names['W1']}/auroc, 2 decimals")
     put("rest_judge_2", f"{c['gap2'][names['judge']]['auroc']:.2f}", f"repro/gaps/expected/controls.json gap2/{names['judge']}/auroc, 2 decimals")
 
-    tpl = (HERE / "DRAFT_4p.md.in").read_text()
+    tpl = (HERE / "DRAFT_4p.md.in").read_text().replace("<!-- tests -->", tests_md(names_rows, rows))
     src = re.sub(r"\{\{(\w+)\}\}", lambda m: N[m.group(1)], tpl).replace("<!-- register -->", register_md(rows, uses, pa["rows"]))
     assert "{{" not in src
     bib = read_bib()
@@ -226,20 +282,6 @@ def design_figures():
         lx = 62 + i * 21.0; ax.add_patch(FancyBboxPatch((lx, 20.4), 1.4, 1.4, boxstyle="round,pad=0", fc=c, ec="none")); ax.text(lx + 2.1, 21.1, lab, fontsize=5.2, va="center")
     fig.subplots_adjust(0, 0, 1, 1); fig.savefig(FIGD / "encoder_predictor.pdf"); fig.savefig(FIGD / "encoder_predictor.png", dpi=200); plt.close(fig)
 
-    # the chain
-    fig, ax = plt.subplots(figsize=(7.0, 1.05)); ax.set_xlim(0, 100); ax.set_ylim(0, 15); ax.axis("off")
-    steps = [("1  bar committed", "protocol commit\nbefore any number"), ("2  run", "rows stored in\nrepro/<exp>/expected"), ("3  result committed", "result commit\nafter the bar"),
-             ("4  L0 recompute", "make l0: every number\nfrom the stored rows"), ("5  paper", "numbers.json: value\nand its anchor")]
-    bw, gap = 16.2, 4.0
-    for i, (a, b) in enumerate(steps):
-        xx = 1 + i * (bw + gap); ax.add_patch(FancyBboxPatch((xx, 3), bw, 10, boxstyle="round,pad=0,rounding_size=1.2", fc="#EDF2FB" if i != 4 else sc.ACCENT, ec=sc.ACCENT, lw=1.0))
-        ax.text(xx + bw / 2, 10.3, a, ha="center", va="center", fontsize=6.4, fontweight="bold", color="white" if i == 4 else sc.ACCENT)
-        ax.text(xx + bw / 2, 6.0, b, ha="center", va="center", fontsize=5.6, color="white" if i == 4 else "black", linespacing=1.15)
-        if i < 4:
-            ax.add_patch(FancyArrowPatch((xx + bw, 8), (xx + bw + gap, 8), arrowstyle="-|>", mutation_scale=6, lw=1.0, color=sc.ACCENT))
-    ax.text(50, 0.7, "make check regenerates the paper from the stored rows and fails on any difference", ha="center", fontsize=5.8, color=sc.DARKGREY, style="italic")
-    fig.subplots_adjust(0, 0, 1, 1); fig.savefig(FIGD / "number_chain.pdf"); fig.savefig(FIGD / "number_chain.png", dpi=200); plt.close(fig)
-
 
 # register table: one row per FEASIBILITY.md §2 row; names and citations from register_names.json, the rest verbatim
 PLAIN = [("W2 (frozen DINOv2-S)", "DINOv2-S"), ("W2′", "DINOv2-S"), ("W2", "DINOv2-S"), ("random-init W1", "random-init ours"),
@@ -256,14 +298,35 @@ def plain(s):
 def register_md(rows, uses, pa):
     names = json.loads((HERE / "register_names.json").read_text())["rows"]
     assert len(names) == len(rows) == len(uses) == len(pa)
-    out = ["Table @tab:register: The register: every use of our world model re-tested here (with the frozen-DINOv2 and RoboJEPA rows beside it), what it takes from the model, whether its bar came before the result, and the verdict. Read the takes column against the verdict: the predictor uses fail. Bar, result and verdict are quoted from repro/register/expected/FEASIBILITY.md §2.",
-           "", "| use | re-tests | takes | bar first | bar | result | verdict | code |", "|---|---|---|---|---|---|---|---|"]
+    out = ["Table @tab:register: Every test run on our world model (with the frozen-DINOv2 and RoboJEPA tests beside it), what it takes from the model, whose method it is, the threshold, the result and the verdict. Whose method: the authors', the authors' fitted to our rig (only what the rig forced was changed), our variant of it, outside the paper's regime, or a use of our own with no paper claim behind it. Bar, result and verdict are quoted from the stored results; the conformal band and the ReAP row carry the corrected and the rebuilt result.",
+           "", "| test | re-tests | takes | whose method | bar | result | verdict | code |", "|---|---|---|---|---|---|---|---|"]
+    fix = {"W1-C2": f"papers' band, medians over {N['cf_splits']} splits: successes {N['cf_fp']} flagged, failures {N['cf_tp']} (our first band, built wrong: {N['cf_fp_old']} and {N['cf_tp_old']})",
+           "REAP": None}
     for l, u, q, nm in zip(rows, uses, pa, names):
         cells = [x.strip() for x in l.split("|")]
         assert cells[1].startswith(nm["gate"]) and cells[1].startswith(u["gate"]) and cells[1].startswith(q["register_gate"]), (cells[1], nm["gate"])
         cite = "[" + "; ".join("@" + k for k in nm["cite"]) + "]" if nm["cite"] else "this project"
-        out.append("| " + " | ".join([nm["use"], cite, u["needs"], BARFIRST.get(q["class"], "none"), plain(cells[5]),
-                                      plain(cells[4]), plain(cells[6]), nm["code"]]) + " |")
+        res = plain(cells[4])
+        if nm["gate"] == "W1-C2":
+            res = fix["W1-C2"]
+        elif nm["gate"] == "REAP":
+            res += f"; Stage 1 + Stage 2 rebuilt from the paper: {N['reap_caught']}/8 at {N['reap_fi']}/42 (one seed)"
+        out.append("| " + " | ".join([nm["use"], cite, u["needs"], nm["tier"], plain(cells[5]),
+                                      res, nm.get("verdict", plain(cells[6]).replace("**", "")), nm["code"]]) + " |")
+    return "\n".join(out)
+
+
+def tests_md(names, rows):
+    """Table @tab:tests: the tests grouped by what they ask of the model, with the counts by verdict."""
+    G = [("outcome", "read the outcome of an episode from the latent", "a hand-built colour judge; the commanded joints; a frozen DINOv2-S encoder; the current latent instead of the imagined one"),
+         ("progress", "read the arm's pose, the task's progress or stage", "the measured or commanded joints; a frozen DINOv2-S encoder"),
+         ("rank", "predict the next latents and rank or plan action chunks", "copy-last (the next latent is the current one); the commanded actions alone"),
+         ("flag", "flag a failing episode from the predictor's surprise or risk", "the risk score with shuffled actions (ReAP); the other monitors have only their threshold"),
+         ("board", "pretrained RoboJEPA and V-JEPA 2.1: run the encoder on the on-board computer, predict ahead", "the 200 ms real-time budget; copy-last")]
+    out = ["Table @tab:tests: The {{rows}} tests grouped by what they ask of the model, with the cheap competitor each group is compared with and the verdicts (held / failed / not proven). Every test is listed in Table @tab:register.",
+           "", "| what the test asks of the model | tests | cheap competitor | held | failed | not proven |", "|---|---|---|---|---|---|"]
+    for g, goal, base in G:
+        out.append(f"| {goal} | {{{{grp_{g}_n}}}} | {base} | {{{{grp_{g}_hold}}}} | {{{{grp_{g}_fail}}}} | {{{{grp_{g}_np}}}} |")
     return "\n".join(out)
 
 
@@ -316,7 +379,7 @@ def esc(s):
     return re.sub(r"\*([^*]+)\*", r"\\emph{\1}", s)
 
 
-COLS = {"tab:scale": (r"\scriptsize", r">{\raggedright}p{2.2cm}p{1.2cm}>{\raggedright}p{4.4cm}>{\raggedright}p{2.6cm}>{\raggedright}p{1.5cm}>{\raggedright}p{3.6cm}"), "tab:register": (r"\scriptsize", r">{\raggedright}p{2.2cm}>{\raggedright}p{1.0cm}p{1.25cm}>{\raggedright}p{0.9cm}>{\raggedright}p{2.1cm}>{\raggedright}p{4.2cm}>{\raggedright}p{1.5cm}p{1.1cm}")}
+COLS = {"tab:tests": (r"\footnotesize", r">{\raggedright}p{4.6cm}p{0.9cm}>{\raggedright}p{6.6cm}p{0.9cm}p{0.9cm}p{1.3cm}"), "tab:scale": (r"\scriptsize", r">{\raggedright}p{2.2cm}p{1.2cm}>{\raggedright}p{4.4cm}>{\raggedright}p{2.6cm}>{\raggedright}p{1.5cm}>{\raggedright}p{3.6cm}"), "tab:register": (r"\scriptsize", r">{\raggedright}p{2.2cm}>{\raggedright}p{1.0cm}p{1.2cm}>{\raggedright}p{1.6cm}>{\raggedright}p{2.0cm}>{\raggedright}p{4.0cm}>{\raggedright}p{1.6cm}p{1.1cm}")}
 
 
 def refs(s):
@@ -335,7 +398,7 @@ LINKS = r"\textbf{Code and rows:} \texttt{github.com/ravediamond/paper-jepa-worl
 
 def tint(v):
     v = v.lower()
-    c = "shissofail" if ("fail" in v or "no-go" in v) else "shissoamber" if "not proven" in v else "shissopass" if "pass" in v else None
+    c = "shissofail" if ("fail" in v or "no-go" in v) else "shissoamber" if "not proven" in v else "shissopass" if ("pass" in v or "hold" in v) else None
     return "\\rowcolor{" + c + "}" if c else ""
 
 

@@ -95,6 +95,46 @@
   "value": "19",
   "anchor": "repro/register/expected/prereg_audited.json rows, audited class, counted by make_paper.py (bar-first)"
  },
+ "bs_cg": {
+  "value": "−0.12 [−0.24, −0.01]",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-006-1 point_difference, ci95"
+ },
+ "bs_cg_n": {
+  "value": "65",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-006-1 n_units"
+ },
+ "bs_g0": {
+  "value": "+0.58 [+0.51, +0.66]",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-001-1 point_difference, ci95"
+ },
+ "bs_rank_best": {
+  "value": "−0.23 [−0.29, −0.18] at d = 5",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-001-2 per_d.d5 (highest point_difference)"
+ },
+ "bs_rank_eps": {
+  "value": "25",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-001-2 n_units"
+ },
+ "bs_rank_worst": {
+  "value": "−0.37 [−0.42, −0.32] at d = 10",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-001-2 per_d.d10 (lowest point_difference)"
+ },
+ "bs_reap": {
+  "value": "+0.08 [−0.05, +0.20]",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-008-1 point_difference, ci95"
+ },
+ "bs_reap_b": {
+  "value": "0.71",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-008-1 baseline"
+ },
+ "bs_reap_m": {
+  "value": "0.79",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-008-1 method"
+ },
+ "bs_resamples": {
+  "value": "2,000",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json resamples"
+ },
  "c1_bar": {
   "value": "≥ 0.85, ≥ +0.05",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row W1-C1: '≥ 0.85, ≥ +0.05'"
@@ -106,6 +146,38 @@
  "c1_imagined": {
   "value": "0.70",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 row W1-C1: 'imagined 0.70'"
+ },
+ "cf_cal": {
+  "value": "11",
+  "anchor": "repro/register/expected/from_register_paper/conformal_check.json n_A (= n_B)"
+ },
+ "cf_fp": {
+  "value": "9.1 %",
+  "anchor": "repro/register/expected/from_register_paper/conformal_check.json papers_band_eq2.success_flagged.median"
+ },
+ "cf_fp_old": {
+  "value": "22.7 %",
+  "anchor": "repro/register/expected/from_register_paper/conformal_check.json stored_band_replay.success_flagged.median"
+ },
+ "cf_splits": {
+  "value": "20",
+  "anchor": "repro/register/expected/from_register_paper/conformal_check.json splits"
+ },
+ "cf_tp": {
+  "value": "24 %",
+  "anchor": "repro/register/expected/from_register_paper/conformal_check.json papers_band_eq2.failure_flagged.median"
+ },
+ "cf_tp_old": {
+  "value": "46 %",
+  "anchor": "repro/register/expected/from_register_paper/conformal_check.json stored_band_replay.failure_flagged.median"
+ },
+ "cg_theirs": {
+  "value": "0.98 vs 0.84",
+  "anchor": "repro/register/expected/from_register_paper/register.json claim C-006-1 theirs: 'Cup 0.98 vs 0.84'"
+ },
+ "cost_round": {
+  "value": "3",
+  "anchor": "repro/register/expected/FEASIBILITY.md: '($3.30)' (rounded down, written 'about $3')"
  },
  "cost_w1": {
   "value": "3.30",
@@ -178,6 +250,86 @@
  "g5_w1": {
   "value": "0.7476",
   "anchor": "repro/gaps/expected/gap5_pooled_rerun.json terms/W1"
+ },
+ "grp_board_fail": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'board' in paper/register_names.json, verdict class fail, counted by make_paper.py"
+ },
+ "grp_board_hold": {
+  "value": "0",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'board' in paper/register_names.json, verdict class hold, counted by make_paper.py"
+ },
+ "grp_board_n": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'board' in paper/register_names.json, verdict class n, counted by make_paper.py"
+ },
+ "grp_board_np": {
+  "value": "0",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'board' in paper/register_names.json, verdict class np, counted by make_paper.py"
+ },
+ "grp_flag_fail": {
+  "value": "4",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'flag' in paper/register_names.json, verdict class fail, counted by make_paper.py"
+ },
+ "grp_flag_hold": {
+  "value": "0",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'flag' in paper/register_names.json, verdict class hold, counted by make_paper.py"
+ },
+ "grp_flag_n": {
+  "value": "4",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'flag' in paper/register_names.json, verdict class n, counted by make_paper.py"
+ },
+ "grp_flag_np": {
+  "value": "0",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'flag' in paper/register_names.json, verdict class np, counted by make_paper.py"
+ },
+ "grp_outcome_fail": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'outcome' in paper/register_names.json, verdict class fail, counted by make_paper.py"
+ },
+ "grp_outcome_hold": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'outcome' in paper/register_names.json, verdict class hold, counted by make_paper.py"
+ },
+ "grp_outcome_n": {
+  "value": "3",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'outcome' in paper/register_names.json, verdict class n, counted by make_paper.py"
+ },
+ "grp_outcome_np": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'outcome' in paper/register_names.json, verdict class np, counted by make_paper.py"
+ },
+ "grp_progress_fail": {
+  "value": "4",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'progress' in paper/register_names.json, verdict class fail, counted by make_paper.py"
+ },
+ "grp_progress_hold": {
+  "value": "2",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'progress' in paper/register_names.json, verdict class hold, counted by make_paper.py"
+ },
+ "grp_progress_n": {
+  "value": "7",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'progress' in paper/register_names.json, verdict class n, counted by make_paper.py"
+ },
+ "grp_progress_np": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'progress' in paper/register_names.json, verdict class np, counted by make_paper.py"
+ },
+ "grp_rank_fail": {
+  "value": "4",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'rank' in paper/register_names.json, verdict class fail, counted by make_paper.py"
+ },
+ "grp_rank_hold": {
+  "value": "1",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'rank' in paper/register_names.json, verdict class hold, counted by make_paper.py"
+ },
+ "grp_rank_n": {
+  "value": "5",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'rank' in paper/register_names.json, verdict class n, counted by make_paper.py"
+ },
+ "grp_rank_np": {
+  "value": "0",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 rows with group 'rank' in paper/register_names.json, verdict class np, counted by make_paper.py"
  },
  "lejepa_w1": {
   "value": "0.565",
@@ -367,6 +519,10 @@
   "value": "14",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict fail)"
  },
+ "n_hold": {
+  "value": "4",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict pass + met)"
+ },
  "n_met": {
   "value": "1",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict met)"
@@ -374,6 +530,14 @@
  "n_np": {
   "value": "2",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (verdict np)"
+ },
+ "n_own": {
+  "value": "7",
+  "anchor": "paper/register_names.json rows with tier 'our own use'"
+ },
+ "n_paper": {
+  "value": "13",
+  "anchor": "FEASIBILITY.md §2 rows minus the rows with tier 'our own use' in paper/register_names.json"
  },
  "n_pass": {
   "value": "3",
@@ -394,6 +558,18 @@
  "prereg_v1_same_commit": {
   "value": "6",
   "anchor": "repro/register/expected/FEASIBILITY.md §2 table, counted by make_paper.py (pre-reg. same-commit, commit order only)"
+ },
+ "reap_caught": {
+  "value": "2",
+  "anchor": "repro/register/expected/from_register_paper/reap_results.json main_set.seed0.comb:true.caught"
+ },
+ "reap_fi": {
+  "value": "1",
+  "anchor": "repro/register/expected/from_register_paper/reap_results.json main_set.seed0.comb:true.fi"
+ },
+ "reap_v2": {
+  "value": "3/8 at 5/42",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row REAP: '3/8 at 5/42'"
  },
  "rest_W1": {
   "value": "0.9545",
@@ -462,6 +638,46 @@
  "rest_policy_lo": {
   "value": "0.4084",
   "anchor": "repro/gaps/expected/controls.json gap2/policy identity (LOSO probe)/ci95[0]"
+ },
+ "rj_bar": {
+  "value": "15 %",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-003-1 bar"
+ },
+ "rj_clips": {
+  "value": "60",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-003-1 n_clips"
+ },
+ "rj_eps": {
+  "value": "25",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-003-1 n_units"
+ },
+ "rj_hi": {
+  "value": "12.9 %",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-003-1 ci95[1]"
+ },
+ "rj_lo": {
+  "value": "10.8 %",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-003-1 ci95[0]"
+ },
+ "rj_ms": {
+  "value": "526 ms",
+  "anchor": "repro/register/expected/FEASIBILITY.md §2 row RoboJEPA: 'encoder 526 ms'"
+ },
+ "rj_red": {
+  "value": "11.8 %",
+  "anchor": "repro/register/expected/from_register_paper/bootstrap.json claims C-003-1 point_difference"
+ },
+ "ro_episodes": {
+  "value": "50",
+  "anchor": "repro/register/expected/from_register_paper/datasets.json rollouts.primary_episodes"
+ },
+ "ro_failure": {
+  "value": "8",
+  "anchor": "repro/register/expected/from_register_paper/datasets.json rollouts.primary_failure"
+ },
+ "ro_success": {
+  "value": "42",
+  "anchor": "repro/register/expected/from_register_paper/datasets.json rollouts.primary_success"
  },
  "rows": {
   "value": "20",
@@ -810,6 +1026,14 @@
  "surv_tau_joints": {
   "value": "0.0265",
   "anchor": "repro/gaps/expected/controls.json surveyor_gate0/joints (commanded)/tau"
+ },
+ "tel_ep_s": {
+  "value": "11",
+  "anchor": "repro/register/expected/from_register_paper/datasets.json teleop.frames / episodes / fps"
+ },
+ "tel_min": {
+  "value": "34",
+  "anchor": "repro/register/expected/from_register_paper/datasets.json teleop.frames / fps / 60"
  },
  "teleop_eps": {
   "value": "182",

@@ -1,0 +1,391 @@
+{
+ "protocol": "repro/baseline-bootstrap/PROTOCOL.md",
+ "resamples": 2000,
+ "seed": 0,
+ "interval": "percentile 95 %",
+ "comparisons": 11,
+ "counts": {
+  "beats": 5,
+  "loses": 4,
+  "unclear": 2,
+  "rerun does not match the stored result": 0,
+  "rows not available": 0
+ },
+ "claims": [
+  {
+   "claim": "C-001-1",
+   "comparison": "LeWorldModel vs copy-last, latent error at K = 30 (positive = model lower)",
+   "unit": "window (episode ids not written by the re-run; narrower than an episode interval)",
+   "n_units": 192,
+   "method": 0.31558,
+   "baseline": 0.89891,
+   "point_difference": 0.58333,
+   "ci95": [
+    0.5089,
+    0.6595
+   ],
+   "outcome": "beats",
+   "near_match": {
+    "stored": {
+     "model_mse_k30": 0.31331,
+     "copy_last_mse_k30": 0.89271
+    },
+    "rerun": {
+     "model_mse_k30": 0.31558,
+     "copy_last_mse_k30": 0.89891
+    }
+   },
+   "source_files": [
+    "repro/baseline-bootstrap/data/not_matched/sens_rows_w1.csv (re-run WS-213)"
+   ]
+  },
+  {
+   "claim": "C-001-2",
+   "comparison": "LeWorldModel ranking vs action-only, top-1",
+   "unit": "episode",
+   "n_units": 25,
+   "n_anchors": 703,
+   "per_d": {
+    "d5": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.4509,
+     "baseline": 0.6842,
+     "point_difference": -0.2333,
+     "ci95": [
+      -0.2859,
+      -0.1796
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d10": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.5064,
+     "baseline": 0.8777,
+     "point_difference": -0.3713,
+     "ci95": [
+      -0.4226,
+      -0.3186
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d15": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.5733,
+     "baseline": 0.9047,
+     "point_difference": -0.3314,
+     "ci95": [
+      -0.3813,
+      -0.2824
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d20": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.6031,
+     "baseline": 0.9033,
+     "point_difference": -0.3001,
+     "ci95": [
+      -0.354,
+      -0.2446
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d30": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.6046,
+     "baseline": 0.8734,
+     "point_difference": -0.2688,
+     "ci95": [
+      -0.3338,
+      -0.204
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    }
+   },
+   "worst_d": "d10",
+   "best_d": "d5",
+   "point_difference": -0.3713,
+   "ci95": [
+    -0.4226,
+    -0.3186
+   ],
+   "outcome": "loses",
+   "source_files": [
+    "projects/vla-jepa-world-model/wm_train/g1b_range.py, g1_diag.py (re-run WS-213)",
+    "repro/baseline-bootstrap/data/g1b_rows_w1.csv"
+   ]
+  },
+  {
+   "claim": "C-002-1",
+   "comparison": "DINO-WM ranking vs action-only, top-1",
+   "unit": "episode",
+   "n_units": 25,
+   "n_anchors": 703,
+   "per_d": {
+    "d5": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.5846,
+     "baseline": 0.6842,
+     "point_difference": -0.0996,
+     "ci95": [
+      -0.1549,
+      -0.0437
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d10": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.6472,
+     "baseline": 0.8777,
+     "point_difference": -0.2304,
+     "ci95": [
+      -0.2754,
+      -0.1825
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d15": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.6245,
+     "baseline": 0.9047,
+     "point_difference": -0.2802,
+     "ci95": [
+      -0.3135,
+      -0.2471
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d20": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.6188,
+     "baseline": 0.9033,
+     "point_difference": -0.2845,
+     "ci95": [
+      -0.3237,
+      -0.2463
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    },
+    "d30": {
+     "unit": "episode",
+     "n_units": 25,
+     "method": 0.6017,
+     "baseline": 0.8734,
+     "point_difference": -0.2717,
+     "ci95": [
+      -0.3217,
+      -0.2197
+     ],
+     "outcome": "loses",
+     "n_anchors": 703
+    }
+   },
+   "worst_d": "d15",
+   "best_d": "d5",
+   "point_difference": -0.2802,
+   "ci95": [
+    -0.3135,
+    -0.2471
+   ],
+   "outcome": "loses",
+   "source_files": [
+    "repro/baseline-bootstrap/data/not_matched/g1b_rows_w2.csv (re-run WS-213)",
+    "repro/baseline-bootstrap/data/g1b_rows_w1.csv (action-only)"
+   ],
+   "near_match": {
+    "stored": {
+     "d5_Hd": 0.5832,
+     "d10_Hd": 0.6458,
+     "d15_Hd": 0.6302,
+     "d20_Hd": 0.6273,
+     "d30_Hd": 0.5903
+    },
+    "rerun": {
+     "d5_Hd": 0.5846,
+     "d10_Hd": 0.6472,
+     "d15_Hd": 0.6245,
+     "d20_Hd": 0.6188,
+     "d30_Hd": 0.6017
+    }
+   }
+  },
+  {
+   "claim": "C-003-1",
+   "comparison": "RoboJEPA 300M vs copy-last, 9-step latent L1 (reduction = 1 - model / copy-last; bar 0.15)",
+   "unit": "episode",
+   "n_units": 25,
+   "method": 0.3314,
+   "baseline": 0.3759,
+   "point_difference": 0.1183,
+   "ci95": [
+    0.1078,
+    0.1288
+   ],
+   "outcome": "beats",
+   "point_is": "fraction below copy-last",
+   "bar": 0.15,
+   "bar_inside_interval": false,
+   "n_clips": 60,
+   "outcome_note": "outcome = interval against 0; the bar 0.15 is reported beside it",
+   "source_files": [
+    "road-to-robotics branch exp/robojepa-gate commit 20f820d, results/gateA/gateA_300m_300k_settinga.json (stored raw result, per_clip)",
+    "repro/baseline-bootstrap/data/robojepa_rows.csv",
+    "repro/baseline-bootstrap/data/robojepa_match.json"
+   ]
+  },
+  {
+   "claim": "C-006-1",
+   "comparison": "ContactGuard imagined-latent vs current-latent probe, failure AUROC",
+   "unit": "rollout",
+   "n_units": 65,
+   "method": 0.7013,
+   "baseline": 0.8199,
+   "point_difference": -0.1186,
+   "ci95": [
+    -0.2362,
+    -0.0066
+   ],
+   "outcome": "loses",
+   "source_files": [
+    "scripts/run_w1c_offline.py c1 (re-run WS-213)",
+    "repro/baseline-bootstrap/data/w1c_rows.csv"
+   ]
+  },
+  {
+   "claim": "C-008-1",
+   "comparison": "ReAP risk head vs shuffled actions, failure AUROC",
+   "unit": "rollout",
+   "n_units": 50,
+   "method": 0.7857,
+   "baseline": 0.7083,
+   "point_difference": 0.0774,
+   "ci95": [
+    -0.0532,
+    0.2024
+   ],
+   "outcome": "unclear",
+   "near_match": {
+    "stored": {
+     "true": 0.7887,
+     "shuffled": 0.7083
+    },
+    "rerun": {
+     "true": 0.7857,
+     "shuffled": 0.7083
+    }
+   },
+   "source_files": [
+    "repro/baseline-bootstrap/data/not_matched/reap_rows.csv (re-run WS-213)"
+   ]
+  },
+  {
+   "claim": "C-010-2",
+   "comparison": "Robometer-4B zero-shot vs episode length (failure AUROC)",
+   "unit": "rollout",
+   "n_units": 2047,
+   "method": 0.8184,
+   "baseline": 0.9383,
+   "point_difference": -0.12,
+   "ci95": [
+    -0.1501,
+    -0.0937
+   ],
+   "outcome": "loses",
+   "source_files": [
+    "ravediamond/paper-vs-hardware posts/2026-10-23-paper-vs-hardware-robometer (g9a-ab ab_top.jsonl + ab_top_rescore.jsonl)",
+    "repro/baseline-bootstrap/data/robometer_rollouts.csv"
+   ]
+  },
+  {
+   "claim": "C-016-2",
+   "comparison": "HWM learned macro-actions vs net joint displacement, cosine",
+   "unit": "episode",
+   "n_units": 25,
+   "method": 0.6078,
+   "baseline": 0.551,
+   "point_difference": 0.0568,
+   "ci95": [
+    0.0346,
+    0.0797
+   ],
+   "outcome": "beats",
+   "n_anchors": 700,
+   "source_files": [
+    "projects/hwm-crossover/scripts/hwm_train.py evaluate(), stored f2_*.pt (re-run WS-213)",
+    "repro/baseline-bootstrap/data/hwm_rows.csv"
+   ]
+  },
+  {
+   "claim": "C-019-2",
+   "comparison": "AAC + overwrite vs fixed chunk + overwrite (median boundary jump, delay 8; positive = AAC lower)",
+   "unit": "episode (all boundaries of a resampled episode kept together)",
+   "n_units": 20,
+   "n_boundaries": 254,
+   "method": 0.9728,
+   "baseline": 0.9395,
+   "point_difference": -0.0333,
+   "ci95": [
+    -0.1725,
+    0.0643
+   ],
+   "outcome": "unclear",
+   "source_files": [
+    "ravediamond/paper-vs-hardware posts/2026-10-30-paper-vs-hardware-adaptive-chunking/out/aac_gate0/rows.jsonl",
+    "repro/baseline-bootstrap/data/aac_boundaries.csv"
+   ]
+  },
+  {
+   "claim": "C-020-1",
+   "comparison": "PACT selection vs random pick (executed-window error, degrees; positive = PACT lower)",
+   "unit": "episode (20), 254 boundaries",
+   "n_units": 20,
+   "point_difference": 0.2695,
+   "ci95": [
+    0.0864,
+    0.4416
+   ],
+   "outcome": "beats",
+   "reused_stored_ci": true,
+   "source_files": [
+    "ravediamond/paper-vs-hardware posts/2026-10-30-paper-vs-hardware-pact/expected/gate_b.json: k8.pact_minus_random.ci95",
+    "repro/baseline-bootstrap/data/pact_gate_b_k8.json"
+   ]
+  },
+  {
+   "claim": "C-022-1",
+   "comparison": "REMORA nearest-peak vs per-frame readout (flips ratio, null = 1, lower is better)",
+   "unit": "episode (34 test rollouts)",
+   "n_units": 34,
+   "point_difference": 0.7044,
+   "point_is": "ratio",
+   "ci95": [
+    0.4836,
+    0.9419
+   ],
+   "outcome": "beats",
+   "reused_stored_ci": true,
+   "source_files": [
+    "ravediamond/paper-vs-hardware posts/2026-10-31-paper-vs-hardware-remora-readout/expected/summary.json: paired.flips_ratio_ci95",
+    "repro/baseline-bootstrap/data/remora_paired.json"
+   ]
+  }
+ ]
+}

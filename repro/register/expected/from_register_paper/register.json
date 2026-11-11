@@ -1,0 +1,2741 @@
+{
+ "stats": {
+  "tested": 22,
+  "reproduces": 4,
+  "fail_or_not_proven": 16,
+  "withdrawn": 1,
+  "not_tested": 1,
+  "cost_usd": 45.1
+ },
+ "gates": {
+  "total": 95,
+  "fail": 29,
+  "pass": 14,
+  "not_proven": 5,
+  "void": 3,
+  "no_go": 4,
+  "other": 40,
+  "rule": "a gate is a table row of experiments.md whose first cell is a date (YYYY-MM-DD or MM-DD) in a table with a Verdict column (located per table from its header row; cells split on unescaped pipes); its verdict is that cell, bold and code marks stripped, lowercased: fail = starts with 'fail' or contains 'fail' but not 'not proven'; then void, no-go, not proven, pass (starts with 'pass' or contains '**pass**'); the rest other",
+  "source": "/experiments/"
+ },
+ "papers": [
+  {
+   "id": 1,
+   "paper": "LeWorldModel",
+   "arxiv": "2603.19312",
+   "code": [
+    "https://github.com/lucas-maes/le-wm"
+   ],
+   "claim_tested": "A small JEPA world model learns the arm's dynamics well enough to plan with it.",
+   "bar": "Dynamics: beat copy-last, every corruption ≥ 1.3 at K = 30. Planning: rank the executed chunk first among 8 in ≥ 0.8 of anchors.",
+   "theirs": "Push-T planning 90 % at matched FLOPs",
+   "ours": "dynamics 0.31 vs 0.89 copy-last (reproduces); planning top-1 0.60 vs 0.68–0.90 for an action-only baseline (fail)",
+   "their_rig": "Push-T, OGBench-Cube, Reacher, Two-Room (sim); one GPU (model not stated)",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§4.1, App. D",
+   "n": "25 val episodes, 703 anchors",
+   "not_proven": "Closed-loop planning on the arm was never run; one training seed.",
+   "verdict": "fail",
+   "gate_ids": [
+    "G0",
+    "G1b",
+    "G1 diagnosis"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 6.6,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-leworldmodel.md",
+   "folder": "2026-10-23-paper-vs-hardware-leworldmodel",
+   "site_card": [
+    4,
+    5
+   ],
+   "goal": "Train a small world model end to end from pixels, with no frozen encoder and no EMA target, kept from collapse by SIGReg alone, and plan with it by sampling actions in its latent space; shown in simulation (Push-T, Two-Room, Reacher, OGBench Cube).",
+   "hypotheses": [
+    {
+     "text": "A 15M-parameter JEPA world model trained end to end with SIGReg learns dynamics stable enough to plan with.",
+     "stated_in": "§3.1, Eq. (3); Fig. 6",
+     "claim_ids": [
+      "C-001-1"
+     ]
+    },
+    {
+     "text": "At a matched planning-compute budget it plans more successfully than DINO-WM and about 48× faster; without that match it leads on Push-T and Reacher only.",
+     "stated_in": "Fig. 3 (Push-T at fixed FLOPs 90 % vs 13 %; 0.98 s vs 47 s per plan)",
+     "claim_ids": [
+      "C-001-2"
+     ]
+    },
+    {
+     "text": "A linear readout of its latent recovers object state.",
+     "stated_in": "Table 1 (Push-T probes)",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, planning and evaluation sections; Fig. 6; Table 1",
+   "claims": [
+    {
+     "id": "C-001-1",
+     "subject": "JEPA world model",
+     "relation": "<",
+     "object": "copy-last baseline",
+     "metric": "open-loop latent error at K = 30",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "real teleop data",
+      "model": "W1"
+     },
+     "stated_in": "not stated: the premise of §3–4 (planning needs a usable dynamics model)",
+     "theirs": "Push-T planning 90 % at matched FLOPs",
+     "ours": "0.31 vs 0.89 copy-last",
+     "bar": "beat copy-last; every corruption ≥ 1.3 at K = 30",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-g0",
+     "source_file": "2026-10-23-paper-vs-hardware-leworldmodel/expected",
+     "checks": [
+      {
+       "l0": "K=30 open-loop error, true actions",
+       "value": 0.3133,
+       "tol": 0.005,
+       "shown": "0.31"
+      },
+      {
+       "l0": "K=30 copy-last error",
+       "value": 0.8927,
+       "tol": 0.005,
+       "shown": "0.89"
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-001-2",
+     "subject": "latent world-model ranking",
+     "relation": ">",
+     "object": "action-only baseline",
+     "metric": "G1b top-1",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "recorded candidates",
+      "model": "W1"
+     },
+     "stated_in": "paper §4 (planning by ranking imagined outcomes)",
+     "theirs": "Push-T planning 90 %",
+     "ours": "0.60 vs 0.68–0.90 action-only",
+     "bar": "executed chunk first among 8 in ≥ 0.8 of anchors",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-g1b-w1",
+     "source_file": "2026-10-23-paper-vs-hardware-leworldmodel/expected",
+     "checks": [
+      {
+       "l0": "G1b best top-1 over all cells",
+       "value": 0.6046,
+       "tol": 0.006,
+       "shown": "0.60"
+      },
+      {
+       "l0": "action-only top-1, min over d",
+       "value": 0.6842,
+       "tol": 0.006,
+       "shown": "0.68"
+      },
+      {
+       "l0": "action-only top-1, max over d",
+       "value": 0.9047,
+       "tol": 0.006,
+       "shown": "0.90"
+      }
+     ],
+     "note": "closed-loop planning on the arm was not run"
+    },
+    {
+     "id": "C-001-3",
+     "subject": "action-only baseline",
+     "relation": ">",
+     "object": "latent world-model ranking",
+     "metric": "G1b top-1",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "recorded candidates",
+      "model": "W1"
+     },
+     "stated_in": "not a paper claim: ours",
+     "theirs": null,
+     "ours": "0.68–0.90 vs 0.60",
+     "bar": "action-only ≥ the world model at every target distance",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-g1b-w1",
+     "source_file": "2026-10-23-paper-vs-hardware-leworldmodel/expected",
+     "checks": [
+      {
+       "l0": "action-only top-1, min over d",
+       "value": 0.6842,
+       "tol": 0.006,
+       "shown": "0.68"
+      },
+      {
+       "l0": "G1b best top-1 over all cells",
+       "value": 0.6046,
+       "tol": 0.006,
+       "shown": "0.60"
+      }
+     ],
+     "note": "the commanded joints win"
+    }
+   ],
+   "card_verdicts": [
+    "reproduces",
+    "fail"
+   ]
+  },
+  {
+   "id": 2,
+   "paper": "DINO-WM",
+   "arxiv": "2411.04983",
+   "code": [
+    "https://github.com/gaoyuezhou/dino_wm"
+   ],
+   "claim_tested": "A predictor on frozen DINOv2 patches plans better than one on a learned latent.",
+   "bar": "G1b top-1 ≥ 0.8 at some target distance.",
+   "theirs": "Push-T planning success 0.90",
+   "ours": "arm-pose R² 0.92 (vs 0.57 for W1); G1b top-1 0.55–0.61; no-model baseline 0.68–0.90",
+   "their_rig": "PointMaze, Push-T, Wall, Reacher (sim), XArm rope / granular in NVIDIA Flex; A6000 GPU",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§4.1, App. A.1, A.8",
+   "n": "25 val episodes, 703 anchors",
+   "not_proven": "One training each (W2 lost, W2′ retrained); planning not run in closed loop.",
+   "verdict": "fail",
+   "gate_ids": [
+    "G1",
+    "G1b",
+    "W2′"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 1.7,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-dino-wm.md",
+   "folder": "2026-10-23-paper-vs-hardware-dino-wm",
+   "site_card": null,
+   "goal": "Plan for manipulation and navigation with a world model built on frozen DINOv2 patch features, so that no task-specific visual representation has to be learned; a transition model predicts the next patch features and CEM plans toward a goal image, in six simulated environments.",
+   "hypotheses": [
+    {
+     "text": "A transition model on frozen DINOv2 patches plans to goal images better than world models that learn their own representation.",
+     "stated_in": "Table 1 (Push-T 0.90 vs DreamerV3 0.30)",
+     "claim_ids": [
+      "C-002-1"
+     ]
+    },
+    {
+     "text": "Patch features, not a pooled global vector, carry the spatial detail manipulation needs.",
+     "stated_in": "Table 2 (encoder ablation)",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method (eq. 1), planning, Tables 1–3",
+   "claims": [
+    {
+     "id": "C-002-1",
+     "subject": "latent world-model ranking",
+     "relation": ">",
+     "object": "action-only baseline",
+     "metric": "G1b top-1",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "recorded candidates",
+      "model": "W2 (frozen DINOv2-S)"
+     },
+     "stated_in": "paper §3.2 and §4.3, Table 1 (planning with DINO-WM)",
+     "theirs": "Push-T planning success 0.90",
+     "ours": "0.61 vs 0.68–0.90 action-only",
+     "bar": "G1b top-1 ≥ 0.8 at some target distance",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-g1-w2",
+     "source_file": "2026-10-23-paper-vs-hardware-dino-wm/expected",
+     "checks": [
+      {
+       "l0": "W2 best-val G1b best top-1",
+       "value": 0.6145,
+       "tol": 0.006,
+       "shown": "0.61"
+      }
+     ],
+     "note": "the action-only numbers are LeWorldModel's G1b (same candidates)"
+    },
+    {
+     "id": "C-002-2",
+     "subject": "frozen-DINOv2 world model",
+     "relation": ">",
+     "object": "JEPA world model",
+     "metric": "arm-pose R²",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "real teleop data"
+     },
+     "stated_in": "paper §4.4, Table 2 (frozen pretrained features encode the scene)",
+     "theirs": "not reported for an arm pose",
+     "ours": "0.92 vs 0.57",
+     "bar": "– (measured)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-g1-w2",
+     "source_file": "2026-10-23-paper-vs-hardware-dino-wm/expected/g1_final_w2prime_best.json",
+     "checks": [
+      {
+       "file": "2026-10-23-paper-vs-hardware-dino-wm/expected/g1_final_w2prime_best.json",
+       "json": "probes.arm_pose_r2.score",
+       "value": 0.9193,
+       "tol": 0.005,
+       "shown": "0.92"
+      },
+      {
+       "file": "2026-10-23-paper-vs-hardware-leworldmodel/expected/c1_probe_results.json",
+       "json": "B_encodes.real_z_t/full.arm_pose_r2",
+       "value": 0.5741,
+       "tol": 0.005,
+       "shown": "0.57"
+      }
+     ],
+     "note": "encodes the arm well, ranks no better"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "paper": "RoboJEPA",
+   "arxiv": "2610.10515",
+   "code": [
+    "https://github.com/facebookresearch/robo_jepa"
+   ],
+   "claim_tested": "Pretrained RoboJEPA predicts my latents, uses the actions, and runs on the robot's computer.",
+   "bar": "9-step L1 ≥ 15 % below copy-last (300M) and ≥ 5 % below shuffled actions; 2-view encoder ≤ 200 ms on the Orin.",
+   "theirs": "rollout error frontier near E ≈ 0.22; latency not reported",
+   "ours": "11.8 % below copy-last (300M; 1B 15.8 % on 30 clips); 9–10 % below shuffled; encoder 526 ms on the Orin NX",
+   "their_rig": "Franka Panda (DROID stack), CEM planning on a multi-GPU cluster; RoboCasa sim",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "App. G.1, §2.2",
+   "n": "60 clips (30 for 1B), 25 episodes",
+   "not_proven": "1B on a partial sample; TensorRT not tried.",
+   "verdict": "fail",
+   "gate_ids": [
+    "Gate A",
+    "Gate B"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 1.2,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-robojepa.md",
+   "folder": "2026-10-23-paper-vs-hardware-robojepa",
+   "site_card": null,
+   "goal": "Measure how an action-conditioned predictor on frozen V-JEPA 2.1 features scales with compute across 12 embodiments, fit a law that extrapolates to held-out model sizes, and plan with the large models on a real Franka.",
+   "hypotheses": [
+    {
+     "text": "Latent-rollout error on held-out scenes follows a compute law that extrapolates to 4B and 8B models.",
+     "stated_in": "§3.1, Table 2",
+     "claim_ids": [
+      "C-003-1"
+     ]
+    },
+    {
+     "text": "Planning capabilities emerge in order with compute: end-effector control, holding, scene geometry, object dynamics.",
+     "stated_in": "Fig. 6–9",
+     "claim_ids": []
+    },
+    {
+     "text": "The larger models plan grasp, lift and pick-and-place on a real Franka from a single image goal.",
+     "stated_in": "Table 3",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method (eq. 5), scaling-law section and Table 2, downstream protocol, Table 3",
+   "claims": [
+    {
+     "id": "C-003-1",
+     "subject": "pretrained RoboJEPA",
+     "relation": "<",
+     "object": "copy-last baseline",
+     "metric": "9-step latent L1",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "recorded clips",
+      "model": "RoboJEPA 300M"
+     },
+     "stated_in": "paper §3.1, Table 2 (DROID holdout, E = 0.218)",
+     "theirs": "rollout error frontier near E ≈ 0.22",
+     "ours": "11.8 % below copy-last",
+     "bar": "≥ 15 % below copy-last (300M)",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-robojepa-gate-a",
+     "source_file": "2026-10-23-paper-vs-hardware-robojepa/expected",
+     "checks": [
+      {
+       "l0": "300m_300k_settinga: reduction vs copy-last",
+       "value": 0.1183,
+       "tol": 0.001,
+       "shown": "11.8 %",
+       "scale": 100
+      }
+     ],
+     "note": "1B: 15.8 % on 30 clips only"
+    },
+    {
+     "id": "C-003-2",
+     "subject": "RoboJEPA encoder",
+     "relation": "≤",
+     "object": "pass mark",
+     "metric": "ms per encoder call on the Orin NX",
+     "conditions": {
+      "robot": "SO-101",
+      "compute": "Orin NX 16 GB"
+     },
+     "stated_in": "not a paper claim: ours (latency not reported)",
+     "theirs": "latency not reported",
+     "ours": "526 ms",
+     "bar": "≤ 200 ms",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-robojepa-gate-b",
+     "source_file": "2026-10-23-paper-vs-hardware-robojepa/expected/gateB_orin.json",
+     "checks": [
+      {
+       "file": "2026-10-23-paper-vs-hardware-robojepa/expected/gateB_orin.json",
+       "json": "encoder.2_view.p50_ms",
+       "value": 526.07,
+       "tol": 1,
+       "shown": "526"
+      }
+     ],
+     "note": "TensorRT not tried"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "paper": "H-JEPA",
+   "arxiv": "2610.06805",
+   "code": [],
+   "claim_tested": "A slow second level makes latent distance track task progress.",
+   "bar": "Progress monotonicity Spearman ρ ≤ −0.80; false stalls ≤ 10 %.",
+   "theirs": "subgoal-tracking Spearman 0.89–1.00",
+   "ours": "level-2 ρ −0.73; false stalls 52 %",
+   "their_rig": "FourRoom, Visual AntMaze, Push-T, OGBench-Cube (sim); DROID video scored offline",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§3, App. B",
+   "n": "teleop val episodes (monotonicity, stalls); 88 rollouts (sanity check)",
+   "not_proven": "Outside the paper's regime (no entity-frequency gap on this task).",
+   "verdict": "fail",
+   "gate_ids": [
+    "G6b"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0,
+   "gpu": "none",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-h-jepa.md",
+   "folder": "2026-10-14-g6-progress-latents",
+   "site_card": null,
+   "goal": "Stack JEPA world models into a hierarchy with a distinct latent space per level, so that upper levels plan in abstract states over longer horizons and hand subgoals down; shown in simulation, with an open-loop fidelity measure on DROID.",
+   "hypotheses": [
+    {
+     "text": "A hierarchy of distinct latent spaces plans long-horizon tasks with less planner compute than a flat model.",
+     "stated_in": "Fig. 6 (AntMaze 18 % → 73 %)",
+     "claim_ids": []
+    },
+    {
+     "text": "The lower level's cost to the subgoals handed down falls steadily along expert trajectories (Spearman 0.89–1.00), more consistently than its cost to the final goal (0.48–0.75).",
+     "stated_in": "§4.2, Fig. 8; Table 10 (Spearman 0.89–1.00)",
+     "claim_ids": [
+      "C-004-1"
+     ]
+    },
+    {
+     "text": "Upper levels drop fast-varying entities when the data has an entity-frequency gap above about 2×.",
+     "stated_in": "Fig. 4–5",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, planning, evaluation protocol, Fig. 4–9, Table 1",
+   "claims": [
+    {
+     "id": "C-004-1",
+     "subject": "second-level latent distance",
+     "relation": "≤",
+     "object": "pass mark",
+     "metric": "progress Spearman ρ",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "held-out teleop episodes",
+      "model": "H-JEPA on W1"
+     },
+     "stated_in": "paper, subgoal-tracking Spearman 0.89–1.00",
+     "theirs": "subgoal-tracking (level-1 cost to level-2 subgoals) Spearman 0.89–1.00; no level-2 distance-to-goal reported",
+     "ours": "ρ −0.73; false stalls 52 %",
+     "bar": "ρ ≤ −0.80 and false stalls ≤ 10 %",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-g6b",
+     "source_file": "2026-10-14-g6-progress-latents/expected",
+     "checks": [
+      {
+       "l0": "G6b H-JEPA T1 Spearman rho",
+       "value": -0.7268,
+       "tol": 0.005,
+       "shown": "−0.73"
+      },
+      {
+       "l0": "G6b H-JEPA false stall rate",
+       "value": 0.52,
+       "tol": 0.005,
+       "shown": "52 %",
+       "scale": 100
+      }
+     ],
+     "note": "outside the paper's regime: no entity-frequency gap on this task"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "paper": "D-JEPA",
+   "arxiv": "2609.24749",
+   "code": [
+    "https://github.com/NEBULIS-Lab/D-JEPA"
+   ],
+   "claim_tested": "A decision-aligned ranking operator on a frozen world model picks better action chunks.",
+   "bar": "G1b regret ≤ 0.10 and ≤ the action-only baseline + 0.05.",
+   "theirs": "+4 to +17 points",
+   "ours": "regret 0.263 (W1 alone 0.263; action-only −0.007)",
+   "their_rig": "Push-T, Reacher, Granular, RoboTwin (sim); AgileX PiPER arm with a V-JEPA 2-AC planner",
+   "their_rig_cost_class": "<$5k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§5, Table 2",
+   "n": "703 val anchors",
+   "not_proven": "Proxy labels (executed chunk = success); the executed-candidate version is not run.",
+   "verdict": "not tested",
+   "gate_ids": [
+    "W1-R"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-d-jepa.md",
+   "folder": "2026-10-23-paper-vs-hardware-d-jepa",
+   "site_card": null,
+   "goal": "Close the gap between a world model's global predictive geometry and the decision among the few candidates that compete for execution, with a set operator that corrects each candidate's score, trained on counterfactual execution of every candidate.",
+   "hypotheses": [
+    {
+     "text": "Among the top few candidates, latent goal distance misorders successes and failures.",
+     "stated_in": "§3, Fig. 2c–d",
+     "claim_ids": []
+    },
+    {
+     "text": "A permutation-equivariant ranking operator on frozen world models raises planning success over the base models.",
+     "stated_in": "§4 (operator), §6, Tables 1–2",
+     "claim_ids": [
+      "C-005-1"
+     ]
+    }
+   ],
+   "summary_source": "§3 (diagnosis), §4 (method), Tables 1–5",
+   "claims": [
+    {
+     "id": "C-005-1",
+     "subject": "decision-aligned ranking operator",
+     "relation": "<",
+     "object": "latent world-model ranking",
+     "metric": "G1b regret",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "recorded candidates",
+      "model": "W1"
+     },
+     "stated_in": "paper §6, Tables 1, 2 and 4 (+4 to +17 points)",
+     "theirs": "+4 to +17 points",
+     "ours": "regret 0.2631 (W1 alone 0.2630)",
+     "bar": "regret ≤ 0.10 and ≤ action-only + 0.05",
+     "verdict": "not tested",
+     "tested": true,
+     "gate": "exp-w1-r",
+     "source_file": "2026-10-23-paper-vs-hardware-d-jepa/expected",
+     "checks": [
+      {
+       "l0": "W1-R regret",
+       "value": 0.2631,
+       "tol": 0.0001,
+       "shown": "0.2631"
+      },
+      {
+       "l0": "W1 regret",
+       "value": 0.263,
+       "tol": 0.0001,
+       "shown": "0.2630"
+      }
+     ],
+     "note": "not tested: the gate used proxy labels (executed chunk = success), not the paper's executed-candidate success"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "paper": "ContactGuard",
+   "arxiv": "2608.13438",
+   "code": [],
+   "claim_tested": "An event-anchored probe on imagined latents predicts grasp failure better than the current latent.",
+   "bar": "AUROC ≥ 0.85 and ≥ 0.05 above the current latent.",
+   "theirs": "AUROC 0.98–0.99 imagined vs 0.84–0.92 current over four grasp tasks (Cup 0.98 vs 0.84)",
+   "ours": "0.70 imagined vs 0.82 current",
+   "their_rig": "AgileX Piper dual-arm (14-DoF), three RGB cameras; RTX 5090",
+   "their_rig_cost_class": "$5–20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§4.1, Table 4",
+   "n": "65 scored rollouts, 21 failures",
+   "not_proven": "Mixed policies and two views against their single policy and three views; corruption control pending.",
+   "verdict": "fail",
+   "gate_ids": [
+    "W1-C1"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-contactguard.md",
+   "folder": "2026-10-23-paper-vs-hardware-contactguard",
+   "site_card": 6,
+   "goal": "Detect grasp failures before contact for a chunked policy, by rolling an action-conditioned latent world model forward under the chunk the policy already emitted and reading the imagined latent with a small probe; shown on a dual-arm AgileX Piper with ACT.",
+   "hypotheses": [
+    {
+     "text": "A probe on the imagined latent after the grasp predicts grasp failure better than a probe on the current latent.",
+     "stated_in": "Table 2 (0.98 vs 0.84)",
+     "claim_ids": [
+      "C-006-1"
+     ]
+    },
+    {
+     "text": "The monitor can abort a grasp before contact, without access to the policy.",
+     "stated_in": "§3.5 (online pre-contact monitor), §1",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method (probe, eq. 4–6), evaluation protocol, Table 2",
+   "claims": [
+    {
+     "id": "C-006-1",
+     "subject": "imagined-latent probe",
+     "relation": ">",
+     "object": "current-latent probe",
+     "metric": "failure AUROC",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "mixed-policy rollouts",
+      "views": 2
+     },
+     "stated_in": "paper Table 2 (ROC AUC, Cup .982 vs .840)",
+     "theirs": "AUROC 0.98–0.99 vs 0.84–0.92 over four grasp tasks (Cup 0.98 vs 0.84)",
+     "ours": "0.70 vs 0.82",
+     "bar": "AUROC ≥ 0.85 and ≥ 0.05 above the current latent",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-w1-c1",
+     "source_file": "2026-10-23-paper-vs-hardware-contactguard/expected",
+     "checks": [
+      {
+       "l0": "imagined latent AUROC",
+       "value": 0.7013,
+       "tol": 0.005,
+       "shown": "0.70"
+      },
+      {
+       "l0": "current latent AUROC",
+       "value": 0.8199,
+       "tol": 0.005,
+       "shown": "0.82"
+      }
+     ],
+     "note": "their setting: one policy, three views"
+    },
+    {
+     "id": "C-006-2",
+     "subject": "current-latent probe",
+     "relation": ">",
+     "object": "imagined-latent probe",
+     "metric": "failure AUROC",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "mixed-policy rollouts",
+      "views": 2
+     },
+     "stated_in": "not a paper claim: ours",
+     "theirs": null,
+     "ours": "0.82 vs 0.70",
+     "bar": "– (measured, 5 seeds)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-w1-c1",
+     "source_file": "2026-10-23-paper-vs-hardware-contactguard/expected",
+     "checks": [
+      {
+       "l0": "current latent AUROC",
+       "value": 0.8199,
+       "tol": 0.005,
+       "shown": "0.82"
+      },
+      {
+       "l0": "imagined latent AUROC",
+       "value": 0.7013,
+       "tol": 0.005,
+       "shown": "0.70"
+      }
+     ],
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "paper": "FAIL-Detect and SAFE",
+   "arxiv": "2503.08558, 2506.09937",
+   "code": [
+    "https://github.com/CXU-TRI/FAIL-Detect",
+    "https://github.com/vla-safe/SAFE"
+   ],
+   "claim_tested": "A conformal band on a learned failure score keeps false alarms at α while catching failures.",
+   "bar": "Successes flagged ≤ 1/20; failures flagged ≥ 50 %.",
+   "theirs": "false alarms ≤ α on in-distribution successes (conformal coverage bound)",
+   "ours": "9.1 % of successes flagged at α = 5 %; 24 % of failures caught (first band built wrong, see WS-214: 22.7 % / 46 %)",
+   "their_rig": "bimanual Franka Panda station (FAIL-Detect); Franka Panda + WidowX (SAFE); A100 GPUs",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "FAIL-Detect §V; SAFE §5.1",
+   "n": "22 + 22 successes, 25 failures, 20 splits",
+   "not_proven": "One world model's surprise as the score; their own scores were not reimplemented.",
+   "verdict": "fail",
+   "gate_ids": [
+    "W1-C2"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-fail-detect-and-safe.md",
+   "folder": "2026-10-23-paper-vs-hardware-contactguard",
+   "site_card": null,
+   "goal": "Detect policy failures at run time from scores built without failure data (FAIL-Detect) or from a probe on a VLA's own features trained on both outcomes (SAFE), with a conformal band that fixes the false-alarm rate.",
+   "hypotheses": [
+    {
+     "text": "A conformal band calibrated on successful rollouts keeps false alarms at or below the chosen rate α on in-distribution successes.",
+     "stated_in": "FAIL-Detect §IV-B; SAFE §4.3",
+     "claim_ids": [
+      "C-007-1"
+     ]
+    },
+    {
+     "text": "Learned scores flag failures early enough to matter, on simulated and real robots.",
+     "stated_in": "FAIL-Detect Fig. 4–5; SAFE Table 1, Fig. 4 and 6",
+     "claim_ids": [
+      "C-007-2"
+     ]
+    }
+   ],
+   "summary_source": "FAIL-Detect method and §VI; SAFE method, protocol, Table 1",
+   "claims": [
+    {
+     "id": "C-007-1",
+     "subject": "conformal failure band",
+     "relation": "=",
+     "object": "conformal level α",
+     "metric": "successes flagged",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "69 rollouts",
+      "score": "W1 surprise"
+     },
+     "stated_in": "FAIL-Detect §IV-B; SAFE §4.3 (coverage ≥ 1 − α)",
+     "theirs": "false alarms ≤ α",
+     "ours": "9.1 % at α = 5 %",
+     "bar": "successes flagged ≤ 1/20",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-w1-c2",
+     "source_file": "2026-10-23-paper-vs-hardware-contactguard/expected/w1c_summary.json",
+     "checks": [
+      {
+       "file": "../../../paper-register-reproducibility/repro/conformal-check/expected/conformal_check.json",
+       "json": "papers_band_eq2.success_flagged.median",
+       "value": 0.0909,
+       "tol": 0.0005,
+       "shown": "9.1 %",
+       "scale": 100
+      }
+     ],
+     "note": "one world model's surprise as the score; their own scores were not reimplemented. Corrected 2026-11-10: my first band was built wrong, see WS-214: 22.7 % / 46 %; this is the papers' band, medians over 20 splits."
+    },
+    {
+     "id": "C-007-2",
+     "subject": "conformal failure band",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "failures caught",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "69 rollouts",
+      "score": "W1 surprise"
+     },
+     "stated_in": "FAIL-Detect Fig. 4–5; SAFE Table 1",
+     "theirs": "high recall at the target α",
+     "ours": "24 %",
+     "bar": "failures flagged ≥ 50 %",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-w1-c2",
+     "source_file": "2026-10-23-paper-vs-hardware-contactguard/expected/w1c_summary.json",
+     "checks": [
+      {
+       "file": "../../../paper-register-reproducibility/repro/conformal-check/expected/conformal_check.json",
+       "json": "papers_band_eq2.failure_flagged.median",
+       "value": 0.24,
+       "tol": 0.0005,
+       "shown": "24 %",
+       "scale": 100
+      }
+     ],
+     "note": "Corrected 2026-11-10: my first band was built wrong, see WS-214: 22.7 % / 46 %; this is the papers' band, medians over 20 splits."
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "paper": "ReAP",
+   "arxiv": "2610.16309",
+   "code": [],
+   "claim_tested": "A risk head on an action-conditioned latent warns before failures.",
+   "bar": "≥ 5/8 failures caught at ≤ 1/20 false interventions; action-conditioned iff true ≥ shuffled + 0.05.",
+   "theirs": "bTWA 0.65–0.78 in simulation (Table 1), 0.60–0.82 on the real robot (Table 2a)",
+   "ours": "v1 AUROC 0.93 came from time and length; v2 0.789 vs 0.708 shuffled, 3/8 at 5/42",
+   "their_rig": "LIBERO-10, RoboTwin (sim); two AgileX PIPER arms, π0.5 on a remote server, RTX 4070 detector",
+   "their_rig_cost_class": "$5–20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§5.1, App. C.4",
+   "n": "50 episodes, 8 failures (and all 69)",
+   "not_proven": "8 failures; v1 onsets VLM-labelled.",
+   "verdict": "fail",
+   "gate_ids": [
+    "REAP v1",
+    "REAP v2"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0.1,
+   "gpu": "api",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-reap.md",
+   "folder": "2026-10-23-paper-vs-hardware-reap",
+   "site_card": 2,
+   "goal": "Warn of a VLA's failure before it happens, with a detector on a compact visual state trained on a ramp target (no onset labels) and a predictor that rolls that state forward under the policy's next action chunk.",
+   "hypotheses": [
+    {
+     "text": "Conditioning the risk prediction on the policy's next action chunk improves warning over the same model with shuffled or zero actions.",
+     "stated_in": "Table 3b",
+     "claim_ids": [
+      "C-008-1"
+     ]
+    },
+    {
+     "text": "The monitor warns earlier and more accurately than action-uncertainty, OOD and classifier baselines.",
+     "stated_in": "Table 1, Table 2a",
+     "claim_ids": [
+      "C-008-2"
+     ]
+    }
+   ],
+   "summary_source": "method, protocol, Tables 1–4",
+   "claims": [
+    {
+     "id": "C-008-1",
+     "subject": "action-conditioned risk head",
+     "relation": ">",
+     "object": "shuffled-action risk head",
+     "metric": "failure AUROC",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "50 rollouts",
+      "latent": "W1"
+     },
+     "stated_in": "paper Table 3b (action-conditioned 0.683 vs shuffled 0.618 bTWA; the next planned chunk)",
+     "theirs": "bTWA 0.683 vs 0.618 shuffled (no AUROC reported)",
+     "ours": "0.789 vs 0.708 shuffled",
+     "bar": "true ≥ shuffled + 0.05",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-reap-v2",
+     "source_file": "2026-10-23-paper-vs-hardware-reap/expected",
+     "checks": [
+      {
+       "l0": "v2 logistic AUROC, true actions",
+       "value": 0.7887,
+       "tol": 0.0005,
+       "shown": "0.789"
+      },
+      {
+       "l0": "v2 logistic AUROC, shuffled actions",
+       "value": 0.7083,
+       "tol": 0.0005,
+       "shown": "0.708"
+      }
+     ],
+     "note": "the v1 AUROC 0.93 came from time and length (fault F-07)"
+    },
+    {
+     "id": "C-008-2",
+     "subject": "action-conditioned risk head",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "failures caught",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "50 rollouts (8 failures)",
+      "latent": "W1"
+     },
+     "stated_in": "paper Table 1 (detection time), Table 2a",
+     "theirs": "bTWA 0.70–0.78",
+     "ours": "3/8 at 5/42",
+     "bar": "≥ 5/8 failures at ≤ 1/20 false interventions",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-reap-v2",
+     "source_file": "2026-10-23-paper-vs-hardware-reap/expected",
+     "checks": [
+      {
+       "l0": "v2 caught (of 8, median of seeds)",
+       "value": 3,
+       "tol": 0,
+       "shown": "3/8"
+      },
+      {
+       "l0": "v2 false interventions (of 42, median of seeds)",
+       "value": 5,
+       "tol": 0,
+       "shown": "5/42"
+      }
+     ],
+     "note": "8 failures only"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "paper": "VLA-Corrector",
+   "arxiv": "2609.06508",
+   "code": [],
+   "claim_tested": "A verifier on observable history flags a failing rollout early enough to correct it.",
+   "bar": "≥ 5/8 failures at ≤ 1/20 false interventions.",
+   "theirs": "54-feature GRU verifier AUROC 0.90",
+   "ours": "the paper's Learned Verifier on my rollouts, built and trained as the paper describes (54 RGB features per view, joint positions, executed actions, its labels, optimiser and gate): 1/8 caught at 3/42 false interventions, AUROC 0.53; the earlier run with the same input and our own training: 2/8 at 3/42, AUROC 0.59; cosine drift of the W1 latent 0/8, AUROC 0.30",
+   "their_rig": "LIBERO and LIBERO-Plus (sim, Franka Panda); real robot not named",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "Experimental Setup",
+   "n": "50 episodes, 8 failures",
+   "not_proven": "Their stage head, rule-based teacher labels, 120-episode training set and recovery prompt were not run here; the verifier here has 30 training rollouts per fold and onset labels read from video.",
+   "verdict": "fail",
+   "gate_ids": [
+    "W1-A",
+    "WS-215"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-vla-corrector.md",
+   "folder": "2026-10-19-six-monitors-w1",
+   "site_card": null,
+   "goal": "Keep a frozen π0.5 on task by detecting deviations with a learned verifier on observable history (cheap visual statistics, state and action, a GRU) and prompting recovery when it fires; shown in LIBERO and LIBERO-Plus and on a physical arm.",
+   "hypotheses": [
+    {
+     "text": "A verifier on observable history detects execution risk (AUROC 0.902) close to a privileged rule-based verifier.",
+     "stated_in": "§ Failure Detection and Recovery Analysis (AUROC 0.902); Fig. 4",
+     "claim_ids": [
+      "C-009-1"
+     ]
+    },
+    {
+     "text": "Prompting recovery when the verifier fires raises success under perturbations.",
+     "stated_in": "Fig. 3, Table 3; real-robot results",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, protocol and numbers, Table 3–4",
+   "claims": [
+    {
+     "id": "C-009-1",
+     "subject": "observable-history verifier",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "failures caught",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "50 rollouts (8 failures)",
+      "input": "2 x 54 pooled RGB features + joint positions + actions"
+     },
+     "stated_in": "§ Failure Detection and Recovery Analysis (AUROC 0.902); Fig. 4",
+     "theirs": "AUROC 0.90",
+     "ours": "1/8 caught at 3/42, AUROC 0.53",
+     "bar": "≥ 5/8 failures at ≤ 1/20 false interventions",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "ws-215-vla-corrector-verifier",
+     "source_file": "repro/variants/vla-corrector/expected/result.json",
+     "checks": [
+      {
+       "file": "repro/variants/vla-corrector/expected/result.json",
+       "json": "R1.median.caught",
+       "value": 1,
+       "tol": 0,
+       "shown": "1/8"
+      },
+      {
+       "file": "repro/variants/vla-corrector/expected/result.json",
+       "json": "R1.median.auroc",
+       "value": 0.5298,
+       "tol": 0.005,
+       "shown": "0.53"
+      }
+     ],
+     "note": "re-run 2026-11-10 (WS-215): verifier built and trained as the paper describes, protocol repro/variants/vla-corrector/PROTOCOL.md frozen before any number; the earlier gate (exp-reap-v2, 2/8 at 3/42, AUROC 0.59) already had the joint positions, its training was ours (full batch, ramp target, calibrated threshold)"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "paper": "Robometer",
+   "arxiv": "2603.02115",
+   "code": [
+    "https://github.com/robometer/robometer"
+   ],
+   "claim_tested": "A 4B reward model judges SO-101 rollouts zero-shot.",
+   "bar": "Pooled AUROC ≥ 0.85 and within-policy ≥ 0.8 on ≥ 5 of 7 policies.",
+   "theirs": "VOC 0.94 on out-of-distribution evaluation sets (0.92 in-distribution)",
+   "ours": "pooled AUROC 0.818 on 2099 ArmnetBench rollouts; episode length alone 0.938",
+   "their_rig": "21 embodiments, training hardware not stated in the text; RL on a DROID Franka Panda",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "App. B.3, App. E.2",
+   "n": "2099 + 88 rollouts",
+   "not_proven": "Zero-shot only; the LoRA run never trained.",
+   "verdict": "fail",
+   "gate_ids": [
+    "G9a-AB",
+    "G9a-own",
+    "G9b"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 9.55,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-robometer.md",
+   "folder": "2026-10-23-paper-vs-hardware-robometer",
+   "site_card": 7,
+   "goal": "Train a general robot reward model on a vision-language backbone, from about a million trajectories across 21 embodiments with progress, preference and success heads, and use it zero-shot to score progress, rank trajectories and detect failures.",
+   "hypotheses": [
+    {
+     "text": "The reward model tracks task progress on embodiments it was not trained on.",
+     "stated_in": "Table I (VOC 0.92 / 0.94)",
+     "claim_ids": [
+      "C-010-1"
+     ]
+    },
+    {
+     "text": "It detects failures zero-shot better than other reward models and token-uncertainty baselines.",
+     "stated_in": "Table IV (F1 0.81)",
+     "claim_ids": [
+      "C-010-2"
+     ]
+    },
+    {
+     "text": "As a reward it improves online and offline RL, including on an SO-101.",
+     "stated_in": "Q3, Fig. 7",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, Tables I–IV, Q3 downstream results",
+   "claims": [
+    {
+     "id": "C-010-1",
+     "subject": "learned reward model",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "failure AUROC",
+     "conditions": {
+      "robot": "ArmnetBench arms",
+      "setting": "2,099 rollouts",
+      "model": "Robometer-4B zero-shot"
+     },
+     "stated_in": "paper Table IV (zero-shot failure detection)",
+     "theirs": "failure-detection F1 0.81 (no AUROC reported); VOC 0.94 OOD",
+     "ours": "0.818 pooled",
+     "bar": "pooled AUROC ≥ 0.85",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-g9a-ab-complete",
+     "source_file": "2026-10-23-paper-vs-hardware-robometer/expected",
+     "checks": [
+      {
+       "l0": "Robometer pooled AUROC, complete set",
+       "value": 0.8184,
+       "tol": 0.0005,
+       "shown": "0.818"
+      }
+     ],
+     "note": "zero-shot only; the LoRA run never trained"
+    },
+    {
+     "id": "C-010-2",
+     "subject": "learned reward model",
+     "relation": ">",
+     "object": "episode length",
+     "metric": "failure AUROC",
+     "conditions": {
+      "robot": "ArmnetBench arms",
+      "setting": "2,099 rollouts",
+      "model": "Robometer-4B zero-shot"
+     },
+     "stated_in": "not a paper comparison: the paper's premise that a learned judge beats hand-made signals",
+     "theirs": "no episode-length baseline in the paper",
+     "ours": "0.818 vs episode length 0.938",
+     "bar": "– (the baseline a learned judge must clear)",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-g9a-ab-complete",
+     "source_file": "2026-10-23-paper-vs-hardware-robometer/expected/g9a_ab_complete.json",
+     "checks": [
+      {
+       "l0": "Robometer pooled AUROC, complete set",
+       "value": 0.8184,
+       "tol": 0.0005,
+       "shown": "0.818"
+      },
+      {
+       "file": "2026-10-23-paper-vs-hardware-robometer/expected/g9a_ab_complete.json",
+       "json": "complete.baselines.episode_length_auroc",
+       "value": 0.938,
+       "tol": 0.0005,
+       "shown": "0.938"
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-010-3",
+     "subject": "episode length",
+     "relation": ">",
+     "object": "learned reward model",
+     "metric": "failure AUROC",
+     "conditions": {
+      "robot": "ArmnetBench arms",
+      "setting": "2,099 rollouts",
+      "model": "Robometer-4B zero-shot"
+     },
+     "stated_in": "not a paper claim: ours",
+     "theirs": null,
+     "ours": "0.938 vs 0.818",
+     "bar": "– (measured)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-g9a-ab-complete",
+     "source_file": "2026-10-23-paper-vs-hardware-robometer/expected/g9a_ab_complete.json",
+     "checks": [
+      {
+       "file": "2026-10-23-paper-vs-hardware-robometer/expected/g9a_ab_complete.json",
+       "json": "complete.baselines.episode_length_auroc",
+       "value": 0.938,
+       "tol": 0.0005,
+       "shown": "0.938"
+      },
+      {
+       "l0": "Robometer pooled AUROC, complete set",
+       "value": 0.8184,
+       "tol": 0.0005,
+       "shown": "0.818"
+      }
+     ],
+     "note": "on my own 88 rollouts length is near chance (0.521): where failures do not run to the timeout, length says little"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "paper": "SmolVLA",
+   "arxiv": "2506.01844",
+   "code": [
+    "https://github.com/huggingface/lerobot"
+   ],
+   "claim_tested": "A 450M VLA succeeds on an SO-101 task and can run on low-cost hardware.",
+   "bar": "10-trial operator-judged gate (no numeric pass mark registered); chunk inference within the async budget (667 ms).",
+   "theirs": "SO-101 LEGO 90 % in distribution; latency not reported for Jetson",
+   "ours": "9/10 on bowls; 974 ms in PyTorch, 238 ms with vla.cpp on the Orin NX",
+   "their_rig": "SO-100 / SO-101 arms; pretraining on 4 GPUs (~30k GPU-hours)",
+   "their_rig_cost_class": "<$5k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§4.1–4.3",
+   "n": "10 trials per engine",
+   "not_proven": "The bowls task is at ceiling for every policy; asynchronous execution not timed on the arm.",
+   "verdict": "reproduces",
+   "gate_ids": [
+    "09-29 gate",
+    "10-01 gate",
+    "vla.cpp parity"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-smolvla.md",
+   "folder": "2026-10-23-paper-vs-hardware-smolvla",
+   "site_card": 1,
+   "goal": "Build a small, open vision-language-action model trained on community LeRobot data that matches much larger VLAs, runs on consumer hardware, and can run asynchronously; shown in simulation and on SO-100 / SO-101 arms.",
+   "hypotheses": [
+    {
+     "text": "A 450M VLA pretrained on community SO-100 data matches or beats much larger VLAs on real low-cost arms.",
+     "stated_in": "Table 3–4 (SO-101 LEGO 90 %)",
+     "claim_ids": [
+      "C-011-1"
+     ]
+    },
+    {
+     "text": "Asynchronous inference keeps the arm moving while the next chunk is computed.",
+     "stated_in": "Algorithm 1; Fig. 5",
+     "claim_ids": []
+    },
+    {
+     "text": "Pretraining on community data raises real-arm success (51.7 → 78.3 % on SO-100, Table 5).",
+     "stated_in": "Table 5",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, asynchronous inference (Algorithm 1), evaluation protocol, Tables 2–5",
+   "claims": [
+    {
+     "id": "C-011-1",
+     "subject": "SmolVLA",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "success on the arm",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "bowls task",
+      "compute": "Orin NX 16 GB"
+     },
+     "stated_in": "paper Table 4 (SO-101 Pick-Place-Lego, 90 % in distribution)",
+     "theirs": "90 % (SO-101 LEGO)",
+     "ours": "9/10",
+     "bar": "10-trial operator-judged gate (no numeric pass mark registered)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-smolvla-pytorch-2",
+     "source_file": "2026-09-29-three-policies-so101/expected/trials_orin_nx.csv",
+     "checks": [
+      {
+       "file": "2026-09-29-three-policies-so101/expected/trials_orin_nx.csv",
+       "csv_count": "success",
+       "equals": "True",
+       "where": {
+        "policy": "smolvla",
+        "device": "orin_nx"
+       },
+       "value": 9,
+       "tol": 0,
+       "shown": "9/10"
+      }
+     ],
+     "note": "the bowls task is at ceiling for every policy"
+    },
+    {
+     "id": "C-011-2",
+     "subject": "SmolVLA chunk inference",
+     "relation": "<",
+     "object": "async budget",
+     "metric": "ms per action chunk on the Orin NX",
+     "conditions": {
+      "robot": "SO-101",
+      "compute": "Orin NX 16 GB",
+      "engine": "vla.cpp + flash attention"
+     },
+     "stated_in": "not a paper claim: ours (latency not reported for Jetson)",
+     "theirs": "latency not reported for Jetson",
+     "ours": "238 ms (vla.cpp + FA), 974 ms PyTorch",
+     "bar": "≤ 667 ms (async budget)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-smolvla-via-vla-cpp-flash-attention",
+     "source_file": "2026-10-23-paper-vs-hardware-smolvla/expected",
+     "checks": [
+      {
+       "l0": "vla.cpp _fa chunk inference (ms)",
+       "value": 238.09,
+       "tol": 1,
+       "shown": "238"
+      },
+      {
+       "l0": "PyTorch SmolVLA chunk inference (ms)",
+       "value": 974.18,
+       "tol": 1,
+       "shown": "974"
+      }
+     ],
+     "note": "PyTorch alone misses the budget"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "paper": "TurboVLA",
+   "arxiv": "2607.27205",
+   "code": [
+    "https://github.com/H-EmbodVis/TurboVLA"
+   ],
+   "claim_tested": "My claim that the architecture made the policy ignore its instruction.",
+   "bar": "Task swap ≥ 5° and per-layout ≥ 75 % → my port was the bug; < 1° with the control ≥ 0.095 → the data.",
+   "theirs": "LIBERO-Goal 97.4 → 11.6 without language (Table 3)",
+   "ours": "upstream's own trainer on my data: task swap 0.020°, per-layout 38.9 %; control, their released LIBERO checkpoint run here: 0.105 (≈ 5.5° of pan)",
+   "their_rig": "LIBERO and RoboTwin 2.0 (sim) on an RTX 4090; real: AgileX Piper",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§4.1, Table 1",
+   "n": "25 val episodes, 8 frames",
+   "not_proven": "One seed; two tasks only, instruction redundant on 94 % of frames.",
+   "verdict": "withdrawn",
+   "gate_ids": [
+    "port gates",
+    "path A"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 2.8,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-turbovla.md",
+   "folder": "2026-10-23-paper-vs-hardware-turbovla",
+   "site_card": 3,
+   "goal": "Make a lightweight VLA without a full VLM backbone (DINOv3 vision and a BERT text encoder fused for an action decoder) that is fast enough for real-time control; shown on LIBERO and RoboTwin 2.0 in simulation and on an AgileX Piper.",
+   "hypotheses": [
+    {
+     "text": "A policy without a large VLM backbone still follows the language instruction.",
+     "stated_in": "§4 ablations, Table 3 (LIBERO-Goal 97.4 → 11.6 without language)",
+     "claim_ids": [
+      "C-012-1"
+     ]
+    }
+   ],
+   "summary_source": "method, LIBERO and RoboTwin results; my diagnosis in book ch. 8.3",
+   "claims": [
+    {
+     "id": "C-012-1",
+     "subject": "TurboVLA on my data",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "task-swap action change",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "bowls data",
+      "trainer": "upstream's"
+     },
+     "stated_in": "not a paper claim: ours (that my port, not the data, made it ignore the instruction)",
+     "theirs": "LIBERO control 5.5° of pan",
+     "ours": "0.020° on my data; LIBERO control 5.5°",
+     "bar": "task swap ≥ 5° → my port was the bug; < 1° → the data",
+     "verdict": "withdrawn",
+     "tested": true,
+     "gate": "exp-turbovla-faithful-path-a",
+     "source_file": "2026-10-23-paper-vs-hardware-turbovla/expected",
+     "checks": [
+      {
+       "l0": "task swap median (deg), over 8 frames",
+       "value": 0.0198,
+       "tol": 0.0005,
+       "shown": "0.020"
+      },
+      {
+       "l0": "LIBERO control in deg-equivalent pan",
+       "value": 5.5253,
+       "tol": 0.05,
+       "shown": "5.5"
+      }
+     ],
+     "note": "my data, not the port: the instruction is redundant on 94 % of frames"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "paper": "VLA-JEPA",
+   "arxiv": "2602.10098",
+   "code": [
+    "https://github.com/ginwind/VLA-JEPA"
+   ],
+   "claim_tested": "VLA-JEPA trains cheaply on SO-101 data and runs on the robot.",
+   "bar": "10-trial operator-judged gate (no numeric pass mark registered); for reranking (H0): oracle / mean error ≤ ~0.7 and N = 8 ≤ 1.5× the latency.",
+   "theirs": "+1.1 over no-human-video on LIBERO (Table 1); no latency reported",
+   "ours": "9/10 for ~$9.7; 355 ms per chunk on the Orin NX; reranking no-go (0.76, 1.84×)",
+   "their_rig": "LIBERO, SimplerEnv (sim); real: Franka Research 3; trained on 8× A100",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§4.1–4.4, App. B",
+   "n": "10 trials; H0 on the teleop val split",
+   "not_proven": "Perturbation robustness (their main claim) not tested.",
+   "verdict": "reproduces",
+   "gate_ids": [
+    "10-08 gate",
+    "H0"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-23",
+   "cost_usd": 9.7,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-vla-jepa.md",
+   "folder": "2026-10-23-paper-vs-hardware-vla-jepa",
+   "site_card": null,
+   "goal": "Pretrain a VLA on human videos without actions through a latent world model, so that its latent action tokens carry state-transition structure without leaking future frames; evaluated on LIBERO, SimplerEnv, LIBERO-Plus and a real Franka.",
+   "hypotheses": [
+    {
+     "text": "Pretraining on action-free human video through a leakage-free latent world model improves robustness to perturbations.",
+     "stated_in": "Table 3 (LIBERO-Plus 79.5 vs 62.9 without human video)",
+     "claim_ids": []
+    },
+    {
+     "text": "The model reaches state-of-the-art success on LIBERO and transfers to a real arm with 100 demonstrations.",
+     "stated_in": "Table 1; Fig. 4",
+     "claim_ids": [
+      "C-013-1"
+     ]
+    }
+   ],
+   "summary_source": "method (eq. 1–9), Tables 1–4, Fig. 4–5",
+   "claims": [
+    {
+     "id": "C-013-1",
+     "subject": "VLA-JEPA",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "success on the arm",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "bowls task",
+      "compute": "Orin NX 16 GB"
+     },
+     "stated_in": "paper §4.4, Fig. 4 (real Franka)",
+     "theirs": "real Franka: ahead of π0 and π0.5 in-distribution and with object-layout changes, second on unseen tasks (Fig. 4)",
+     "ours": "9/10",
+     "bar": "10-trial operator-judged gate (no numeric pass mark registered)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-vla-jepa-qwen3-vl-2b-dit-b-world-model-off-at-inference-fine-tuned-9-7",
+     "source_file": "2026-10-23-paper-vs-hardware-vla-jepa/expected",
+     "checks": [
+      {
+       "l0": "VLA-JEPA arm successes",
+       "value": 9,
+       "tol": 0,
+       "shown": "9/10"
+      }
+     ],
+     "note": "perturbation robustness, the paper's main claim, not tested"
+    },
+    {
+     "id": "C-013-2",
+     "subject": "best-of-N reranking",
+     "relation": "≤",
+     "object": "pass mark",
+     "metric": "oracle-to-mean error ratio",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "recorded episodes",
+      "N": 8
+     },
+     "stated_in": "not a paper claim: ours (H0)",
+     "theirs": null,
+     "ours": "0.76, 1.84× latency",
+     "bar": "oracle / mean ≤ ~0.7 and N = 8 ≤ 1.5× latency",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-h0",
+     "source_file": "2026-10-23-paper-vs-hardware-vla-jepa/expected",
+     "checks": [
+      {
+       "l0": "H0 oracle / mean error, overall",
+       "value": 0.76,
+       "tol": 0.005,
+       "shown": "0.76"
+      },
+      {
+       "l0": "H0 ratio N = 8 / N = 1",
+       "value": 1.8411,
+       "tol": 0.01,
+       "shown": "1.84"
+      }
+     ],
+     "note": "a plain mean of the 8 chunks gets 45 % of the oracle gain"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "paper": "REKI",
+   "arxiv": "2610.22178",
+   "code": [
+    "https://github.com/kyutai-labs/reki"
+   ],
+   "claim_tested": "Policies without memory oscillate between poses at a measurable rate.",
+   "bar": "≥ 10 % of failed episodes oscillate (their criterion).",
+   "theirs": "18.6 % without memory, 4.1 % with",
+   "ours": "20.3 % of all episodes, 24.0 % of failures; REKI trained on my data: 19/20 + 19/20 on the arm, oscillates in 1/40",
+   "their_rig": "RoboTwin (sim, AgileX ALOHA); real: UR5 + WSG50; pretrained on 32× H100",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§5.2, §6.2, §7",
+   "n": "69 published rollouts",
+   "not_proven": "That memory causes the drop to 1/40: the K = 1 (memory off) control is not run. REKI does not build for the Orin (served from an RTX 3090).",
+   "verdict": "reproduces",
+   "gate_ids": [
+    "G14",
+    "WS-025",
+    "WS-026"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-28",
+   "cost_usd": 13.05,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-reki.md",
+   "folder": "2026-10-23-paper-vs-hardware-reki",
+   "site_card": null,
+   "goal": "Give a VLA a short memory of past frames with register tokens cached across steps, so it stops oscillating between visually aliased poses; trained on public data only and evaluated on LIBERO-Plus, RoboTwin, RoboCasa and real robots.",
+   "hypotheses": [
+    {
+     "text": "Policies without memory oscillate between poses in a measurable share of episodes; register memory cuts it.",
+     "stated_in": "Fig. 5b (18.6 % without, 4.1 % with)",
+     "claim_ids": [
+      "C-014-1"
+     ]
+    },
+    {
+     "text": "Most of the gain comes from reading the first past frame at inference.",
+     "stated_in": "Fig. 5a",
+     "claim_ids": []
+    },
+    {
+     "text": "A 2.4B VLA pretrained only on public data matches larger in-house models.",
+     "stated_in": "Fig. 4",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, augmentation §5.3, Fig. 4–5, App. D.2",
+   "claims": [
+    {
+     "id": "C-014-1",
+     "subject": "policy without memory",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "oscillating share of failures",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "69 rollouts",
+      "policies": "ACT, SmolVLA, VLA-JEPA"
+     },
+     "stated_in": "paper, 18.6 % without memory, 4.1 % with",
+     "theirs": "18.6 % of all episodes and about half of the failed ones oscillate without memory (RoboTwin Clean, §6.2, Fig. 5b)",
+     "ours": "24.0 % of failures, 20.3 % of all episodes",
+     "bar": "≥ 10 % of failed episodes oscillate",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-g14",
+     "source_file": "2026-10-23-paper-vs-hardware-reki/expected",
+     "checks": [
+      {
+       "l0": "share among failures",
+       "value": 0.24,
+       "tol": 0.0005,
+       "shown": "24.0 %",
+       "scale": 100
+      },
+      {
+       "l0": "share oscillating, all",
+       "value": 0.2029,
+       "tol": 0.0005,
+       "shown": "20.3 %",
+       "scale": 100
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-014-2",
+     "subject": "REKI",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "success on the arm",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "bowls task",
+      "compute": "RTX 3090 (off-board)"
+     },
+     "stated_in": "paper §7, Fig. 8",
+     "theirs": "UR5 + WSG50 real-robot success",
+     "ours": "19/20 + 19/20",
+     "bar": "20 trials per instruction, judged at rest",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-reki-arm",
+     "source_file": "2026-10-23-paper-vs-hardware-reki/README.md",
+     "checks": [
+      {
+       "file": "2026-10-23-paper-vs-hardware-reki/README.md",
+       "text": "**19/20** blue-in-pink, **19/20** pink-in-blue",
+       "shown": "19/20"
+      }
+     ],
+     "note": "that memory causes the drop to 1/40 oscillating: the K = 1 control is not run"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "paper": "Real-Time Chunking",
+   "arxiv": "2506.07339",
+   "code": [
+    "https://github.com/Physical-Intelligence/real-time-chunking-kinetix"
+   ],
+   "claim_tested": "Conditioning a new chunk on the executing one removes the jump at chunk boundaries.",
+   "bar": "Best gradient-free method cuts the median jump ≥ 50 % against naive async, drift ≤ +10 %, within 667 ms.",
+   "theirs": "throughput flat across added latency (π0.5, real robot)",
+   "ours": "prefix overwrite cuts the jump 71–73 % against naive async at +0.4 ms; tuned LeRobot identity mode is close",
+   "their_rig": "two 6-DoF arms with parallel grippers (arm model not named); π0.5, RTX 4090 inference; Kinetix sim",
+   "their_rig_cost_class": "unstated",
+   "their_rig_source": "§4.2, App. A.7",
+   "n": "254 boundaries per delay, 20 episodes",
+   "not_proven": "Offline smoothness only; task success on the arm not measured for any mode.",
+   "verdict": "not proven",
+   "gate_ids": [
+    "G13b",
+    "vla.cpp prefix overwrite"
+   ],
+   "date_first": "2026-10-23",
+   "date_updated": "2026-10-26",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-23-paper-vs-hardware-real-time-chunking.md",
+   "folder": "2026-10-25-vla-chunk-boundary-jumps",
+   "site_card": null,
+   "goal": "Let a flow-matching policy run asynchronously without jumps at chunk boundaries, by generating each new chunk as an inpainting of the actions already committed; shown on dynamic simulated tasks and a bimanual robot with added latency.",
+   "hypotheses": [
+    {
+     "text": "Conditioning the new chunk on the committed actions removes the discontinuity at chunk boundaries.",
+     "stated_in": "§3.1–3.2 (ΠGDM guidance, Eq. 2–3); Fig. 3–4",
+     "claim_ids": [
+      "C-015-1"
+     ]
+    },
+    {
+     "text": "With it, task throughput stays flat as inference latency grows, where synchronous execution falls.",
+     "stated_in": "Fig. 6",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "problem statement, method, evaluation protocol, Fig. 5–6",
+   "claims": [
+    {
+     "id": "C-015-1",
+     "subject": "prefix overwrite",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "median boundary-jump cut",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "20 recorded episodes",
+      "policy": "SmolVLA",
+      "delays": "8 / 12 / 20"
+     },
+     "stated_in": "paper §3.1–3.2, Fig. 4 (qualitative; no jump metric reported)",
+     "theirs": "throughput flat across added latency (π0.5, real robot)",
+     "ours": "71–73 % at +0.4 ms",
+     "bar": "≥ 50 % against naive async, drift ≤ +10 %, within 667 ms",
+     "verdict": "not proven",
+     "tested": true,
+     "gate": "exp-g13b",
+     "source_file": "2026-10-25-vla-chunk-boundary-jumps/expected",
+     "checks": [
+      {
+       "l0": "jump cut vs naive, d = 8",
+       "value": 0.7099,
+       "tol": 0.0005,
+       "shown": "71",
+       "scale": 100,
+       "round": 0
+      },
+      {
+       "l0": "jump cut vs naive, d = 12",
+       "value": 0.7335,
+       "tol": 0.0005,
+       "shown": "73",
+       "scale": 100,
+       "round": 0
+      },
+      {
+       "l0": "overwrite cost per chunk (ms), max over d",
+       "value": 0.41,
+       "tol": 0.1,
+       "shown": "0.4"
+      }
+     ],
+     "note": "offline smoothness only; the tuned LeRobot identity mode is close"
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "paper": "HWM (hierarchical latent world models)",
+   "arxiv": "2604.03208",
+   "code": [
+    "https://github.com/kevinghst/HWM_PLDM"
+   ],
+   "code_note": "minimal implementation on PLDM, linked from the project page",
+   "claim_tested": "A high-level world model over learned macro-actions beats the low-level model beyond about 1 s (their Fig. 6 crossover).",
+   "bar": "Crossover in [1.0, 2.0] s; at 2 s high-level error ≤ 0.95 × low-level; learned macro-actions ≥ net joint displacement on cosine.",
+   "theirs": "low level better up to 1 s, high level from 1.5 s (Fig. 6; ≈ 0.367 vs 0.385 at 2 s, read off the plot); cosine 0.88 ± 0.03 vs 0.80 ± 0.02",
+   "ours": "no crossover: W1 0.382 ± 0.005 → 0.563 ± 0.007, high level 0.769 ± 0.009 → 0.759 ± 0.009 (0.73–2 s); cosine 0.608 ± 0.007 vs 0.551 ± 0.006",
+   "their_rig": "Franka Emika Panda + Robotiq; ~130 h DROID/RoboSet",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§3.1 (Franka, Robotiq, data); §3.4 (Fig. 6, Table 4b)",
+   "n": "700 val anchors, 25 episodes (157 train, ~0.6 h)",
+   "not_proven": "Open confound: ~0.6 h of one task vs their ~130 h, so data scale is not separated from the method. Baselines and the overfitting reading are post-hoc.",
+   "verdict": "not proven",
+   "gate_ids": [
+    "HWM gate 0"
+   ],
+   "date_first": "2026-10-28",
+   "date_updated": "2026-10-28",
+   "cost_usd": 0.4,
+   "gpu": "vast",
+   "post": "blog/posts/2026-10-28-paper-vs-hardware-hwm.md",
+   "folder": "2026-10-28-paper-vs-hardware-hwm",
+   "site_card": null,
+   "goal": "Plan long manipulation tasks with a two-level world model: a high level over learned macro-actions proposes waypoints, a low level plans primitive actions toward them; shown on a real Franka trained on about 130 hours of DROID and RoboSet.",
+   "hypotheses": [
+    {
+     "text": "Beyond about one second, the high-level model predicts the future latent better than the low-level model.",
+     "stated_in": "Fig. 6 (crossover near 1.25 s)",
+     "claim_ids": [
+      "C-016-1"
+     ]
+    },
+    {
+     "text": "Learned macro-actions align with the true motion better than a handcrafted delta-pose summary.",
+     "stated_in": "Table 4b (cosine 0.88 vs 0.80)",
+     "claim_ids": [
+      "C-016-2"
+     ]
+    },
+    {
+     "text": "Hierarchical planning succeeds on real pick-and-place where flat planning does not.",
+     "stated_in": "§3.1, Table 1 (70 % vs 0 %)",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "method, Fig. 6, Table 4b, real-robot results",
+   "claims": [
+    {
+     "id": "C-016-1",
+     "subject": "high-level world model",
+     "relation": "<",
+     "object": "low-level world model",
+     "metric": "latent error at 2 s",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "0.6 h of one task",
+      "model": "HWM on W1"
+     },
+     "stated_in": "paper §3.4, Fig. 6 (crossover between 1 s and 1.5 s; ≈ 0.367 vs 0.385 at 2 s, read off the plot)",
+     "theirs": "0.367 vs 0.385 at 2 s",
+     "ours": "0.759 vs 0.563 at 2 s (ratio 1.35)",
+     "bar": "crossover in [1.0, 2.0] s; at 2 s high ≤ 0.95 × low",
+     "verdict": "not proven",
+     "tested": true,
+     "gate": "exp-hwm",
+     "source_file": "2026-10-28-paper-vs-hardware-hwm/expected",
+     "checks": [
+      {
+       "l0": "high-level error at 2.0 s",
+       "value": 0.7593,
+       "tol": 0.0005,
+       "shown": "0.759"
+      },
+      {
+       "l0": "W1 error at 2.0 s",
+       "value": 0.5627,
+       "tol": 0.0005,
+       "shown": "0.563"
+      },
+      {
+       "l0": "H2: high / low at 60 frames",
+       "value": 1.3495,
+       "tol": 0.005,
+       "shown": "1.35"
+      }
+     ],
+     "note": "open confound: ~0.6 h of one task vs their ~130 h"
+    },
+    {
+     "id": "C-016-2",
+     "subject": "learned macro-actions",
+     "relation": "≥",
+     "object": "net joint displacement",
+     "metric": "cosine to the true macro-action",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "0.6 h of one task"
+     },
+     "stated_in": "paper §3.4, Table 4b (0.88 ± 0.03 vs 0.80 ± 0.02)",
+     "theirs": "0.88 vs 0.80",
+     "ours": "0.608 vs 0.551",
+     "bar": "learned ≥ displacement",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-hwm",
+     "source_file": "2026-10-28-paper-vs-hardware-hwm/expected",
+     "checks": [
+      {
+       "l0": "H3: learned cosine",
+       "value": 0.6078,
+       "tol": 0.0005,
+       "shown": "0.608"
+      },
+      {
+       "l0": "H3: displacement cosine",
+       "value": 0.551,
+       "tol": 0.0005,
+       "shown": "0.551"
+      }
+     ],
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "paper": "LeJEPA identifiability",
+   "arxiv": "2605.26379",
+   "code": [],
+   "claim_tested": "A SIGReg JEPA trained on goal-directed data recovers the true latent state only partially and unevenly.",
+   "bar": "W1's mean R² from latent to joints < 0.80; anisotropy (max − min per-joint R²) ≥ 0.20; the higher-R² model has the higher G1b top-1.",
+   "theirs": "anisotropic recovery on trajectory data, identifiable under isotropic random walks (simulation)",
+   "ours": "W1 mean R² 0.565, anisotropy 0.639 (shoulder lift 0.91, wrist flex 0.27); frozen DINOv2-S 0.867 / 0.301",
+   "their_rig": "DMC Reacher (simulation)",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "§6.1–6.2 (synthetic 2D worlds, DMC Reacher)",
+   "n": "8 447 validation frames, 25 episodes; 2 models",
+   "not_proven": "The random-walk side (gate 1: random-walk data on the arm and a retrain) is not run; B3 compares two models.",
+   "verdict": "reproduces",
+   "gate_ids": [
+    "WS-047 gate 0"
+   ],
+   "date_first": "2026-10-29",
+   "date_updated": "2026-10-29",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-29-paper-vs-hardware-lejepa.md",
+   "folder": "2026-10-29-paper-vs-hardware-lejepa",
+   "site_card": null,
+   "goal": "Derive the conditions under which a JEPA trained with SIGReg recovers the true latent state of the system, and show where goal-directed data breaks that recovery.",
+   "hypotheses": [
+    {
+     "text": "On goal-directed trajectory data, recovery of the true state is partial and anisotropic.",
+     "stated_in": "§6.2, Table 2 (DMC Reacher trajectories)",
+     "claim_ids": [
+      "C-017-1",
+      "C-017-2"
+     ]
+    },
+    {
+     "text": "Under an isotropic random walk the latent recovers the state up to a linear map.",
+     "stated_in": "§5.1, Theorem 1; §6.2, Table 2 (OU pairs R² = 0.95)",
+     "claim_ids": [
+      "C-017-3"
+     ]
+    }
+   ],
+   "summary_source": "abstract, theory, simulation experiments; my post's reading",
+   "claims": [
+    {
+     "id": "C-017-1",
+     "subject": "SIGReg JEPA latent",
+     "relation": "<",
+     "object": "pass mark",
+     "metric": "latent-to-joints R²",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "goal-directed teleop data",
+      "model": "W1"
+     },
+     "stated_in": "paper §6.2, Table 2",
+     "theirs": "anisotropic recovery on trajectory data (simulation)",
+     "ours": "0.565",
+     "bar": "W1 mean R² < 0.80",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-lejepa-gate-0",
+     "source_file": "2026-10-29-paper-vs-hardware-lejepa/expected",
+     "checks": [
+      {
+       "l0": "W1 mean R2",
+       "value": 0.5654,
+       "tol": 0.0005,
+       "shown": "0.565"
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-017-2",
+     "subject": "SIGReg JEPA latent",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "per-joint R² anisotropy",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "goal-directed teleop data",
+      "model": "W1"
+     },
+     "stated_in": "paper §6.2, Table 2",
+     "theirs": "anisotropic (simulation)",
+     "ours": "0.639",
+     "bar": "anisotropy ≥ 0.20",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-lejepa-gate-0",
+     "source_file": "2026-10-29-paper-vs-hardware-lejepa/expected",
+     "checks": [
+      {
+       "l0": "W1 anisotropy max - min",
+       "value": 0.6393,
+       "tol": 0.0005,
+       "shown": "0.639"
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-017-3",
+     "subject": "SIGReg JEPA latent",
+     "relation": "=",
+     "object": "pass mark",
+     "metric": "latent-to-joints R²",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "isotropic random-walk data"
+     },
+     "stated_in": "paper §5.1 Theorem 1; §7",
+     "theirs": "identifiable (simulation)",
+     "ours": null,
+     "bar": null,
+     "verdict": "not tested",
+     "tested": false,
+     "gate": null,
+     "source_file": null,
+     "checks": [],
+     "note": "gate 1 (random-walk data on the arm and a retrain) not run"
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "paper": "SURVEYOR",
+   "arxiv": "none (NeurIPS 2026 workshop)",
+   "paper_url": "https://neurips.cc/virtual/2026/175857",
+   "code": [],
+   "claim_tested": "A threshold on the imagined-vs-reached latent distance accepts good plans and rejects bad ones (τ = 0.20).",
+   "bar": "τ below the 10th percentile of non-equivalent pairs and ≤ 0.40; as a monitor ≥ 5/8 failures at ≤ 2/42; ≥ 0.05 AUROC over a shuffled drafter.",
+   "theirs": "τ = 0.20 in simulation (PushT, Reacher, OGBench-Cube, Two-Room)",
+   "ours": "τ = 1.249 on W1 latents of 69 real rollouts; as a monitor 3/8 at 6/42 (S = 30), AUROC 0.756 vs shuffled 0.560",
+   "their_rig": "simulation only (PushT, Reacher, OGBench-Cube, Two-Room)",
+   "their_rig_cost_class": "sim",
+   "their_rig_source": "experiments section, Table 1",
+   "n": "69 rollouts (primary 50: 42 successes, 8 failures)",
+   "not_proven": "FF-JEPA's diffusion drafter is not available (W1's own imagination stands in); no closed-loop planning.",
+   "verdict": "fail",
+   "gate_ids": [
+    "WS-050 gate 0",
+    "WS-050 gate 1"
+   ],
+   "date_first": "2026-10-29",
+   "date_updated": "2026-10-29",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-29-paper-vs-hardware-surveyor.md",
+   "folder": "2026-10-29-paper-vs-hardware-surveyor",
+   "site_card": null,
+   "goal": "Let a latent-world-model planner consume drafted subgoals speculatively, accepting each step while the imagined and reached latents stay within a calibrated threshold; shown in simulation (PushT, Reacher, OGBench-Cube, Two-Room).",
+   "hypotheses": [
+    {
+     "text": "A threshold calibrated on task-equivalent state pairs (τ = 0.20) separates acceptable from unacceptable plan steps.",
+     "stated_in": "method and experiments",
+     "claim_ids": [
+      "C-018-1"
+     ]
+    },
+    {
+     "text": "The accept rule keeps good drafted plans and rejects bad ones.",
+     "stated_in": "experiments",
+     "claim_ids": [
+      "C-018-2"
+     ]
+    }
+   ],
+   "summary_source": "method and experiments (workshop paper); my post's reading",
+   "claims": [
+    {
+     "id": "C-018-1",
+     "subject": "latent accept threshold",
+     "relation": "≤",
+     "object": "pass mark",
+     "metric": "accept threshold τ",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "69 real rollouts",
+      "latent": "W1"
+     },
+     "stated_in": "paper, τ = 0.20 (simulation)",
+     "theirs": "τ = 0.20",
+     "ours": "τ = 1.249",
+     "bar": "τ below the p10 of non-equivalent pairs and ≤ 0.40",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-surveyor-gate-0",
+     "source_file": "2026-10-29-paper-vs-hardware-surveyor/expected",
+     "checks": [
+      {
+       "l0": "tau = median rel of equivalent pairs",
+       "value": 1.2488,
+       "tol": 0.0005,
+       "shown": "1.249"
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-018-2",
+     "subject": "latent accept rule",
+     "relation": "≥",
+     "object": "pass mark",
+     "metric": "failures caught",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "50 rollouts (8 failures)",
+      "latent": "W1",
+      "drafter": "W1's own imagination"
+     },
+     "stated_in": "paper (accepts good plans, rejects bad ones)",
+     "theirs": "simulation only",
+     "ours": "3/8 at 6/42",
+     "bar": "≥ 5/8 failures at ≤ 2/42",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-surveyor-gate-1",
+     "source_file": "2026-10-29-paper-vs-hardware-surveyor/expected/gate1.json",
+     "checks": [
+      {
+       "file": "2026-10-29-paper-vs-hardware-surveyor/expected/gate1.json",
+       "json": "S30.primary_50.caught",
+       "value": 3,
+       "tol": 0,
+       "shown": "3/8"
+      },
+      {
+       "file": "2026-10-29-paper-vs-hardware-surveyor/expected/gate1.json",
+       "json": "S30.primary_50.fi",
+       "value": 6,
+       "tol": 0,
+       "shown": "6/42"
+      }
+     ],
+     "note": "FF-JEPA's drafter is not available"
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "paper": "Adaptive Action Chunking (AAC)",
+   "arxiv": "2604.04161",
+   "code": [],
+   "claim_tested": "Chunk length chosen from the entropy of N sampled chunks follows the task's phases (long in transport, short at the grasp), lowers the boundary jump, and costs little with batched sampling.",
+   "bar": "median h* in transport ≥ grasp window + 2; jump with AAC + overwrite ≤ fixed + overwrite at d = 8; an N = 20 decision ≤ 298 ms on the Orin.",
+   "theirs": "h* follows the semantic phases (Fig. 3–4); real world 67.0 → 82.0 %; N = 20 costs 106 ms vs 83 ms on an A800 (\"about 20 ms inference delay\"; negligible below N = 10)",
+   "ours": "h* 2 in transport and 2 at the grasp (86 % of decisions at the floor); jump 0.973 vs 0.940; N = 20 decision 4,751 ms (sequential) on the Orin",
+   "their_rig": "Realman arm + Mycobot gripper; A800",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "real-world experiments and Table 4 (efficiency)",
+   "n": "254 decisions on 20 recorded episodes; 10 timed decisions per N",
+   "not_proven": "No arm run (the bowls task is at ceiling for SmolVLA); vla.cpp has no batched sampler, which would change the cost but not the entropy rule.",
+   "verdict": "fail",
+   "gate_ids": [
+    "WS-049 gate 0",
+    "WS-049 gate 1"
+   ],
+   "date_first": "2026-10-30",
+   "date_updated": "2026-10-30",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-30-paper-vs-hardware-adaptive-chunking.md",
+   "folder": "2026-10-30-paper-vs-hardware-adaptive-chunking",
+   "site_card": null,
+   "goal": "Choose each action chunk's length at inference from how much N sampled chunks disagree, so a VLA commits to long chunks where it is confident and short ones where it is not; shown on RoboCasa, LIBERO and three real tasks.",
+   "hypotheses": [
+    {
+     "text": "The entropy-chosen chunk length follows the task's phases: long in transport, short near the grasp.",
+     "stated_in": "Fig. 3–4",
+     "claim_ids": [
+      "C-019-1"
+     ]
+    },
+    {
+     "text": "Adaptive chunks raise success over fixed chunks in simulation and on a real arm.",
+     "stated_in": "Tables 1–3; Table 5 (real world 67.0 → 82.0 %)",
+     "claim_ids": []
+    },
+    {
+     "text": "Sampling N chunks in a batch adds little cost: negligible below N = 10, about 20 ms at N = 20.",
+     "stated_in": "Table 4 (A800)",
+     "claim_ids": [
+      "C-019-3"
+     ]
+    }
+   ],
+   "summary_source": "§4 (method, Eq. 2–5, Alg. 1), Fig. 3–4, Table 4, real-world results",
+   "claims": [
+    {
+     "id": "C-019-1",
+     "subject": "entropy-chosen chunk length",
+     "relation": ">",
+     "object": "grasp-window chunk length",
+     "metric": "median chunk length h* in transport",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "20 recorded episodes",
+      "policy": "SmolVLA"
+     },
+     "stated_in": "paper Fig. 3–4 (h* follows the semantic phases)",
+     "theirs": "long in transport, short at the grasp",
+     "ours": "2 vs 2",
+     "bar": "transport ≥ grasp window + 2",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-aac-gate-0",
+     "source_file": "2026-10-30-paper-vs-hardware-adaptive-chunking/expected",
+     "checks": [
+      {
+       "l0": "A1 median h* transport",
+       "value": 2,
+       "tol": 0,
+       "shown": "2"
+      },
+      {
+       "l0": "A1 median h* grasp window",
+       "value": 2,
+       "tol": 0,
+       "shown": "2"
+      }
+     ],
+     "note": "h* sits at the floor in 86 % of decisions"
+    },
+    {
+     "id": "C-019-2",
+     "subject": "AAC with prefix overwrite",
+     "relation": "≤",
+     "object": "fixed chunk with prefix overwrite",
+     "metric": "median boundary jump",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "20 recorded episodes",
+      "policy": "SmolVLA",
+      "delay": 8
+     },
+     "stated_in": "paper §1 and Fig. 6 (qualitative; no boundary metric)",
+     "theirs": "no boundary-jump measurement; real-world success 67.0 → 82.0 % (Table 5)",
+     "ours": "0.973 vs 0.940",
+     "bar": "AAC + overwrite ≤ fixed + overwrite",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-aac-gate-0",
+     "source_file": "2026-10-30-paper-vs-hardware-adaptive-chunking/expected",
+     "checks": [
+      {
+       "l0": "A3 AAC + overwrite, d = 8",
+       "value": 0.9728,
+       "tol": 0.0005,
+       "shown": "0.973"
+      },
+      {
+       "l0": "A3 fixed + overwrite, d = 8",
+       "value": 0.9395,
+       "tol": 0.0005,
+       "shown": "0.940"
+      }
+     ],
+     "note": ""
+    },
+    {
+     "id": "C-019-3",
+     "subject": "N-sample decision",
+     "relation": "≤",
+     "object": "pass mark",
+     "metric": "ms per decision on the Orin NX",
+     "conditions": {
+      "compute": "Orin NX 16 GB",
+      "power": "MAXN_SUPER",
+      "engine": "vla.cpp (sequential)",
+      "N": 20
+     },
+     "stated_in": "paper Table 4 (N = 20: 106 ms vs 83 ms on an A800, \"negligible\")",
+     "theirs": "106 ms (A800, batched)",
+     "ours": "4,751 ms",
+     "bar": "≤ 298 ms",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-aac-gate-1",
+     "source_file": "2026-10-30-paper-vs-hardware-adaptive-chunking/expected/gate1_latency.json",
+     "checks": [
+      {
+       "l0": "A4 N = 20 decision, ms",
+       "value": 4751.33,
+       "tol": 1,
+       "shown": "4,751"
+      }
+     ],
+     "note": "vla.cpp has no batched sampler"
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "paper": "PACT-VLA",
+   "arxiv": "2610.28019",
+   "code": [],
+   "claim_tested": "Picking among N sampled chunks by their flow residual under the pre-commit observation fits what happens next better than a random or stale pick, with no added control-step delay.",
+   "bar": "PACT beats a random pick and the stale-observation residual at d = 8 (CIs < 0); its delay on the Orin ≤ the naive delay; at that delay it still beats a single sample.",
+   "theirs": "bimanual PiperX 82.0 % vs naive async 60.0 %; no added control-step delay on the evaluated GPUs (generation 35–49 ms, with verification 59–65 ms, both d = 2 at 30 Hz, Table 4)",
+   "ours": "offline −0.27° vs random and vs the stale residual (both CIs < 0); on the Orin 1,200 ms per cycle, 37 control ticks vs 8",
+   "their_rig": "bimanual AgileX PiperX, three RealSense cameras; π0.5 on RTX 5090 / H100 / RTX Pro 6000",
+   "their_rig_cost_class": "$5–20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§4.4, Fig. 4; Table 4 (latency)",
+   "n": "20 episodes, 254 boundaries per delay",
+   "not_proven": "The verification time is projected (vla.cpp has no velocity query); at the measured delay a 50-step chunk cannot fill the executed window, so the transfer clause is not computable; no arm run.",
+   "verdict": "fail",
+   "gate_ids": [
+    "WS-059 gate A",
+    "WS-059 gate B"
+   ],
+   "date_first": "2026-10-30",
+   "date_updated": "2026-10-30",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-30-paper-vs-hardware-pact-vla.md",
+   "folder": "2026-10-30-paper-vs-hardware-pact",
+   "site_card": null,
+   "goal": "Under asynchronous execution, sample several candidate chunks and keep the one the frozen policy finds most consistent with the newest observation before the switch, with no verifier to train and no added control-step delay; shown on Kinetix, LIBERO and a bimanual PiperX.",
+   "hypotheses": [
+    {
+     "text": "Selecting by flow residual under the pre-commit observation picks better chunks than a random pick or the stale observation.",
+     "stated_in": "Appendix D.2; Fig. 4",
+     "claim_ids": [
+      "C-020-1"
+     ]
+    },
+    {
+     "text": "The selection adds no control-step delay, because the extra pass overlaps with execution.",
+     "stated_in": "§3 (pipelining), Table 4",
+     "claim_ids": [
+      "C-020-2"
+     ]
+    }
+   ],
+   "summary_source": "§3.2 (Eq. 5–6), Tables 1 and 3, Fig. 4, Appendix D",
+   "claims": [
+    {
+     "id": "C-020-1",
+     "subject": "PACT selection",
+     "relation": "<",
+     "object": "random pick",
+     "metric": "executed-window error",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "20 recorded episodes",
+      "policy": "SmolVLA",
+      "delay": 8
+     },
+     "stated_in": "paper Appendix D and Fig. 4",
+     "theirs": "+0.44 points over random (Kinetix); 82.0 vs 60.0 % (PiperX)",
+     "ours": "−0.27° error vs a random pick (CI −0.44 to −0.09)",
+     "bar": "PACT − random CI entirely < 0",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-pact-gate-b",
+     "source_file": "2026-10-30-paper-vs-hardware-pact/expected/gate_b.json",
+     "checks": [
+      {
+       "file": "2026-10-30-paper-vs-hardware-pact/expected/gate_b.json",
+       "json": "k8.pact_minus_random.mean",
+       "value": -0.2695,
+       "tol": 0.0005,
+       "shown": "−0.27"
+      },
+      {
+       "file": "2026-10-30-paper-vs-hardware-pact/expected/gate_b.json",
+       "json": "k8.pact_minus_random.ci95.1",
+       "value": -0.0864,
+       "tol": 0.0005,
+       "shown": "−0.09"
+      }
+     ],
+     "note": "also beats the stale-observation residual (−0.27°)"
+    },
+    {
+     "id": "C-020-2",
+     "subject": "PACT cycle",
+     "relation": "=",
+     "object": "naive async cycle",
+     "metric": "control-step delay",
+     "conditions": {
+      "compute": "Orin NX 16 GB",
+      "power": "MAXN_SUPER",
+      "engine": "vla.cpp (sequential)"
+     },
+     "stated_in": "paper (\"no added control-step delay\" on the evaluated hardware; Table 4: generation 35–49 ms, with verification 59–65 ms, both d = 2)",
+     "theirs": "no added delay",
+     "ours": "37 ticks vs 8",
+     "bar": "d_PACT ≤ d_naive",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-pact-gate-a",
+     "source_file": "2026-10-30-paper-vs-hardware-pact/expected",
+     "checks": [
+      {
+       "l0": "d_PACT, ticks",
+       "value": 37,
+       "tol": 0,
+       "shown": "37"
+      },
+      {
+       "l0": "d_naive, ticks",
+       "value": 8,
+       "tol": 0,
+       "shown": "8"
+      }
+     ],
+     "note": "the verification time is projected"
+    },
+    {
+     "id": "C-020-3",
+     "subject": "PACT cycle",
+     "relation": ">",
+     "object": "naive async cycle",
+     "metric": "control-step delay",
+     "conditions": {
+      "compute": "Orin NX 16 GB",
+      "power": "MAXN_SUPER",
+      "engine": "vla.cpp (sequential)"
+     },
+     "stated_in": "not a paper claim: ours",
+     "theirs": null,
+     "ours": "37 ticks vs 8",
+     "bar": "– (measured)",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-pact-gate-a",
+     "source_file": "2026-10-30-paper-vs-hardware-pact/expected",
+     "checks": [
+      {
+       "l0": "d_PACT, ticks",
+       "value": 37,
+       "tol": 0,
+       "shown": "37"
+      },
+      {
+       "l0": "d_naive, ticks",
+       "value": 8,
+       "tol": 0,
+       "shown": "8"
+      }
+     ],
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "paper": "Horizon × depth (Euler steps vs execution horizon)",
+   "arxiv": "2610.32102",
+   "code": [],
+   "claim_tested": "With long open-loop commitment, cutting a flow-matching VLA's Euler steps from 10 to 2 contracts the action cloud around an unchanged centroid, saves most of the inference time and avoids edge-GPU thermal throttling.",
+   "bar": "median R(2)/R(10) ≤ 0.70 with the centroid within 0.05 relative and 3°; N = 2 latency ≤ 0.85 × N = 10 on the Orin, N = 10 within 5 % of 238 ms.",
+   "theirs": "R(2)/R(10) 0.51, centroid shift 3.2 %; 14.3 → 2.6 ms per step (A100); \"eliminating edge GPU thermal throttling\"",
+   "ours": "R(2)/R(10) 0.78 (CI 0.73–0.81), centroid 0.018 and 2.35°; 196.1 vs 237.5 ms per chunk (0.83, vision 151 ms); no throttling at N = 10 on the Orin, at MAXN_SUPER or 25 W",
+   "their_rig": "Franka Research 3 with a ZED 2i (real); π0 / π0.5 / GR00T on A100s (LIBERO, RoboTwin 2.0 sim)",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§IV-C (real robot), Table I and Fig. 3 (sim)",
+   "n": "20 frames × 32 draws; 50 timed chunks per N; 2 × 10 min thermal per power mode",
+   "not_proven": "The contraction is between the bar and the fail line, so the arm gate (success at N = 2 vs 10) is not run; one policy, one task.",
+   "verdict": "not proven",
+   "gate_ids": [
+    "WS-057 A1",
+    "WS-057 A2"
+   ],
+   "date_first": "2026-10-30",
+   "date_updated": "2026-10-30",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-30-paper-vs-hardware-horizon-depth.md",
+   "folder": "2026-10-30-paper-vs-hardware-horizon-depth",
+   "site_card": null,
+   "goal": "Show that, for frozen flow-matching VLAs, the effect of cutting Euler steps depends on how long the robot commits to a chunk: fewer steps hurt under frequent replanning and help under long open-loop commitment; shown on LIBERO, RoboTwin 2.0 and a real Franka.",
+   "hypotheses": [
+    {
+     "text": "Few Euler steps contract the sampled action cloud around an unchanged centroid.",
+     "stated_in": "Proposition 1; §III-D",
+     "claim_ids": [
+      "C-021-1"
+     ]
+    },
+    {
+     "text": "Under long open-loop commitment, two steps match or beat ten while cutting inference time.",
+     "stated_in": "Table I; Fig. 3; latency figures",
+     "claim_ids": [
+      "C-021-2"
+     ]
+    },
+    {
+     "text": "Two steps avoid thermal throttling on edge GPUs.",
+     "stated_in": "§IV (end): 0.04 NFE per step; asserted, no thermal measurement",
+     "claim_ids": []
+    }
+   ],
+   "summary_source": "Proposition 1, §III-D, Table I, Fig. 3, §IV-C (real robot)",
+   "claims": [
+    {
+     "id": "C-021-1",
+     "subject": "two Euler steps",
+     "relation": "<",
+     "object": "ten Euler steps",
+     "metric": "action-cloud radius",
+     "conditions": {
+      "robot": "SO-101 frames",
+      "setting": "20 frames × 32 draws",
+      "policy": "SmolVLA"
+     },
+     "stated_in": "paper Proposition 1; §III-D (R(2)/R(10) = 0.51 on π0)",
+     "theirs": "R(2)/R(10) 0.51",
+     "ours": "R(2)/R(10) 0.78",
+     "bar": "≤ 0.70 (fail > 0.85)",
+     "verdict": "not proven",
+     "tested": true,
+     "gate": "exp-hd-a1",
+     "source_file": "2026-10-30-paper-vs-hardware-horizon-depth/expected",
+     "checks": [
+      {
+       "l0": "A1 median R(2)/R(10)",
+       "value": 0.7825,
+       "tol": 0.005,
+       "shown": "0.78"
+      }
+     ],
+     "note": "contracts, by 22 % instead of 49 %"
+    },
+    {
+     "id": "C-021-2",
+     "subject": "two Euler steps",
+     "relation": "<",
+     "object": "ten Euler steps",
+     "metric": "ms per chunk on the Orin NX",
+     "conditions": {
+      "compute": "Orin NX 16 GB",
+      "power": "MAXN_SUPER",
+      "engine": "vla.cpp"
+     },
+     "stated_in": "paper Table I (14.3 → 2.6 ms per control step, A100)",
+     "theirs": "14.3 → 2.6 ms per step",
+     "ours": "196.1 vs 237.5 ms",
+     "bar": "N = 2 ≤ 0.85 × N = 10",
+     "verdict": "reproduces",
+     "tested": true,
+     "gate": "exp-hd-a2",
+     "source_file": "2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json",
+     "checks": [
+      {
+       "file": "2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json",
+       "json": "by_n.2.median.rtt",
+       "value": 196.05,
+       "tol": 0.05,
+       "shown": "196.1"
+      },
+      {
+       "file": "2026-10-30-paper-vs-hardware-horizon-depth/expected/a2_latency.json",
+       "json": "by_n.10.median.rtt",
+       "value": 237.48,
+       "tol": 0.05,
+       "shown": "237.5"
+      }
+     ],
+     "note": "vision is 151 ms of every chunk"
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "paper": "REMORA",
+   "arxiv": "2610.39125",
+   "code": [],
+   "claim_tested": "Reading a progress distribution out at the supported peak nearest the previous estimate steadies the estimate and lets it fall during real setbacks, with no worse detection of the stages.",
+   "bar": "Against per-frame argmax: premature not higher and missed ≤ +2 points (P1); flips halved, CI upper ≤ 0.7 (P2); a decrease inside ≥ 50 % of the reversal windows with ≤ 20 % false regressions (P3).",
+   "theirs": "D2 (25 error episodes): peak selection vs the median readout MAE 6.04 → 3.31 (×10⁻²), Spearman 0.870 → 0.959",
+   "ours": "premature 0.22 vs 0.25, missed equal (P1 pass); flips 0.70 × argmax, CI 0.48–0.94 (P2 fail); setback recall 2/7, false 0.52 (P3 fail); MAE 0.184 vs median 0.218",
+   "their_rig": "AgiBot G02, head + 2 wrist cameras, 30 Hz; 8 × H200",
+   "their_rig_cost_class": ">$20k",
+   "their_rig_cost_estimated": true,
+   "their_rig_source": "§4.1, §5.1",
+   "n": "34 test episodes of the 69 rollouts, 7 reversal windows",
+   "not_proven": "Three progress atoms from hand-written evidence, not a learned 201-bin distribution; the reversal windows are a mechanical criterion, not human error labels; the recurrent memory and the backbone are not tested.",
+   "verdict": "fail",
+   "gate_ids": [
+    "WS-065"
+   ],
+   "date_first": "2026-10-31",
+   "date_updated": "2026-10-31",
+   "cost_usd": 0,
+   "gpu": "orin",
+   "post": "blog/posts/2026-10-31-paper-vs-hardware-remora.md",
+   "folder": "2026-10-31-paper-vs-hardware-remora-readout",
+   "site_card": null,
+   "goal": "Track task progress through errors and recovery: a progress distribution from a frozen-VLM backbone with a per-camera recurrent memory, trained against a target that falls inside error intervals, read out causally at the peak nearest the previous estimate; shown on ReSTEP (AgiBot G02, two logistics tasks).",
+   "hypotheses": [
+    {
+     "text": "Picking the supported peak nearest the previous estimate tracks progress through errors better than a per-frame readout.",
+     "stated_in": "§3.3 (Eq. 3); Table 2 (A5)",
+     "claim_ids": [
+      "C-022-1"
+     ]
+    },
+    {
+     "text": "A recurrent memory beats an explicit window of past frames.",
+     "stated_in": "Table 2",
+     "claim_ids": [
+      "C-022-2"
+     ]
+    },
+    {
+     "text": "REMORA tracks progress better than SARM.",
+     "stated_in": "Table 2",
+     "claim_ids": [
+      "C-022-3"
+     ]
+    }
+   ],
+   "summary_source": "§3.2 (Eq. 2), §3.3 (Eq. 3), §4, Table 2",
+   "claims": [
+    {
+     "id": "C-022-1",
+     "subject": "nearest-peak progress readout",
+     "relation": "<",
+     "object": "per-frame progress readout",
+     "metric": "readout flips per episode",
+     "conditions": {
+      "robot": "SO-101",
+      "setting": "34 recorded rollouts",
+      "evidence": "G15 predicates",
+      "atoms": 3
+     },
+     "stated_in": "paper §3.3 and Table 2 (peak selection vs median readout on the error task)",
+     "theirs": "MAE 6.04 → 3.31 (×10⁻²) vs the median readout",
+     "ours": "flips 0.70 × argmax (CI 0.48–0.94); setback recall 0.29 (2/7), false regressions 0.52",
+     "bar": "flips ≤ 0.5 × argmax, CI upper ≤ 0.7; setback recall ≥ 0.5 at ≤ 0.2 false",
+     "verdict": "fail",
+     "tested": true,
+     "gate": "exp-ws-065",
+     "source_file": "2026-10-31-paper-vs-hardware-remora-readout/expected/summary.json",
+     "checks": [
+      {
+       "file": "2026-10-31-paper-vs-hardware-remora-readout/expected/summary.json",
+       "json": "paired.flips_R3_over_R1",
+       "value": 0.7044,
+       "tol": 0.0005,
+       "shown": "0.70"
+      },
+      {
+       "file": "2026-10-31-paper-vs-hardware-remora-readout/expected/summary.json",
+       "json": "R3.regression_recall",
+       "value": 0.2857,
+       "tol": 0.0005,
+       "shown": "0.29"
+      }
+     ],
+     "note": "MAE vs the error-aware target 0.184 vs the median readout's 0.218 (descriptive, no bar)"
+    },
+    {
+     "id": "C-022-2",
+     "subject": "recurrent progress memory",
+     "relation": "<",
+     "object": "explicit frame window",
+     "metric": "progress MAE",
+     "conditions": {
+      "robot": "SO-101"
+     },
+     "stated_in": "paper Table 2 (MAE −3.3 %)",
+     "theirs": "MAE −3.3 %, curvature error −14 %",
+     "ours": null,
+     "bar": null,
+     "verdict": "not tested",
+     "tested": false,
+     "gate": null,
+     "source_file": null,
+     "checks": [],
+     "note": "no learned model here: the memory is not tested"
+    },
+    {
+     "id": "C-022-3",
+     "subject": "REMORA progress model",
+     "relation": "<",
+     "object": "SARM reward model",
+     "metric": "progress MAE",
+     "conditions": {
+      "robot": "SO-101"
+     },
+     "stated_in": "paper Table 2",
+     "theirs": "lower MAE and smoother on both tasks",
+     "ours": null,
+     "bar": null,
+     "verdict": "not tested",
+     "tested": false,
+     "gate": null,
+     "source_file": null,
+     "checks": [],
+     "note": "neither model is run here"
+    }
+   ]
+  }
+ ],
+ "scheduled": [
+  {
+   "paper": "SEVO",
+   "arxiv": "2605.11114",
+   "plan": "§18 wrist-camera blanking, then top+side fine-tune"
+  },
+  {
+   "paper": "Planning Limits of JEPA",
+   "arxiv": "2609.39235",
+   "plan": "§19 VLA + WM selection; ranking test on the 69 rollouts"
+  },
+  {
+   "paper": "PSG-JEPA + SA/IDM",
+   "arxiv": "2608.06799, 2609.03565",
+   "plan": "§7 three-arm grounding"
+  },
+  {
+   "paper": "CF-JEPA",
+   "arxiv": "2610.00727",
+   "plan": "§8 participation ratio, then factorisation"
+  },
+  {
+   "paper": "PEEK",
+   "arxiv": "2509.18282",
+   "plan": "§21 mask overlay for ACT"
+  },
+  {
+   "paper": "Mulligan",
+   "arxiv": "2610.05882",
+   "plan": "§11 Sobol + failed-layouts-first"
+  },
+  {
+   "paper": "Spotter + ReTrace",
+   "arxiv": "2609.36808, 2610.15814",
+   "plan": "§4 repair vs retreat vs retry"
+  },
+  {
+   "paper": "FARM",
+   "arxiv": "2609.11445",
+   "plan": "readout on W1 / VLA-JEPA states, common-horizon truncation"
+  },
+  {
+   "paper": "TD-JEPA",
+   "PRIME": null,
+   "arxiv": "2607.25337",
+   "plan": "§16 pre/post-grasp split"
+  },
+  {
+   "paper": "Augmentation in post-training",
+   "arxiv": "2610.05994",
+   "plan": "§20 noise floor"
+  },
+  {
+   "paper": "Robo-COP",
+   "SEAR": null,
+   "arxiv": "2610.09228, 2610.18792",
+   "plan": "G24 adoption window; flywheel controls"
+  },
+  {
+   "paper": "HyMeS",
+   "arxiv": "2608.09410",
+   "plan": "harness stage verification (k-of-w vote)"
+  }
+ ],
+ "read_only": [
+  {
+   "paper": "V-JEPA 2.1",
+   "reason": "encoder too slow for the loop; used offline"
+  },
+  {
+   "paper": "JEPA-WM design study",
+   "reason": "rules adopted in W1 training"
+  },
+  {
+   "paper": "DeepJEPA",
+   "reason": "planner not the bottleneck"
+  },
+  {
+   "paper": "Imagine-RL and the residual-RL pair",
+   "reason": "no torque sensing, no RL budget"
+  },
+  {
+   "paper": "FailSafe",
+   "reason": "no simulator injection; leader-arm version noted"
+  },
+  {
+   "paper": "STDR",
+   "reason": "RL from scratch"
+  },
+  {
+   "paper": "FOREWARN",
+   "reason": "VLM on imagined latents; at-rest only"
+  },
+  {
+   "paper": "VLAs-as-Tools",
+   "reason": "unit-level fine-tuning noted for G24"
+  },
+  {
+   "paper": "RegenHarness and HexaShell",
+   "reason": "design papers; rules adopted"
+  },
+  {
+   "paper": "No Free Checker",
+   "reason": "survey; report-card template adopted"
+  },
+  {
+   "paper": "blind precise assembly",
+   "reason": "torque control; its Wilson-interval figure is the evaluation standard"
+  },
+  {
+   "paper": "2610.19375 one-step fidelity",
+   "reason": "the matched-epochs control in §7"
+  }
+ ]
+}

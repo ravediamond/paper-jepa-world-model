@@ -1,0 +1,343 @@
+{
+ "protocol": "repro/variants/reap/PROTOCOL.md",
+ "main_set": {
+  "seeds_run": 1,
+  "seeds_frozen": 5,
+  "failures": 8,
+  "successes": 42,
+  "steps": 5000,
+  "seed0": {
+   "comb:true": {
+    "caught": 2,
+    "fi": 1,
+    "auroc": 0.7232142857142857
+   },
+   "det:true": {
+    "caught": 3,
+    "fi": 4,
+    "auroc": 0.7172619047619048
+   },
+   "pred:true": {
+    "caught": 2,
+    "fi": 2,
+    "auroc": 0.6875
+   },
+   "comb:shuffled": {
+    "caught": 2,
+    "fi": 1,
+    "auroc": 0.7202380952380952
+   },
+   "pred:shuffled": {
+    "caught": 1,
+    "fi": 1,
+    "auroc": 0.6696428571428571
+   },
+   "comb:zero": {
+    "caught": 2,
+    "fi": 1,
+    "auroc": 0.7351190476190477
+   },
+   "pred:zero": {
+    "caught": 0,
+    "fi": 0,
+    "auroc": 0.7083333333333334
+   }
+  },
+  "pred_true_minus_shuffled_auroc": 0.017857142857142905,
+  "pred_true_minus_shuffled_ci95_bootstrap": [
+   -0.0598006644518273,
+   0.10227840909090909
+  ],
+  "register_bar": "at least 5/8 failures at at most 2/42 false interventions",
+  "pass_bar": false
+ },
+ "armnetbench_held_out_policy": {
+  "act": {
+   "comb:true": {
+    "caught": 52,
+    "fi": 2,
+    "auroc": 0.6086496650605242
+   },
+   "det:true": {
+    "caught": 72,
+    "fi": 5,
+    "auroc": 0.5815607004348337
+   },
+   "pred:true": {
+    "caught": 77,
+    "fi": 3,
+    "auroc": 0.6331531319779058
+   },
+   "comb:shuffled": {
+    "caught": 46,
+    "fi": 2,
+    "auroc": 0.6012457398049125
+   },
+   "pred:shuffled": {
+    "caught": 65,
+    "fi": 5,
+    "auroc": 0.6336232224703255
+   },
+   "comb:zero": {
+    "caught": 51,
+    "fi": 4,
+    "auroc": 0.6064167352215302
+   },
+   "pred:zero": {
+    "caught": 81,
+    "fi": 8,
+    "auroc": 0.6044776119402985
+   },
+   "n": 321,
+   "failures": 254,
+   "length_auroc": 0.9405041720531202
+  },
+  "diffusion": {
+   "comb:true": {
+    "caught": 35,
+    "fi": 5,
+    "auroc": 0.5370180475799836
+   },
+   "det:true": {
+    "caught": 45,
+    "fi": 8,
+    "auroc": 0.5375307629204266
+   },
+   "pred:true": {
+    "caught": 41,
+    "fi": 6,
+    "auroc": 0.543273174733388
+   },
+   "comb:shuffled": {
+    "caught": 40,
+    "fi": 5,
+    "auroc": 0.546862182116489
+   },
+   "pred:shuffled": {
+    "caught": 43,
+    "fi": 4,
+    "auroc": 0.5394790812141099
+   },
+   "comb:zero": {
+    "caught": 38,
+    "fi": 6,
+    "auroc": 0.5275840853158327
+   },
+   "pred:zero": {
+    "caught": 40,
+    "fi": 6,
+    "auroc": 0.5507588187038556
+   },
+   "n": 237,
+   "failures": 184,
+   "length_auroc": 0.9303732567678425
+  },
+  "smolvla": {
+   "comb:true": {
+    "caught": 85,
+    "fi": 7,
+    "auroc": 0.6601784266017843
+   },
+   "det:true": {
+    "caught": 102,
+    "fi": 9,
+    "auroc": 0.6560421735604217
+   },
+   "pred:true": {
+    "caught": 119,
+    "fi": 11,
+    "auroc": 0.6727493917274939
+   },
+   "comb:shuffled": {
+    "caught": 79,
+    "fi": 7,
+    "auroc": 0.6573398215733982
+   },
+   "pred:shuffled": {
+    "caught": 109,
+    "fi": 10,
+    "auroc": 0.6565287915652879
+   },
+   "comb:zero": {
+    "caught": 80,
+    "fi": 8,
+    "auroc": 0.627088402270884
+   },
+   "pred:zero": {
+    "caught": 119,
+    "fi": 15,
+    "auroc": 0.6183292781832928
+   },
+   "n": 319,
+   "failures": 274,
+   "length_auroc": 0.9545417680454177
+  },
+  "pi0": {
+   "comb:true": {
+    "caught": 19,
+    "fi": 1,
+    "auroc": 0.7556493861912581
+   },
+   "det:true": {
+    "caught": 23,
+    "fi": 2,
+    "auroc": 0.7394636015325671
+   },
+   "pred:true": {
+    "caught": 28,
+    "fi": 1,
+    "auroc": 0.7662835249042146
+   },
+   "comb:shuffled": {
+    "caught": 16,
+    "fi": 1,
+    "auroc": 0.7510360466025491
+   },
+   "pred:shuffled": {
+    "caught": 25,
+    "fi": 1,
+    "auroc": 0.7586988818515912
+   },
+   "comb:zero": {
+    "caught": 15,
+    "fi": 1,
+    "auroc": 0.6604112909531629
+   },
+   "pred:zero": {
+    "caught": 23,
+    "fi": 2,
+    "auroc": 0.650324497615138
+   },
+   "n": 234,
+   "failures": 147,
+   "length_auroc": 0.9630932832903276
+  },
+  "pi0.5": {
+   "comb:true": {
+    "caught": 10,
+    "fi": 3,
+    "auroc": 0.7049657783602737
+   },
+   "det:true": {
+    "caught": 13,
+    "fi": 3,
+    "auroc": 0.6984855104121159
+   },
+   "pred:true": {
+    "caught": 17,
+    "fi": 3,
+    "auroc": 0.7020532983835737
+   },
+   "comb:shuffled": {
+    "caught": 8,
+    "fi": 3,
+    "auroc": 0.6994320664045435
+   },
+   "pred:shuffled": {
+    "caught": 13,
+    "fi": 3,
+    "auroc": 0.6953545944371633
+   },
+   "comb:zero": {
+    "caught": 9,
+    "fi": 3,
+    "auroc": 0.6791175185670598
+   },
+   "pred:zero": {
+    "caught": 16,
+    "fi": 4,
+    "auroc": 0.6763506625891947
+   },
+   "n": 235,
+   "failures": 126,
+   "length_auroc": 0.9446992864424058
+  },
+  "grootn1.7": {
+   "comb:true": {
+    "caught": 38,
+    "fi": 6,
+    "auroc": 0.6771915247195679
+   },
+   "det:true": {
+    "caught": 42,
+    "fi": 9,
+    "auroc": 0.6715413377648525
+   },
+   "pred:true": {
+    "caught": 51,
+    "fi": 12,
+    "auroc": 0.688076443705858
+   },
+   "comb:shuffled": {
+    "caught": 34,
+    "fi": 6,
+    "auroc": 0.6684669713336103
+   },
+   "pred:shuffled": {
+    "caught": 49,
+    "fi": 12,
+    "auroc": 0.6792687993352722
+   },
+   "comb:zero": {
+    "caught": 35,
+    "fi": 9,
+    "auroc": 0.639634399667636
+   },
+   "pred:zero": {
+    "caught": 49,
+    "fi": 14,
+    "auroc": 0.6254258412962194
+   },
+   "n": 228,
+   "failures": 145,
+   "length_auroc": 0.9105941005400914
+  },
+  "molmoact2": {
+   "comb:true": {
+    "caught": 39,
+    "fi": 0,
+    "auroc": 0.6509354635274333
+   },
+   "det:true": {
+    "caught": 34,
+    "fi": 2,
+    "auroc": 0.6204190316025506
+   },
+   "pred:true": {
+    "caught": 50,
+    "fi": 3,
+    "auroc": 0.6653703314413846
+   },
+   "comb:shuffled": {
+    "caught": 37,
+    "fi": 1,
+    "auroc": 0.6162147011421765
+   },
+   "pred:shuffled": {
+    "caught": 45,
+    "fi": 3,
+    "auroc": 0.6188774437670801
+   },
+   "comb:zero": {
+    "caught": 42,
+    "fi": 1,
+    "auroc": 0.5869595683554061
+   },
+   "pred:zero": {
+    "caught": 51,
+    "fi": 2,
+    "auroc": 0.5867843879195571
+   },
+   "n": 473,
+   "failures": 402,
+   "length_auroc": 0.9445378740102305
+  }
+ },
+ "armnetbench_pooled": {
+  "rollouts": 2047,
+  "failures": 1532,
+  "comb_true_caught": 278,
+  "comb_true_false_interventions": 24,
+  "successes": 515
+ }
+}
